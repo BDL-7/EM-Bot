@@ -48,3 +48,12 @@ The first command verifies that every registered manual matches the correspondin
 ## Scope boundary
 
 The pilot uses EDAV BaaS and the EDAV-hosted UI first. CAT Flask development, Azure Functions, custom RAG, direct MaaS integration, production databases, PII, and competency or authorization decisions are outside the current pilot scope.
+
+## Repository workflow
+
+- `main` is the stable branch and receives reviewed promotion pull requests from `dev`.
+- `dev` is the integration branch for active development.
+- Each change starts with a GitHub issue and an issue-numbered feature branch created from an up-to-date `dev`, such as `12-add-evaluation-matrix`.
+- Feature pull requests target `dev`; feature branches do not merge directly into `main`.
+- `dev` is promoted to `main` through a separate pull request after the integrated changes are ready.
+- Both `main` and `dev` are protected: changes require pull requests, unresolved review conversations block merging, and force-pushes and branch deletion are disabled.
