@@ -1,0 +1,12 @@
+# Local/private ChatGPT and Codex conversation archives
+.local/chat-archives/
+
+# Local equipment-manual source PDFs (do not commit)
+/Docs/*.pdf
+
+# Python-generated cache files
+__pycache__/
+*.py[cod]
+
+# Local document-rendering and verification scratch files
+/.codex_tmp/
