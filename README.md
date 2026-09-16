@@ -7,6 +7,7 @@ Planning and pilot-support materials for the Equipment Manual Knowledge Retrieva
 - Phase 0: pilot purpose, boundaries, and technology direction are documented.
 - Phase 1: the 35-manual corpus is inventoried and locally verified against the source register.
 - Phase 2: the EDAV BaaS configuration package is prepared, but EDAV portal configuration and ingestion have not yet been performed or evidenced.
+- Phase 3: release `EMKB-P3-v1.0` defines the bot behavior and ten configuration-level tests, but it has not yet been applied or verified in EDAV.
 
 This repository does not represent a production application or a production-ready bot.
 
@@ -26,8 +27,11 @@ This repository does not represent a production application or a production-read
 | `PHASE_0_PILOT_BOUNDARY.md` | Agreed pilot scope, decisions, assumptions, and exclusions |
 | `PILOT_SOURCE_REGISTER.md` | Authoritative manifest and integrity record for the 35 manuals |
 | `PHASE_2_BAAS_CONFIGURATION.md` | EDAV BaaS configuration, discovery, and evidence runbook |
+| `PHASE_3_BEHAVIOR_CONFIGURATION.md` | Versioned grounding, citation, safety, refusal, and uncertainty configuration record |
+| `PHASE_3_BEHAVIOR_TESTS.md` | Ten configuration-level acceptance tests for the live EDAV bot |
 | `PILOT_BOT_INSTRUCTIONS.md` | Copy-ready grounding and safety instructions for EM Knowledge Bot |
 | `scripts/verify_source_register.py` | Read-only comparison of the register with the local PDF corpus |
+| `scripts/verify_phase3.py` | Read-only consistency check for the Phase 3 release artifacts |
 | `Docs/chat-archive-workflow.md` | Local conversation-archive workflow |
 
 ## Manual handling
@@ -40,10 +44,11 @@ With Python and `pypdf` available:
 
 ```text
 python scripts/verify_source_register.py
+python scripts/verify_phase3.py
 python -m unittest discover -s tests
 ```
 
-The first command verifies that every registered manual matches the corresponding local PDF. The second runs the conversation-archive unit tests.
+The first command verifies that every registered manual matches the corresponding local PDF. The second checks that the Phase 3 documents agree on their release identifier and ten required behavior tests. The third runs the conversation-archive unit tests.
 
 ## Scope boundary
 

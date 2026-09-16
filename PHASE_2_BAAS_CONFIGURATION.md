@@ -188,3 +188,5 @@ Phase 2 is complete only when all of the following are evidenced:
 ## 10. Handoff to Phase 3
 
 After the completion gate, Phase 3 will configure and test grounding, citation, safety, refusal, and uncertainty behavior. Phase 3 must use the actual BaaS capabilities observed here; it must not assume that a documented feature exists merely because it was requested in the instructions.
+
+The prepared Phase 3 package is maintained in [PHASE_3_BEHAVIOR_CONFIGURATION.md](PHASE_3_BEHAVIOR_CONFIGURATION.md), [PILOT_BOT_INSTRUCTIONS.md](PILOT_BOT_INSTRUCTIONS.md), and [PHASE_3_BEHAVIOR_TESTS.md](PHASE_3_BEHAVIOR_TESTS.md). Preparation of those artifacts does not satisfy this Phase 2 gate or prove that the behavior has been applied in EDAV.
