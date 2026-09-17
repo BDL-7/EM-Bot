@@ -4,6 +4,14 @@
 # Local equipment-manual source PDFs (do not commit)
 /Docs/*.pdf
 
+# Local Word planning and reference documents (do not commit)
+*.docx
+
+# Local pilot governance and source-control records (do not commit)
+/PILOT_SOURCE_REGISTER.md
+/PHASE_0_PILOT_BOUNDARY.md
+/PHASE_2_BAAS_CONFIGURATION.md
+
 # Python-generated cache files
 __pycache__/
 *.py[cod]
