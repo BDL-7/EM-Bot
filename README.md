@@ -4,9 +4,10 @@ Planning and pilot-support materials for the Equipment Manual Knowledge Retrieva
 
 ## Current status
 
-- Phase 0: pilot purpose, boundaries, and technology direction are documented.
-- Phase 1: the 35-manual corpus is inventoried and locally verified against the source register.
-- Phase 2: the EDAV BaaS configuration package is prepared, but EDAV portal configuration and ingestion have not yet been performed or evidenced.
+- Phase 0: pilot purpose, boundaries, and technology direction are documented in a local-only record.
+- Phase 1: the 35-manual corpus is inventoried and locally verified against a local-only source register.
+- Phase 2: the local-only EDAV BaaS configuration package is prepared, but EDAV portal configuration and ingestion have not yet been performed or evidenced.
+- Phase 3: release `EMKB-P3-v1.0` defines the bot behavior and ten configuration-level tests, but it has not yet been applied or verified in EDAV.
 
 This repository does not represent a production application or a production-ready bot.
 
@@ -23,27 +24,47 @@ This repository does not represent a production application or a production-read
 
 | File | Purpose |
 |---|---|
-| `PHASE_0_PILOT_BOUNDARY.md` | Agreed pilot scope, decisions, assumptions, and exclusions |
-| `PILOT_SOURCE_REGISTER.md` | Authoritative manifest and integrity record for the 35 manuals |
-| `PHASE_2_BAAS_CONFIGURATION.md` | EDAV BaaS configuration, discovery, and evidence runbook |
+| `PHASE_3_BEHAVIOR_CONFIGURATION.md` | Versioned grounding, citation, safety, refusal, and uncertainty configuration record |
+| `PHASE_3_BEHAVIOR_TESTS.md` | Ten configuration-level acceptance tests for the live EDAV bot |
 | `PILOT_BOT_INSTRUCTIONS.md` | Copy-ready grounding and safety instructions for EM Knowledge Bot |
 | `scripts/verify_source_register.py` | Read-only comparison of the register with the local PDF corpus |
+| `scripts/verify_phase3.py` | Read-only consistency check for the Phase 3 release artifacts |
 | `Docs/chat-archive-workflow.md` | Local conversation-archive workflow |
 
 ## Manual handling
 
-The 35 source PDFs remain local under `Docs/` and are intentionally excluded by `.gitignore`. Git tracks the source register, including filenames, sizes, page counts, and SHA-256 hashes, but it does not publish the manuals themselves.
+The 35 source PDFs remain local under `Docs/` and are intentionally excluded by `.gitignore`. The source register also remains local and is not published by Git.
+
+## Local-only project artifacts
+
+The following artifacts are required locally but intentionally excluded from Git:
+
+| Local path or pattern | Purpose |
+|---|---|
+| `*.docx` | Word planning and reference documents |
+| `Docs/*.pdf` | Approved equipment-manual corpus |
+| `PILOT_SOURCE_REGISTER.md` | Manual filenames, sizes, page counts, hashes, and verification status |
+| `PHASE_0_PILOT_BOUNDARY.md` | Pilot scope and decision record |
+| `PHASE_2_BAAS_CONFIGURATION.md` | EDAV configuration, discovery, and evidence runbook |
+
+Removing these files from Git tracking does not delete the local copies. A new clone will not contain them; obtain them through the approved project file-sharing process.
 
 ## Local validation
 
-With Python and `pypdf` available:
+The Phase 3 package can be checked with:
 
 ```text
-python scripts/verify_source_register.py
+python scripts/verify_phase3.py
 python -m unittest discover -s tests
 ```
 
-The first command verifies that every registered manual matches the corresponding local PDF. The second runs the conversation-archive unit tests.
+When the local source register and all 35 PDFs are present, the local corpus can also be checked with Python and `pypdf`:
+
+```text
+python scripts/verify_source_register.py
+```
+
+The corpus command verifies that every registered manual matches the corresponding local PDF. The Phase 3 command checks that its documents agree on the release identifier and ten required behavior tests. The unit-test command checks the conversation-archive workflow.
 
 ## Scope boundary
 
