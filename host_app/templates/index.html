@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Aquarius Assistant — EM Knowledge Bot Pilot Host</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <p class="eyebrow">Aquarius Assistant · DEV pilot</p>
+        <h1>EM Knowledge Bot</h1>
+        <p class="summary">
+          Temporary authenticated parent application for the EDAV-hosted Microbot.
+          This is not CAT or the competency-assessment application.
+        </p>
+      </header>
+
+      <section class="notice" aria-labelledby="deployment-status">
+        <h2 id="deployment-status">Deployment status</h2>
+        <p>
+          The Aquarius pilot host is deployed. EDAV Microbot loading is pending
+          provision of the EM Knowledge Bot <code>clientId</code> and the supported
+          JWT acquisition method.
+        </p>
+      </section>
+
+      <section aria-labelledby="readiness-heading">
+        <h2 id="readiness-heading">Integration readiness</h2>
+        <dl class="status-grid">
+          <div><dt>Flask host</dt><dd class="good">Ready</dd></div>
+          <div><dt>Environment</dt><dd>{{ settings.app_env|upper }}</dd></div>
+          <div>
+            <dt>Connect authentication</dt>
+            <dd class="{{ 'good' if user.authenticated else 'pending' }}">
+              {{ 'Authenticated as ' ~ user.display_name if user.authenticated else user.display_name }}
+            </dd>
+          </div>
+          <div><dt>EDAV Microbot URL</dt><dd class="good">Configured for DEV</dd></div>
+          <div>
+            <dt>Microbot clientId</dt>
+            <dd class="{{ 'good' if settings.client_id else 'pending' }}">
+              {{ 'Configured' if settings.client_id else 'Waiting for EDAV' }}
+            </dd>
+          </div>
+          <div>
+            <dt>JWT integration</dt>
+            <dd class="{{ 'good' if settings.auth_mode != 'unconfigured' else 'pending' }}">
+              {{ 'Configured' if settings.auth_mode != 'unconfigured' else 'Waiting for EDAV contract' }}
+            </dd>
+          </div>
+          <div><dt>Iframe handshake</dt><dd id="iframe-status" class="pending">Not started</dd></div>
+        </dl>
+      </section>
+
+      <section aria-labelledby="needed-heading">
+        <h2 id="needed-heading">Required from EDAV</h2>
+        <ul id="missing-dependencies">
+          {% for dependency in settings.missing_dependencies %}
+          <li>{{ dependency }}</li>
+          {% else %}
+          <li>No outstanding configuration dependency is recorded.</li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section id="microbot-panel" aria-labelledby="microbot-heading" hidden>
+        <div class="panel-heading">
+          <h2 id="microbot-heading">EDAV Microbot</h2>
+          <button id="close-microbot" type="button">Close bot</button>
+        </div>
+        <div id="microbot-container"></div>
+      </section>
+    </main>
+
+    <script id="microbot-config" type="application/json">{{ browser_config|tojson }}</script>
+    <script src="{{ url_for('static', filename='microbot.js') }}"></script>
+  </body>
+</html>
