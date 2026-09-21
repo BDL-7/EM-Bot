@@ -18,3 +18,13 @@ __pycache__/
 
 # Local document-rendering and verification scratch files
 /.codex_tmp/
+
+# Local Python environments and runtime configuration
+/.venv/
+/.env
+/.pytest_cache/
+/pytest-cache-files-*/
+
+# Posit Connect deployment state and generated bundles
+**/.rsconnect-python/
+**/manifest.json
