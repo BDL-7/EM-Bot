@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 
@@ -29,3 +30,17 @@ def test_host_directory_excludes_private_project_artifacts():
     assert "pilot_source_register.md" not in bundled_names
     assert "phase_0_pilot_boundary.md" not in bundled_names
     assert "phase_2_baas_configuration.md" not in bundled_names
+
+
+def test_committed_manifest_describes_only_the_isolated_host():
+    manifest_path = HOST_ROOT / "manifest.json"
+    assert manifest_path.is_file()
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["metadata"]["appmode"] == "python-api"
+    assert manifest["metadata"]["entrypoint"] == "app:app"
+    assert manifest["environment"]["python"]["requires"] == ">=3.10,<3.14"
+    files = set(manifest["files"])
+    assert "app.py" in files
+    assert "templates/index.html" in files
+    assert "static/microbot.js" in files
+    assert not any(path.lower().endswith((".pdf", ".docx", ".env")) for path in files)

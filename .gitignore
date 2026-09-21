@@ -27,4 +27,4 @@ __pycache__/
 
 # Posit Connect deployment state and generated bundles
 **/.rsconnect-python/
-**/manifest.json
+/manifest.json

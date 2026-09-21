@@ -77,23 +77,27 @@ flask --app host_app.app run
 
 Do not commit `.env` files, tokens, client secrets, subscription keys, or Connect API keys.
 
-### Posit Connect deployment
+### Git-backed Posit Connect deployment
 
-Generate and inspect the deployment manifest from the isolated host directory. This directory boundary prevents manuals and project-only records from entering the bundle:
+Git-backed Connect deployment does not require a personal Connect API key. The committed `host_app/manifest.json` identifies the Flask application, and the isolated `host_app/` target directory prevents manuals and project-only records from entering the Git archive used by Connect.
 
-```text
-rsconnect write-manifest api --entrypoint app:app host_app
-```
+To refresh the manifest after changing application code or dependencies, run `rsconnect write-manifest api --overwrite --entrypoint app:app host_app`, inspect it, and commit it with the corresponding application changes.
 
-Deploy that inspected manifest rather than rebuilding the bundle implicitly:
+For the first deployment:
 
-```text
-rsconnect deploy manifest -n <saved-server-name> --title "Aquarius Assistant - EM Knowledge Bot Pilot Host" host_app/manifest.json
-```
+1. Open the EDAV Posit Connect Content page.
+2. Select **Publish → Import from Git**.
+3. Enter `https://github.com/BDL-7/EM-Bot.git` as the repository URL.
+4. Select branch `6-temporary-em-microbot-host`.
+5. Select `host_app` as the target directory containing `manifest.json`.
+6. Enter **Aquarius Assistant - EM Knowledge Bot Pilot Host** as the content title.
+7. Deploy the content.
 
-On Connect, require login, restrict access to the designated pilot users or group, configure runtime variables outside Git, and disable public access. The initial deployment should show a controlled configuration-pending state; it must not load an iframe until the `clientId` and approved JWT implementation exist.
+After deployment, require login, restrict access to the designated pilot users or group, configure runtime variables outside Git, and disable public access. The initial deployment should show a controlled configuration-pending state; it must not load an iframe until the `clientId` and approved JWT implementation exist.
 
-The temporary host remains on its draft issue branch. If it is superseded, close the draft PR and delete the branch without merging it into `dev`.
+Connect must already be able to read the private GitHub repository through its server-managed GitHub credential or OAuth integration. If the repository cannot be selected or cloned, that is a Connect-side private-repository access issue; do not put GitHub credentials in the repository URL.
+
+The Git-backed content should track the temporary issue branch while the experiment remains disposable. If it is superseded, remove the Connect content, close the draft PR, and delete the branch without merging it into `dev`.
 
 ## Local validation
 
