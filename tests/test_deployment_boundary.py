@@ -38,7 +38,7 @@ def test_committed_manifest_describes_only_the_isolated_host():
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     assert manifest["metadata"]["appmode"] == "python-api"
     assert manifest["metadata"]["entrypoint"] == "app:app"
-    assert manifest["environment"]["python"]["requires"] == ">=3.10,<3.14"
+    assert manifest["environment"]["python"]["requires"] == "==3.11.2"
     files = set(manifest["files"])
     assert "app.py" in files
     assert "templates/index.html" in files

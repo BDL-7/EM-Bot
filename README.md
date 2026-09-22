@@ -69,7 +69,7 @@ EDAV_MICROBOT_CLIENT_ID=
 EDAV_AUTH_MODE=unconfigured
 ```
 
-For local development, create an isolated environment satisfying the host's `>=3.10,<3.14` Python constraint, install `requirements-dev.txt`, and run from the repository root:
+For local development, create an isolated Python 3.11.2 environment, install `requirements-dev.txt`, and run from the repository root:
 
 ```text
 flask --app host_app.app run
