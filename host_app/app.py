@@ -5,9 +5,12 @@ from __future__ import annotations
 import json
 import os
 from dataclasses import dataclass
+from typing import Callable
 from urllib.parse import urlparse
 
 from flask import Flask, jsonify, render_template, request, url_for
+
+from host_app.entra_auth import EntraTokenProvider, TokenProviderError
 
 
 DEFAULT_BASE_URL = (
@@ -17,21 +20,34 @@ DEFAULT_BASE_URL = (
 
 @dataclass(frozen=True)
 class Settings:
-    """Non-secret runtime settings for the temporary host."""
+    """Runtime settings for the temporary host; values are never logged."""
 
     app_env: str
     base_url: str
     origin: str
     client_id: str
     auth_mode: str
+    entra_tenant_id: str
+    entra_client_id: str
+    entra_client_secret: str
+    microbot_scope: str
 
     @property
     def missing_dependencies(self) -> list[str]:
         missing: list[str] = []
         if not self.client_id:
             missing.append("EDAV Microbot clientId")
-        if self.auth_mode == "unconfigured":
-            missing.append("EDAV-approved JWT acquisition method")
+        if self.auth_mode != "client_credentials":
+            missing.append("EDAV client-credentials authentication")
+        else:
+            if not self.entra_tenant_id:
+                missing.append("EDAV Entra tenant ID")
+            if not self.entra_client_id:
+                missing.append("EDAV Entra client ID")
+            if not self.entra_client_secret:
+                missing.append("EDAV Entra client secret")
+            if not self.microbot_scope:
+                missing.append("EDAV Microbot scope")
         return missing
 
     @property
@@ -47,7 +63,7 @@ def _origin_from_url(value: str) -> str:
 
 
 def load_settings() -> Settings:
-    """Load public configuration without reading or logging secrets."""
+    """Load configuration without logging or returning the client secret."""
 
     base_url = os.getenv("EDAV_MICROBOT_BASE_URL", DEFAULT_BASE_URL).strip()
     derived_origin = _origin_from_url(base_url)
@@ -56,6 +72,9 @@ def load_settings() -> Settings:
         raise ValueError("EDAV_MICROBOT_ORIGIN must contain only scheme and host")
     if configured_origin != derived_origin:
         raise ValueError("EDAV_MICROBOT_ORIGIN must match EDAV_MICROBOT_BASE_URL")
+    microbot_scope = os.getenv("EDAV_MICROBOT_SCOPE", "").strip()
+    if microbot_scope and not microbot_scope.endswith("/.default"):
+        raise ValueError("EDAV_MICROBOT_SCOPE must use the /.default scope")
     return Settings(
         app_env=os.getenv("APP_ENV", "development").strip() or "development",
         base_url=base_url,
@@ -63,6 +82,10 @@ def load_settings() -> Settings:
         client_id=os.getenv("EDAV_MICROBOT_CLIENT_ID", "").strip(),
         auth_mode=os.getenv("EDAV_AUTH_MODE", "unconfigured").strip()
         or "unconfigured",
+        entra_tenant_id=os.getenv("EDAV_ENTRA_TENANT_ID", "").strip(),
+        entra_client_id=os.getenv("EDAV_ENTRA_CLIENT_ID", "").strip(),
+        entra_client_secret=os.getenv("EDAV_ENTRA_CLIENT_SECRET", "").strip(),
+        microbot_scope=microbot_scope,
     )
 
 
@@ -82,8 +105,32 @@ def _connect_user() -> dict[str, object]:
     return {"authenticated": True, "display_name": username.strip()}
 
 
-def create_app() -> Flask:
+def create_app(
+    token_provider_factory: Callable[..., EntraTokenProvider] = EntraTokenProvider,
+) -> Flask:
     app = Flask(__name__)
+    token_provider: EntraTokenProvider | None = None
+    token_provider_signature: tuple[str, str, str, str] | None = None
+
+    def get_token_provider(settings: Settings) -> EntraTokenProvider:
+        """Reuse the in-process provider only while its configuration is unchanged."""
+
+        nonlocal token_provider, token_provider_signature
+        signature = (
+            settings.entra_tenant_id,
+            settings.entra_client_id,
+            settings.entra_client_secret,
+            settings.microbot_scope,
+        )
+        if token_provider is None or signature != token_provider_signature:
+            token_provider = token_provider_factory(
+                tenant_id=settings.entra_tenant_id,
+                client_id=settings.entra_client_id,
+                client_secret=settings.entra_client_secret,
+                scope=settings.microbot_scope,
+            )
+            token_provider_signature = signature
+        return token_provider
 
     @app.after_request
     def add_security_headers(response):
@@ -137,13 +184,27 @@ def create_app() -> Flask:
                 "status": "healthy",
                 "edav_ready": settings.ready,
                 "client_id_configured": bool(settings.client_id),
-                "auth_mode_configured": settings.auth_mode != "unconfigured",
+                "entra_tenant_configured": bool(settings.entra_tenant_id),
+                "entra_client_id_configured": bool(settings.entra_client_id),
+                "microbot_scope_configured": bool(settings.microbot_scope),
+                "auth_mode_configured": settings.auth_mode == "client_credentials",
             }
         )
 
     @app.post("/api/edav-token")
     def edav_token():
         settings = load_settings()
+        user = _connect_user()
+        if not user["authenticated"]:
+            return (
+                jsonify(
+                    {
+                        "error": "CONNECT_AUTH_REQUIRED",
+                        "message": "A valid Posit Connect user is required.",
+                    }
+                ),
+                401,
+            )
         if not settings.ready:
             return (
                 jsonify(
@@ -158,15 +219,29 @@ def create_app() -> Flask:
                 ),
                 503,
             )
-        return (
-            jsonify(
-                {
-                    "error": "EDAV_AUTH_MODE_UNSUPPORTED",
-                    "message": "The EDAV-approved token provider has not been implemented.",
-                }
-            ),
-            501,
-        )
+        try:
+            token = get_token_provider(settings).get_token()
+        except TokenProviderError:
+            return (
+                jsonify(
+                    {
+                        "error": "EDAV_TOKEN_UNAVAILABLE",
+                        "message": "Unable to obtain an EDAV access token.",
+                    }
+                ),
+                502,
+            )
+        except Exception:
+            return (
+                jsonify(
+                    {
+                        "error": "EDAV_TOKEN_UNAVAILABLE",
+                        "message": "Unable to obtain an EDAV access token.",
+                    }
+                ),
+                502,
+            )
+        return jsonify({"token": token.value, "expiresAt": token.expires_at})
 
     return app
 

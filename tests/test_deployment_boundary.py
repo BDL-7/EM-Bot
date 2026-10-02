@@ -17,6 +17,7 @@ def test_host_directory_contains_only_runtime_material():
         ".python-version",
         "__init__.py",
         "app.py",
+        "entra_auth.py",
         "requirements.txt",
         "static/microbot.js",
         "static/styles.css",
@@ -38,6 +39,7 @@ def test_committed_manifest_describes_only_the_isolated_host():
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     assert manifest["metadata"]["appmode"] == "python-api"
     assert manifest["metadata"]["entrypoint"] == "app:app"
+    assert manifest["python"]["version"] == "3.11.2"
     assert manifest["environment"]["python"]["requires"] == "==3.11.2"
     files = set(manifest["files"])
     assert "app.py" in files
