@@ -8,7 +8,7 @@ Planning and pilot-support materials for the Equipment Manual Knowledge Retrieva
 - Phase 1: the 35-manual corpus is inventoried and locally verified against a local-only source register.
 - Phase 2: the local-only EDAV BaaS configuration package is prepared, but EDAV portal configuration and ingestion have not yet been performed or evidenced.
 - Phase 3: release `EMKB-P3-v1.0` defines the bot behavior and ten configuration-level tests, but it has not yet been applied or verified in EDAV.
-- A disposable Aquarius Flask parent application is being used to establish the DEV Posit Connect host URL and demonstrate readiness for the EDAV iframe protocol while the Microbot `clientId` and JWT contract remain pending.
+- A disposable Aquarius Flask parent application is deployed as the DEV Posit Connect host. It now supports the EDAV-approved Entra client-credentials token flow, but remains inactive until its secret is added in Connect and `EDAV_AUTH_MODE=client_credentials` is set.
 
 This repository does not represent a production application or a production-ready bot. The temporary host is not CAT and is unrelated to the competency-assessment application.
 
@@ -27,7 +27,8 @@ This repository does not represent a production application or a production-read
 
 | File | Purpose |
 |---|---|
-| `host_app/app.py` | Temporary Flask parent application and safe readiness endpoints |
+| `host_app/app.py` | Temporary Flask parent application, safe readiness endpoints, and authenticated token route |
+| `host_app/entra_auth.py` | Server-only Entra client-credentials token provider with short-lived token caching |
 | `host_app/templates/index.html` | Authenticated pilot status and future Microbot container |
 | `host_app/static/microbot.js` | Exact-origin, nonce-validated EDAV iframe protocol scaffold |
 | `PHASE_3_BEHAVIOR_CONFIGURATION.md` | Versioned grounding, citation, safety, refusal, and uncertainty configuration record |
@@ -57,7 +58,7 @@ Removing these files from Git tracking does not delete the local copies. A new c
 
 ## Temporary Flask host
 
-The host intentionally fails closed until EDAV provides the EM Knowledge Bot `clientId` and authoritative JWT acquisition method. Posit Connect identity metadata identifies the signed-in pilot user but is never treated as the EDAV JWT.
+The host uses Entra client credentials to obtain an app-only EDAV access token. Posit Connect identity metadata identifies the signed-in pilot user and is required before the token route responds, but it is never treated as the EDAV JWT.
 
 Required runtime configuration:
 
@@ -66,8 +67,14 @@ APP_ENV=development
 EDAV_MICROBOT_BASE_URL=https://edav-dev-microbot-ui.edav-dev-app.appserviceenvironment.net/
 EDAV_MICROBOT_ORIGIN=https://edav-dev-microbot-ui.edav-dev-app.appserviceenvironment.net
 EDAV_MICROBOT_CLIENT_ID=
+EDAV_ENTRA_TENANT_ID=
+EDAV_ENTRA_CLIENT_ID=
+EDAV_ENTRA_CLIENT_SECRET=
+EDAV_MICROBOT_SCOPE=
 EDAV_AUTH_MODE=unconfigured
 ```
+
+`EDAV_ENTRA_CLIENT_SECRET` is never committed. Add it only through Posit Connect's **Vars** tab or an approved secret store. `EDAV_MICROBOT_SCOPE` must be the complete EDAV-provided scope ending in `/.default`. Use the same Entra application/client ID for `EDAV_ENTRA_CLIENT_ID` and `EDAV_MICROBOT_CLIENT_ID` when EDAV has provisioned one client for both purposes.
 
 For local development, create an isolated Python 3.11.2 environment, install `requirements-dev.txt`, and run from the repository root:
 
@@ -88,16 +95,16 @@ For the first deployment:
 1. Open the EDAV Posit Connect Content page.
 2. Select **Publish → Import from Git**.
 3. Enter `https://github.com/BDL-7/EM-Bot.git` as the repository URL.
-4. Select branch `6-temporary-em-microbot-host`.
+4. Select branch `dev` after the feature pull request has been merged.
 5. Select `host_app` as the target directory containing `manifest.json`.
 6. Enter **Aquarius Assistant - EM Knowledge Bot Pilot Host** as the content title.
 7. Deploy the content.
 
-After deployment, require login, restrict access to the designated pilot users or group, configure runtime variables outside Git, and disable public access. The initial deployment should show a controlled configuration-pending state; it must not load an iframe until the `clientId` and approved JWT implementation exist.
+After deployment, require login, restrict access to the designated pilot users or group, configure runtime variables outside Git, and disable public access. Configure the non-secret tenant ID, client IDs, and scope first. After the provider code is deployed, add `EDAV_ENTRA_CLIENT_SECRET` in Connect and set `EDAV_AUTH_MODE=client_credentials` last. Until then, the host remains in a controlled configuration-pending state and does not load the iframe.
 
 Connect must already be able to read the private GitHub repository through its server-managed GitHub credential or OAuth integration. If the repository cannot be selected or cloned, that is a Connect-side private-repository access issue; do not put GitHub credentials in the repository URL.
 
-The Git-backed content should track the temporary issue branch while the experiment remains disposable. If it is superseded, remove the Connect content, close the draft PR, and delete the branch without merging it into `dev`.
+The Git-backed content should track `dev` for this DEV pilot. After a successful DEV validation, promote the tested `dev` change to `main` through a separate pull request.
 
 ## Local validation
 
