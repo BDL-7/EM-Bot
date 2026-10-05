@@ -10,7 +10,10 @@ from urllib.parse import urlparse
 
 from flask import Flask, jsonify, render_template, request, url_for
 
-from host_app.entra_auth import EntraTokenProvider, TokenProviderError
+if __package__:
+    from .entra_auth import EntraTokenProvider, TokenProviderError
+else:
+    from entra_auth import EntraTokenProvider, TokenProviderError
 
 
 DEFAULT_BASE_URL = (

@@ -1,9 +1,26 @@
 import json
+import subprocess
+import sys
+from pathlib import Path
 
 import pytest
 
 from host_app.app import create_app, load_settings
 from host_app.entra_auth import AccessToken, TokenProviderError
+
+
+HOST_ROOT = Path(__file__).parents[1] / "host_app"
+
+
+def test_connect_style_top_level_app_import_succeeds():
+    result = subprocess.run(
+        [sys.executable, "-c", "import app"],
+        cwd=HOST_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
 
 
 def build_client(monkeypatch, token_provider_factory=None, **settings):
