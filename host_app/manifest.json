@@ -29,10 +29,10 @@
       "checksum": "93eec08f813f93ca1dcc0845d4cd6b1f"
     },
     "app.py": {
-      "checksum": "287dea1bd223a3d797227e10b6f1a142"
+      "checksum": "53ae933d97372d68c936c19ceee030bb"
     },
     "entra_auth.py": {
-      "checksum": "efa2000d6813d003a5935185bab3de22"
+      "checksum": "a6abaf5c05071ba7dcdf82285b5e3071"
     },
     "static/microbot.js": {
       "checksum": "368f01eac668627f8bf11ffb021d1614"
