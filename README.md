@@ -88,6 +88,8 @@ Do not commit `.env` files, tokens, client secrets, subscription keys, or Connec
 
 Git-backed Connect deployment does not require a personal Connect API key. The committed `host_app/manifest.json` identifies the Flask application, and the isolated `host_app/` target directory prevents manuals and project-only records from entering the Git archive used by Connect.
 
+Connect treats `host_app/` as the deployment root and imports `app:app` from that directory. The host supports this top-level import while retaining package-relative imports for local tests.
+
 To refresh the manifest after changing application code or dependencies, run `rsconnect write-manifest api --overwrite --entrypoint app:app host_app`, inspect it, and commit it with the corresponding application changes.
 
 For the first deployment:
