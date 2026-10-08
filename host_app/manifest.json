@@ -29,19 +29,25 @@
       "checksum": "93eec08f813f93ca1dcc0845d4cd6b1f"
     },
     "app.py": {
-      "checksum": "53ae933d97372d68c936c19ceee030bb"
+      "checksum": "52941ef3ccabe5be6a722a1970cebe66"
+    },
+    "auth_diagnostics.py": {
+      "checksum": "653ab90e324e42fd68d0a349135c33af"
     },
     "entra_auth.py": {
-      "checksum": "a6abaf5c05071ba7dcdf82285b5e3071"
+      "checksum": "7ed65b151c1261cfbb8aac087bf8dcb8"
+    },
+    "static/auth-check.js": {
+      "checksum": "56b43dd513eea6d3f7bbd2a0829f663b"
     },
     "static/microbot.js": {
       "checksum": "368f01eac668627f8bf11ffb021d1614"
     },
     "static/styles.css": {
-      "checksum": "444093024d092ea3eea3aa8e0dab2540"
+      "checksum": "c4ed91dccfb7dbb3722f6976d5c41b34"
     },
     "templates/index.html": {
-      "checksum": "e367a7a4405cd71190cfe7560adc29a3"
+      "checksum": "75d3d4c77083edd3c4a1193bafa05faa"
     }
   }
 }

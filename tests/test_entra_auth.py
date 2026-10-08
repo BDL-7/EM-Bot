@@ -41,6 +41,8 @@ def test_provider_uses_expected_authority_scope_and_cache():
         "client_id": "client-id",
         "authority": "https://login.microsoftonline.com/tenant-id",
         "client_credential": "test-only-secret",
+        "timeout": 15,
+        "enable_pii_log": False,
     }
 
 

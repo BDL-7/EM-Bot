@@ -20,9 +20,9 @@
       <section class="notice" aria-labelledby="deployment-status">
         <h2 id="deployment-status">Deployment status</h2>
         <p>
-          The Aquarius pilot host is deployed. EDAV Microbot loading is pending
-          provision of the EM Knowledge Bot <code>clientId</code> and the supported
-          JWT acquisition method.
+          The Aquarius pilot host is deployed. Use the connection-testing guide
+          below to verify the signed-in Connect user, Entra token acquisition,
+          and the EDAV Microbot iframe in that order.
         </p>
       </section>
 
@@ -65,6 +65,84 @@
         </ul>
       </section>
 
+      <section class="connection-guide" aria-labelledby="connection-testing-heading">
+        <h2 id="connection-testing-heading">Connection testing</h2>
+        <p>
+          Test token acquisition on the Connect server independently of the iframe.
+          This uses the saved Connect variables and does not display the token.
+        </p>
+        <button id="test-token-connection" type="button">Test token connection</button>
+        <p id="token-test-status" role="status" aria-live="polite">Not tested in this page session.</p>
+        <p>
+          Test the host in this order. The browser's Network panel can show request
+          names and status codes, but never copy, save, or share a bearer token,
+          client secret, or <code>RStudio-Connect-Credentials</code> header.
+        </p>
+        <ol>
+          <li>
+            Confirm that <strong>Connect authentication</strong> identifies the
+            signed-in pilot user above. A missing identity prevents token requests.
+          </li>
+          <li>
+            Open the safe <a href="{{ url_for('health') }}">health endpoint</a>.
+            It should report <code>"status": "healthy"</code> and configuration
+            booleans only; it never returns a token or secret.
+            These flags confirm configuration is present, not that Entra accepts it.
+          </li>
+          <li>
+            Return to this root page, open Developer Tools, select
+            <strong>Network</strong>, reload the page, and inspect
+            <code>POST {{ browser_config.tokenEndpoint }}</code>.
+          </li>
+        </ol>
+
+        <h3>Interpret the token request safely</h3>
+        <dl class="outcome-list">
+          <div>
+            <dt><code>200</code></dt>
+            <dd>
+              Token acquisition succeeded, possibly using a cached token.
+              The normal iframe flow sends the token to its configured origin after
+              the frame loads; the test button checks token acquisition only.
+              Watch <strong>Iframe handshake</strong> for an acknowledgment.
+            </dd>
+          </div>
+          <div>
+            <dt><code>401</code></dt>
+            <dd>
+              Connect did not provide a usable signed-in user identity. Sign in to
+              Connect and verify the content's access configuration before retrying.
+            </dd>
+          </div>
+          <div>
+            <dt><code>502</code></dt>
+            <dd>
+              The host could not obtain a usable token. This can be an Entra
+              rejection, network failure, or application exception. Find the
+              diagnostic reference in the response and match it to an
+              <code>EDAV_AUTH_DIAGNOSTIC</code> entry in Connect runtime logs.
+              Use the recorded stage and error code to identify the correction.
+            </dd>
+          </div>
+          <div>
+            <dt><code>503</code></dt>
+            <dd>
+              Required runtime configuration is incomplete. Review the Connect
+              <strong>Vars</strong> names and values without exposing secrets.
+            </dd>
+          </div>
+        </dl>
+
+        <p class="testing-note">
+          If token acquisition returns <code>200</code> but the iframe does not
+          acknowledge it, record the timestamp, environment, request URL, HTTP
+          status, diagnostic reference (if present), and safe error code for EDAV.
+          A 502 without a reference may come from Connect or a proxy; check runtime logs.
+          Do not send tokens, client
+          secrets, or full request headers.
+        </p>
+      </section>
+
       <section id="microbot-panel" aria-labelledby="microbot-heading" hidden>
         <div class="panel-heading">
           <h2 id="microbot-heading">EDAV Microbot</h2>
@@ -76,5 +154,6 @@
 
     <script id="microbot-config" type="application/json">{{ browser_config|tojson }}</script>
     <script src="{{ url_for('static', filename='microbot.js') }}"></script>
+    <script src="{{ url_for('static', filename='auth-check.js') }}"></script>
   </body>
 </html>

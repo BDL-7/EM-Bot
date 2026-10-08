@@ -1,5 +1,7 @@
 # EM Knowledge Bot
 
+For an introduction to apps, chatbots, and this project's use of EDAV Bot as a Service, open the [HTML presentation](ppt/ppt_BAAS/index.html). The [presentation guide](ppt/ppt_BAAS/README.md) explains its offline use, source references, and editable build files.
+
 Planning and pilot-support materials for the Equipment Manual Knowledge Retrieval Pilot. The pilot tests whether an EDAV-hosted BaaS microbot can answer natural-language questions from 35 approved, non-PII equipment manuals while remaining grounded in those sources and showing useful citations when the platform supports them.
 
 ## Current status
@@ -90,6 +92,11 @@ Git-backed Connect deployment does not require a personal Connect API key. The c
 
 Connect treats `host_app/` as the deployment root and imports `app:app` from that directory. The host supports this top-level import while retaining package-relative imports for local tests.
 
+The deployed host page includes a safe **Connection testing** guide. It directs
+pilot users through the safe `/health` readiness check, the browser Network
+request to `/api/edav-token`, token-request outcomes, and the EDAV iframe
+handoff without exposing access tokens, client secrets, or Connect credentials.
+
 To refresh the manifest after changing application code or dependencies, run `rsconnect write-manifest api --overwrite --entrypoint app:app host_app`, inspect it, and commit it with the corresponding application changes.
 
 For the first deployment:
@@ -109,6 +116,51 @@ Connect must already be able to read the private GitHub repository through its s
 The Git-backed content should track `dev` for this DEV pilot. After a successful DEV validation, promote the tested `dev` change to `main` through a separate pull request.
 
 ## Local validation
+
+### Diagnose a live token failure in Connect
+
+After the diagnostic change is promoted from dev to main, use **Update Now**
+on the existing main-backed Connect content (directory `host_app`). Confirm
+the new revision, Python 3.11.2, and application startup in the deployment log.
+Open the signed-in application's root page and click **Test token connection**.
+This calls `POST /api/edav-token` on Connect using its saved variables, even
+when the Microbot iframe cannot load. It never displays the token.
+
+For a 502, copy the diagnostic reference and locate the matching
+`EDAV_AUTH_DIAGNOSTIC` JSON entry in the protected **runtime** log, not just
+the build log. Record the UTC timestamp, stage, category, exception type,
+Entra error codes, and correlation/trace IDs. Browser responses remain generic.
+The description is an allowlisted explanation, not raw Entra text: unrestricted
+error descriptions and exceptions may contain credentials or identifying data.
+Unknown codes remain available for investigation rather than being guessed.
+
+| Evidence | Next action |
+|---|---|
+| `client_initialization` | Failure occurred while creating MSAL's client, including authority discovery. Inspect category and codes. |
+| `token_request` | An exception occurred while requesting the token; inspect network/TLS/proxy category. |
+| `token_response` | Inspect the returned Entra error and AADSTS codes. |
+| `token_response_validation` | The returned token/expiration metadata was unusable; inspect provider behavior. |
+| `network_timeout`, `connection_error`, `dns_error`, `proxy_error` | Check Connect-server DNS, outbound access to Entra, and approved proxy configuration. A desktop test does not prove server connectivity. |
+| `tls_error` | Check the Connect server's trusted CA chain; do not disable certificate verification. |
+| `7000215` / `7000222` | Verify the actual secret value for this app, or replace an expired secret in Connect Vars. |
+| `700016` / `90002` | Verify the application/tenant combination. |
+| `70011` / `500011` | Verify the approved full API scope and its tenant resource registration. The iframe URL is not necessarily the scope. |
+| `65001` / `53003` | Investigate consent or Conditional Access with the Entra owner. |
+
+MSAL outbound calls use a 15-second timeout per HTTP operation (not a total
+request deadline). Initialization and token-request exceptions are both captured.
+For 401, verify Connect identity; for 503, complete configuration. A 502 without
+our JSON diagnostic reference may be a proxy failure. A healthy `/health`
+only proves configuration presence/shape, not credentials or EDAV acceptance.
+
+Share only the diagnostic entry's safe fields through the approved support
+channel. Never export full Network HAR files, successful token responses, raw
+headers, or full MSAL result dictionaries. Re-test after the evidence-based
+correction; HTTP 200 confirms token acquisition (including cache hits), then
+test iframe acknowledgment separately.
+
+MSAL references: [client-credentials acquisition](https://learn.microsoft.com/en-us/entra/msal/python/getting-started/acquiring-tokens)
+and [client timeout option](https://learn.microsoft.com/en-us/python/api/msal/msal.application.confidentialclientapplication).
 
 The Phase 3 package can be checked with:
 

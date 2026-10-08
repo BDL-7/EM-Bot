@@ -12,8 +12,10 @@ from flask import Flask, jsonify, render_template, request, url_for
 
 if __package__:
     from .entra_auth import EntraTokenProvider, TokenProviderError
+    from .auth_diagnostics import diagnostic_event, failure_details
 else:
     from entra_auth import EntraTokenProvider, TokenProviderError
+    from auth_diagnostics import diagnostic_event, failure_details
 
 
 DEFAULT_BASE_URL = (
@@ -222,24 +224,22 @@ def create_app(
                 ),
                 503,
             )
+        stage = "client_initialization"
         try:
-            token = get_token_provider(settings).get_token()
-        except TokenProviderError:
+            provider = get_token_provider(settings)
+            stage = "token_request"
+            token = provider.get_token()
+        except Exception as error:
+            details = error.details if isinstance(error, TokenProviderError) else failure_details(stage, exception=error)
+            event = diagnostic_event(details)
+            # Never use logger.exception/str(error): upstream errors may contain credentials.
+            app.logger.error("EDAV_AUTH_DIAGNOSTIC %s", json.dumps(event, sort_keys=True))
             return (
                 jsonify(
                     {
                         "error": "EDAV_TOKEN_UNAVAILABLE",
                         "message": "Unable to obtain an EDAV access token.",
-                    }
-                ),
-                502,
-            )
-        except Exception:
-            return (
-                jsonify(
-                    {
-                        "error": "EDAV_TOKEN_UNAVAILABLE",
-                        "message": "Unable to obtain an EDAV access token.",
+                        "diagnostic_id": event["diagnostic_id"],
                     }
                 ),
                 502,
