@@ -16,7 +16,7 @@ The file is self-contained: its illustration, styles, and interaction code are e
 | Print / save as PDF | P or browser print; all reveal content is included |
 | Keyboard help | ? |
 
-The activities are the proposed first reply on slide 2, the current-records question on slide 9, and the explanation reveal on slide 12. The planned time is about 14 minutes, subject to rehearsal.
+Slide 2 shows clarification directly. The remaining interactions include the question journey on slide 7, the current-records question on slide 9, and the explanation reveal on slide 12. The planned time is about 14 minutes, subject to rehearsal.
 
 ## Files
 
@@ -45,7 +45,7 @@ From the repository root:
 python ppt/ppt_BAAS/build.py
 ```
 
-Edit `src/` and rebuild rather than editing the generated HTML. The build requires Python 3 and no third-party packages. The original illustration is stored in `assets/manual-search.png`; the built file embeds it unchanged.
+Edit `src/` and rebuild rather than editing the generated HTML. The build requires Python 3 and no third-party packages. The original illustration is stored in `assets/manual-retrieval.png`; the built file embeds it unchanged.
 
 ## Evidence and scope
 
@@ -58,3 +58,7 @@ The EDAV portal was inaccessible during preparation. The records reviewed do not
 The HTML is built; source/structure/runtime checks are recorded in [review-record.md](review-record.md). Browser rendering and visual inspection remain pending because no browser was available through the session's browser tool. Check wrapping, printed pages, and fullscreen behavior on the intended presentation screen.
 
 Published through [issue #22](https://github.com/BDL-7/EM-Bot/issues/22) and [PR #23](https://github.com/BDL-7/EM-Bot/pull/23), targeting `dev`. Existing local work and the separate status deck remain unchanged.
+
+## Scoped revision
+
+Only slides 1, 2, and 4 were revised. The [technology diagram proposal](technology-diagram-proposal.md) is for review only; no technology slide was added. See [scope verification](scope-verification.md) for preservation and validation results.
