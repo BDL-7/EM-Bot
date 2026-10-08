@@ -17,9 +17,11 @@ def test_host_directory_contains_only_runtime_material():
         ".python-version",
         "__init__.py",
         "app.py",
+        "auth_diagnostics.py",
         "entra_auth.py",
         "requirements.txt",
         "static/microbot.js",
+        "static/auth-check.js",
         "static/styles.css",
         "templates/index.html",
     }

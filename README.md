@@ -117,6 +117,51 @@ The Git-backed content should track `dev` for this DEV pilot. After a successful
 
 ## Local validation
 
+### Diagnose a live token failure in Connect
+
+After the diagnostic change is promoted from dev to main, use **Update Now**
+on the existing main-backed Connect content (directory `host_app`). Confirm
+the new revision, Python 3.11.2, and application startup in the deployment log.
+Open the signed-in application's root page and click **Test token connection**.
+This calls `POST /api/edav-token` on Connect using its saved variables, even
+when the Microbot iframe cannot load. It never displays the token.
+
+For a 502, copy the diagnostic reference and locate the matching
+`EDAV_AUTH_DIAGNOSTIC` JSON entry in the protected **runtime** log, not just
+the build log. Record the UTC timestamp, stage, category, exception type,
+Entra error codes, and correlation/trace IDs. Browser responses remain generic.
+The description is an allowlisted explanation, not raw Entra text: unrestricted
+error descriptions and exceptions may contain credentials or identifying data.
+Unknown codes remain available for investigation rather than being guessed.
+
+| Evidence | Next action |
+|---|---|
+| `client_initialization` | Failure occurred while creating MSAL's client, including authority discovery. Inspect category and codes. |
+| `token_request` | An exception occurred while requesting the token; inspect network/TLS/proxy category. |
+| `token_response` | Inspect the returned Entra error and AADSTS codes. |
+| `token_response_validation` | The returned token/expiration metadata was unusable; inspect provider behavior. |
+| `network_timeout`, `connection_error`, `dns_error`, `proxy_error` | Check Connect-server DNS, outbound access to Entra, and approved proxy configuration. A desktop test does not prove server connectivity. |
+| `tls_error` | Check the Connect server's trusted CA chain; do not disable certificate verification. |
+| `7000215` / `7000222` | Verify the actual secret value for this app, or replace an expired secret in Connect Vars. |
+| `700016` / `90002` | Verify the application/tenant combination. |
+| `70011` / `500011` | Verify the approved full API scope and its tenant resource registration. The iframe URL is not necessarily the scope. |
+| `65001` / `53003` | Investigate consent or Conditional Access with the Entra owner. |
+
+MSAL outbound calls use a 15-second timeout per HTTP operation (not a total
+request deadline). Initialization and token-request exceptions are both captured.
+For 401, verify Connect identity; for 503, complete configuration. A 502 without
+our JSON diagnostic reference may be a proxy failure. A healthy `/health`
+only proves configuration presence/shape, not credentials or EDAV acceptance.
+
+Share only the diagnostic entry's safe fields through the approved support
+channel. Never export full Network HAR files, successful token responses, raw
+headers, or full MSAL result dictionaries. Re-test after the evidence-based
+correction; HTTP 200 confirms token acquisition (including cache hits), then
+test iframe acknowledgment separately.
+
+MSAL references: [client-credentials acquisition](https://learn.microsoft.com/en-us/entra/msal/python/getting-started/acquiring-tokens)
+and [client timeout option](https://learn.microsoft.com/en-us/python/api/msal/msal.application.confidentialclientapplication).
+
 The Phase 3 package can be checked with:
 
 ```text
