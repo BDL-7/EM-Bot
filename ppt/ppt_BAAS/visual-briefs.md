@@ -1,12 +1,12 @@
 # Visual direction and asset briefs
 
-All assets below are **proposed**. No images, screenshots, diagrams, or slide files have been produced. The briefs specify what a later build should make and how to keep illustrations distinct from evidence.
+These briefs record the design direction. The HTML now implements V01 with a generated conceptual illustration, V02/V04/V05/V06 as editable HTML diagrams, and V03 with the five-role text-diagram fallback. Tables use native HTML. No live screenshot or manual excerpt is included.
 
 ## Design proposal
 
 Use a quiet reference-desk atmosphere: warm off-white background, dark ink text, teal for the question/response route, and muted amber for checking or uncertainty. These are proposed roles, not approved brand colors. Use a familiar sans-serif typeface such as Aptos or Arial, subject to availability. Explain status in words and symbols as well as color.
 
-Build for 16:9, with a 1280 × 720 reference canvas. Starting targets: 40–44 pt titles, 26–30 pt ordinary copy, and at least 22 pt table text in a PowerPoint build. Treat these as initial design targets and check actual rendered size. Keep diagrams and tables editable. Use simple cuts/reveals, no continuous motion, and provide a static view of every reveal. Put detailed evidence and caveats in notes, while keeping “intended,” “illustration,” and material status limits visible.
+Build for 16:9, with a 1280 × 720 reference canvas. Starting targets: 40–44 pt titles, 26–30 pt ordinary copy, and at least 22 pt table text in a PowerPoint build. Treat these as initial design targets and check actual rendered size. Keep diagrams and tables editable. Use simple cuts/reveals, no continuous motion, and provide a static view of every reveal. Put detailed evidence and caveats in the Sources control, while keeping “intended,” “illustration,” and material status limits visible.
 
 Use one main composition per slide. The few tables carry comparisons; images carry the human task and analogy; diagrams carry relationships and sequence. Keep text outside raster images so it remains readable and editable. Do not add official marks or logos until approved assets are supplied.
 
@@ -99,4 +99,4 @@ Use one main composition per slide. The few tables carry comparisons; images car
 
 ## Future visual review
 
-Inspect every slide at presentation size, every reveal in order, and the static/print version. Check wrapping, table density, contrast, alt text, and the visibility of intended/illustrative status. Ask a nontechnical colleague to explain S06 without reading the notes. Structural checks cannot establish visual clarity; no visual QA has been claimed for this planning-only package.
+Inspect every slide at presentation size, every reveal in order, and the static/print version. Check wrapping, table density, contrast, alt text, and the visibility of intended/illustrative status. Ask a nontechnical colleague to explain S06 directly from the slide. Structural checks cannot establish visual clarity; browser-based visual QA remains pending because no browser is enabled in this session.

@@ -1,6 +1,6 @@
 # Storyboard and timing
 
-The opener in [README](README.md) is included in S01's time. Interaction time is included in S02, S09, and S12. Total: **840 seconds / 14 minutes**. Allow a separate discussion period if the meeting agenda permits it.
+Interaction time is included in S02, S09, and S12. Total: **840 seconds / 14 minutes**. Allow a separate discussion period if the meeting agenda permits it.
 
 | Slide | Audience question | Main takeaway | Visual or table | Time |
 |---|---|---|---|---|
@@ -25,7 +25,7 @@ The opener in [README](README.md) is included in S01's time. Interaction time is
 - **S09–S11, 3:45:** Explore limits, responsibility, evidence, and how usefulness will be evaluated.
 - **S12, 1:15:** Return to the original task and let the audience explain the relationships.
 
-All exact audience copy, notes, transitions, and source IDs are in the [slide plan](slide-plan.md). Visual IDs resolve in [visual briefs](visual-briefs.md); source and claim IDs resolve in [evidence](evidence.md).
+All exact audience copy and source IDs are in the [slide plan](slide-plan.md). Visual IDs resolve in [visual briefs](visual-briefs.md); source and claim IDs resolve in [evidence](evidence.md).
 
 ## Vocabulary progression
 
