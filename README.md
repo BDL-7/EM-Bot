@@ -1,5 +1,7 @@
 # EM Knowledge Bot
 
+For an introduction to apps, chatbots, and this project's use of EDAV Bot as a Service, see the [BaaS presentation planning package](_ppt_BAAS/README.md). It contains a 12-slide storyboard, draft copy and speaker notes, visual briefs, and a five-slide introduction for an existing status deck; it is a planning package, not a finished slide deck.
+
 Planning and pilot-support materials for the Equipment Manual Knowledge Retrieval Pilot. The pilot tests whether an EDAV-hosted BaaS microbot can answer natural-language questions from 35 approved, non-PII equipment manuals while remaining grounded in those sources and showing useful citations when the platform supports them.
 
 ## Current status
