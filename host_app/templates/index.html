@@ -68,6 +68,12 @@
       <section class="connection-guide" aria-labelledby="connection-testing-heading">
         <h2 id="connection-testing-heading">Connection testing</h2>
         <p>
+          Test token acquisition on the Connect server independently of the iframe.
+          This uses the saved Connect variables and does not display the token.
+        </p>
+        <button id="test-token-connection" type="button">Test token connection</button>
+        <p id="token-test-status" role="status" aria-live="polite">Not tested in this page session.</p>
+        <p>
           Test the host in this order. The browser's Network panel can show request
           names and status codes, but never copy, save, or share a bearer token,
           client secret, or <code>RStudio-Connect-Credentials</code> header.
@@ -81,6 +87,7 @@
             Open the safe <a href="{{ url_for('health') }}">health endpoint</a>.
             It should report <code>"status": "healthy"</code> and configuration
             booleans only; it never returns a token or secret.
+            These flags confirm configuration is present, not that Entra accepts it.
           </li>
           <li>
             Return to this root page, open Developer Tools, select
@@ -94,8 +101,9 @@
           <div>
             <dt><code>200</code></dt>
             <dd>
-              Entra issued a short-lived access token. The host loads the TST
-              Microbot iframe and sends the token directly to its configured origin.
+              Token acquisition succeeded, possibly using a cached token.
+              The normal iframe flow sends the token to its configured origin after
+              the frame loads; the test button checks token acquisition only.
               Watch <strong>Iframe handshake</strong> for an acknowledgment.
             </dd>
           </div>
@@ -109,9 +117,11 @@
           <div>
             <dt><code>502</code></dt>
             <dd>
-              Entra did not issue a token. Verify the secret <em>value</em>, tenant
-              ID, client ID, and complete EDAV scope. Then ask EDAV to verify the
-              service-principal registration, consent, and TST authorization.
+              The host could not obtain a usable token. This can be an Entra
+              rejection, network failure, or application exception. Find the
+              diagnostic reference in the response and match it to an
+              <code>EDAV_AUTH_DIAGNOSTIC</code> entry in Connect runtime logs.
+              Use the recorded stage and error code to identify the correction.
             </dd>
           </div>
           <div>
@@ -126,7 +136,9 @@
         <p class="testing-note">
           If token acquisition returns <code>200</code> but the iframe does not
           acknowledge it, record the timestamp, environment, request URL, HTTP
-          status, and safe browser error text for EDAV. Do not send tokens, client
+          status, diagnostic reference (if present), and safe error code for EDAV.
+          A 502 without a reference may come from Connect or a proxy; check runtime logs.
+          Do not send tokens, client
           secrets, or full request headers.
         </p>
       </section>
@@ -142,5 +154,6 @@
 
     <script id="microbot-config" type="application/json">{{ browser_config|tojson }}</script>
     <script src="{{ url_for('static', filename='microbot.js') }}"></script>
+    <script src="{{ url_for('static', filename='auth-check.js') }}"></script>
   </body>
 </html>
