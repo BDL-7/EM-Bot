@@ -90,6 +90,11 @@ Git-backed Connect deployment does not require a personal Connect API key. The c
 
 Connect treats `host_app/` as the deployment root and imports `app:app` from that directory. The host supports this top-level import while retaining package-relative imports for local tests.
 
+The deployed host page includes a safe **Connection testing** guide. It directs
+pilot users through the safe `/health` readiness check, the browser Network
+request to `/api/edav-token`, token-request outcomes, and the EDAV iframe
+handoff without exposing access tokens, client secrets, or Connect credentials.
+
 To refresh the manifest after changing application code or dependencies, run `rsconnect write-manifest api --overwrite --entrypoint app:app host_app`, inspect it, and commit it with the corresponding application changes.
 
 For the first deployment:

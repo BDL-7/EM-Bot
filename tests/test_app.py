@@ -91,6 +91,18 @@ def test_index_extracts_only_safe_connect_user_field(client):
     assert "not-a-jwt" not in body
 
 
+def test_index_includes_safe_connection_testing_guide(client):
+    response = client.get("/")
+    body = response.get_data(as_text=True)
+    assert response.status_code == 200
+    assert "Connection testing" in body
+    assert 'href="/health"' in body
+    assert "POST /api/edav-token" in body
+    assert "Iframe handshake" in body
+    assert "Do not send tokens, client" in body
+    assert "secrets, or full request headers." in body
+
+
 def test_health_is_safe_and_reports_pending_edav(client):
     response = client.get("/health")
     assert response.status_code == 200

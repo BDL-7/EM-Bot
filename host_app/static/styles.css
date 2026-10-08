@@ -25,6 +25,15 @@ h1, h2, p { margin-top: 0; }
 h1 { font-size: clamp(2rem, 6vw, 3.4rem); margin-bottom: .5rem; }
 .summary { max-width: 48rem; font-size: 1.05rem; line-height: 1.6; }
 .notice { background: #fff7df; border-block: 1px solid #f0d98a; }
+.connection-guide { background: #f7fbfe; border-block: 1px solid #d8e7f0; }
+.connection-guide ol { padding-left: 1.35rem; }
+.connection-guide li { padding-left: .15rem; }
+.connection-guide h3 { margin: 1.35rem 0 .75rem; font-size: 1.05rem; }
+.outcome-list { display: grid; gap: .7rem; margin: 0; }
+.outcome-list div { padding: .9rem 1rem; border: 1px solid #d8e2ea; border-radius: 10px; background: #fff; }
+.outcome-list dt { color: #17324d; }
+.outcome-list dd { font-weight: 400; line-height: 1.45; }
+.testing-note { margin: 1.25rem 0 0; padding: .9rem 1rem; border-left: 4px solid #185f87; background: #edf5fa; line-height: 1.5; }
 
 .status-grid {
   display: grid;
