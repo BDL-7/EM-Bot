@@ -1,5 +1,7 @@
 # EM Knowledge Bot
 
+A detailed [EMLab BaaS architecture image](ppt/images/emlab-baas-architecture.png) shows browser, Flask/Posit Connect, EDAV, authentication, and intended manual-retrieval boundaries. See its [evidence and generation notes](ppt/images/README.md).
+
 For an introduction to apps, chatbots, and this project's use of EDAV Bot as a Service, open the [HTML presentation](ppt/ppt_BAAS/index.html). The [presentation guide](ppt/ppt_BAAS/README.md) explains its offline use, source references, and editable build files.
 
 Planning and pilot-support materials for the Equipment Manual Knowledge Retrieval Pilot. The pilot tests whether an EDAV-hosted BaaS microbot can answer natural-language questions from 35 approved, non-PII equipment manuals while remaining grounded in those sources and showing useful citations when the platform supports them.
