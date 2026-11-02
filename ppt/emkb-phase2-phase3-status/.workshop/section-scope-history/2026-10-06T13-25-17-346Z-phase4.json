@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "sectionId": "phase4",
+  "startedAt": "2026-10-06T13:24:50.293Z",
+  "targetSlideIds": [
+    "s13-phase4-approvals"
+  ],
+  "boundarySlideIds": [
+    "s12-conclusion"
+  ],
+  "protectedSlides": {
+    "s01-title": "eaf012671a262d7e70bc55bf0b35a45e6e01fe034e45ca4671d50e5de9abe8bb",
+    "s02-evidence": "ed86dc5b5c7f09744236d3b5d5bb86d661bb4976f1987d43b3adb37cfdf6a1ac",
+    "s03-scope": "49ad95d048b0df49e17fc82928c9d786d526979efb678128ffedc4086d116d5d",
+    "s04-checkout": "cad1bc534b82be7931ac45013d0a9c8235983488f662e1cc84e5e4f9d3609583",
+    "s05-release-path": "b6cb981273dd49fa1f641f11121d243d1cdcebbd1f86e8ee45926124c03ec1fb",
+    "s06-owner-inputs": "ceafc6d5ba214bf8d30ff4be4661ed5b4f3d37e7036d097a1443b68963e027cb",
+    "s07-connect": "e9d4de9b872d5ac897e108508393e9dae8057179f84d64410432a297df5e1006",
+    "s08-handoff": "ee16d47ac139c06bebb23d4dc48a4fa6cecdc7f4107ad9e27cbe58cea110c094",
+    "s09-phase3-apply": "da0c576dcba8095a76c591757bcd710a9a6dabc5d0e3519b0c7d87c9b7ceb2fe",
+    "s10-p3-record": "b7be65c7c18c298907e143168e6ddd9242f2260aa35da4af3dc79dbf7a8113e4",
+    "s11-blockers": "accd791da5dea6154bc58ae6b442a84ac8b62783d434fc7fa6f53d3a9b6cf341",
+    "s12-conclusion": "7d5115476ebee7e1c3d61cf2163b808e370f16d9fd1f24e2b74ec7652e131fa9"
+  },
+  "protectedSections": {
+    "snapshot": "a0072ab301cf49f1fc4fc7a917eb787f51f41983c93a1ec9f5b93c4dab184a9f",
+    "evidence": "d7b138041d43fefa60c01a1f7a78ea15642878d87a97635e31262b0318d855c5",
+    "execution": "db0a4c634df14f9205ce8b7ff9f6b54baacb4bf4ed3227cfb59e457922e53a14",
+    "phase3": "cb32d05e8605cf67213c7811eed8dab8baf61a50938e83ba3ae1155af81966b7"
+  },
+  "endedAt": "2026-10-06T13:25:17.346Z",
+  "verification": "passed"
+}

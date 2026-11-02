@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "sectionId": "execution",
+  "startedAt": "2026-10-06T13:24:00.335Z",
+  "targetSlideIds": [
+    "s05-release-path",
+    "s06-owner-inputs",
+    "s07-connect",
+    "s08-handoff"
+  ],
+  "boundarySlideIds": [
+    "s04-checkout",
+    "s09-phase3-apply"
+  ],
+  "protectedSlides": {
+    "s01-title": "eaf012671a262d7e70bc55bf0b35a45e6e01fe034e45ca4671d50e5de9abe8bb",
+    "s02-evidence": "ed86dc5b5c7f09744236d3b5d5bb86d661bb4976f1987d43b3adb37cfdf6a1ac",
+    "s03-scope": "49ad95d048b0df49e17fc82928c9d786d526979efb678128ffedc4086d116d5d",
+    "s04-checkout": "0902393f36bdac37f6ec235f616d9cbba8dedb3dc2ab465d1420ee21f6dc13d7",
+    "s09-phase3-apply": "71c76f9a0818958e2b054428b393fdb787f30d4f011edd878755948715b3cc71",
+    "s10-p3-record": "b7be65c7c18c298907e143168e6ddd9242f2260aa35da4af3dc79dbf7a8113e4",
+    "s11-blockers": "accd791da5dea6154bc58ae6b442a84ac8b62783d434fc7fa6f53d3a9b6cf341",
+    "s12-conclusion": "deccc7af9d951f9e311bf99f507bb0d2ffd1320d1e1b543572b26a3e323341bb",
+    "s13-phase4-approvals": "7cf3e60b1b27d7bdcbb3f7a1b45b65f51be47d6f11e070e014fdaf3ae90580a0"
+  },
+  "protectedSections": {
+    "snapshot": "a0072ab301cf49f1fc4fc7a917eb787f51f41983c93a1ec9f5b93c4dab184a9f",
+    "evidence": "d7b138041d43fefa60c01a1f7a78ea15642878d87a97635e31262b0318d855c5",
+    "phase3": "cb32d05e8605cf67213c7811eed8dab8baf61a50938e83ba3ae1155af81966b7",
+    "phase4": "2a803d55b404e99bd20dfb28bc577900b186315bc450b1484dfb9723520513a1"
+  },
+  "endedAt": "2026-10-06T13:24:41.742Z",
+  "verification": "passed"
+}
