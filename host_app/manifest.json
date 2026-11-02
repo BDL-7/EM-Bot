@@ -29,7 +29,7 @@
       "checksum": "93eec08f813f93ca1dcc0845d4cd6b1f"
     },
     "app.py": {
-      "checksum": "52941ef3ccabe5be6a722a1970cebe66"
+      "checksum": "f9490cb0ee27f9b83b5706a5a9ec89f3"
     },
     "auth_diagnostics.py": {
       "checksum": "653ab90e324e42fd68d0a349135c33af"
@@ -41,13 +41,13 @@
       "checksum": "56b43dd513eea6d3f7bbd2a0829f663b"
     },
     "static/microbot.js": {
-      "checksum": "368f01eac668627f8bf11ffb021d1614"
+      "checksum": "18d01f163b09e647780847fbb9842e7f"
     },
     "static/styles.css": {
       "checksum": "c4ed91dccfb7dbb3722f6976d5c41b34"
     },
     "templates/index.html": {
-      "checksum": "75d3d4c77083edd3c4a1193bafa05faa"
+      "checksum": "53e2ded8b514cd45b0a910b85668028b"
     }
   }
 }

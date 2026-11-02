@@ -14,7 +14,7 @@ For an introduction to apps, chatbots, and this project's use of EDAV Bot as a S
 | Question | Answer |
 |---|---|
 | What is being tested? | Whether an EDAV BaaS microbot can give grounded, cited answers from the approved equipment manuals. |
-| What is implemented? | A restricted Flask/Posit Connect parent host, an exact-origin iframe contract, an Entra client-credentials token provider, and repository-level validation. |
+| What is implemented? | A restricted Flask/Posit Connect parent host, an exact-origin iframe contract, a no-token mode (EDAV-confirmed) with an Entra client-credentials fallback, and repository-level validation. |
 | What is prepared? | The bot instructions, behavior-and-safety record, and ten acceptance tests for release `EMKB-P3-v1.0`. |
 | What is not yet validated? | EDAV portal setup, manual ingestion, live bot behavior, and pilot user value. |
 | What is outside scope? | Production deployment, custom RAG, CAT integration, live equipment status, PII, and competency or authorization decisions. |
@@ -108,6 +108,10 @@ After deployment, require login, restrict access to the designated pilot users o
 Connect must already be able to read the private GitHub repository through its server-managed GitHub credential or OAuth integration. If the repository cannot be selected or cloned, that is a Connect-side private-repository access issue; do not put GitHub credentials in the repository URL.
 
 The Git-backed content should track `dev` for this DEV pilot. After a successful DEV validation, promote the tested `dev` change to `main` through a separate pull request.
+
+### No-token mode (`EDAV_AUTH_MODE=none`)
+
+EDAV confirmed that the Microbot does not need a token when it shows no user information, and this pilot shows none. Set `EDAV_AUTH_MODE=none` and `EDAV_MICROBOT_CLIENT_ID` in Connect. The host then loads the iframe with only the `clientId`, never requests or sends a token, and sends no user name or email to EDAV. `/api/edav-token` refuses requests in this mode. Posit Connect still controls who can open the host. The Entra variables are used only in `client_credentials` mode.
 
 ### Diagnose a live token failure in Connect
 
