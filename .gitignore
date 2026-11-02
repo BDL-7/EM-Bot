@@ -1,5 +1,10 @@
 # Local/private ChatGPT and Codex conversation archives
 .local/chat-archives/
+/codex-session-exports/
+
+# Locally installed reusable Codex skills (managed from BDL-7/ai-skills)
+/.agents/skills/project-context/
+/.agents/skills/agent-orchestration/
 
 # Local equipment-manual source PDFs (do not commit)
 /Docs/*.pdf
@@ -8,9 +13,9 @@
 *.docx
 
 # Local pilot governance and source-control records (do not commit)
-/PILOT_SOURCE_REGISTER.md
-/PHASE_0_PILOT_BOUNDARY.md
-/PHASE_2_BAAS_CONFIGURATION.md
+/Docs/manual-register.md
+/Docs/pilot-boundary.md
+/Docs/baas-runbook.md
 
 # Python-generated cache files
 __pycache__/

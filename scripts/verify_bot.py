@@ -1,7 +1,7 @@
-"""Read-only consistency check for the Phase 3 behavior artifacts.
+"""Read-only consistency check for the EDAV Microbot behavior package.
 
 This validates the repository package, not the behavior of a live EDAV bot.
-Live behavior must be recorded through the Phase 3 execution and test records.
+Live behavior must be recorded through the EDAV configuration and test records.
 """
 
 from __future__ import annotations
@@ -17,9 +17,9 @@ EXPECTED_TEST_IDS = {f"P3-T{number:02d}" for number in range(1, 11)}
 
 def verify(root: Path) -> int:
     paths = {
-        "configuration": root / "PHASE_3_BEHAVIOR_CONFIGURATION.md",
-        "instructions": root / "PILOT_BOT_INSTRUCTIONS.md",
-        "tests": root / "PHASE_3_BEHAVIOR_TESTS.md",
+        "configuration": root / "Docs" / "bot-behavior.md",
+        "instructions": root / "Docs" / "bot-instructions.md",
+        "tests": root / "Docs" / "bot-tests.md",
         "readme": root / "README.md",
     }
     errors: list[str] = []
@@ -63,20 +63,20 @@ def verify(root: Path) -> int:
         if test_id not in tests:
             errors.append(f"test artifact missing {test_id}")
     if "prepared, not applied or verified" not in configuration:
-        errors.append("configuration does not preserve prepared-versus-applied status")
+        errors.append("behavior record does not preserve prepared-versus-applied status")
 
     readme = content.get("readme", "")
     for filename in (
-        "PHASE_3_BEHAVIOR_CONFIGURATION.md",
-        "PHASE_3_BEHAVIOR_TESTS.md",
-        "PILOT_BOT_INSTRUCTIONS.md",
-        "scripts/verify_phase3.py",
+        "Docs/bot-behavior.md",
+        "Docs/bot-tests.md",
+        "Docs/bot-instructions.md",
+        "scripts/verify_bot.py",
     ):
         if filename not in readme:
             errors.append(f"README does not reference {filename}")
 
     print(f"release_id={RELEASE_ID}")
-    print(f"phase3_artifacts={len(content)}/{len(paths)}")
+    print(f"behavior_artifacts={len(content)}/{len(paths)}")
     print(f"behavior_test_ids={len(observed_test_ids)}")
     if errors:
         print("errors:")
@@ -84,7 +84,7 @@ def verify(root: Path) -> int:
             print(f"- {error}")
         return 1
 
-    print("phase3_artifacts_consistent=True")
+    print("behavior_artifacts_consistent=True")
     print("live_edav_behavior_verified=False")
     return 0
 

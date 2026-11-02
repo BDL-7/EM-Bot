@@ -1,96 +1,88 @@
 # EM Knowledge Bot
 
+This repository supports a restricted DEV pilot of an EDAV-hosted knowledge bot
+for 35 approved, non-PII equipment manuals. It records the bot requirements,
+the disposable Flask parent host used to load the EDAV iframe, and the checks
+that keep the pilot grounded and safely bounded.
+
 A detailed [EMLab BaaS architecture image](ppt/images/emlab-baas-architecture.png) shows browser, Flask/Posit Connect, EDAV, authentication, and intended manual-retrieval boundaries. See its [evidence and generation notes](ppt/images/README.md).
 
 For an introduction to apps, chatbots, and this project's use of EDAV Bot as a Service, open the [HTML presentation](ppt/ppt_BAAS/index.html). The [presentation guide](ppt/ppt_BAAS/README.md) explains its offline use, source references, and editable build files.
 
-Planning and pilot-support materials for the Equipment Manual Knowledge Retrieval Pilot. The pilot tests whether an EDAV-hosted BaaS microbot can answer natural-language questions from 35 approved, non-PII equipment manuals while remaining grounded in those sources and showing useful citations when the platform supports them.
+## In one minute
 
-## Current status
-
-- Phase 0: pilot purpose, boundaries, and technology direction are documented in a local-only record.
-- Phase 1: the 35-manual corpus is inventoried and locally verified against a local-only source register.
-- Phase 2: the local-only EDAV BaaS configuration package is prepared, but EDAV portal configuration and ingestion have not yet been performed or evidenced.
-- Phase 3: release `EMKB-P3-v1.0` defines the bot behavior and ten configuration-level tests, but it has not yet been applied or verified in EDAV.
-- A disposable Aquarius Flask parent application is deployed as the DEV Posit Connect host. It now supports the EDAV-approved Entra client-credentials token flow, but remains inactive until its secret is added in Connect and `EDAV_AUTH_MODE=client_credentials` is set.
-
-This repository does not represent a production application or a production-ready bot. The temporary host is not CAT and is unrelated to the competency-assessment application.
-
-## Pilot path
-
-1. Use the frozen 35-manual source register.
-2. Create and configure **EM Knowledge Bot** in EDAV BaaS.
-3. Register the manuals through the BaaS-supported source path.
-4. Deploy the disposable Aquarius Flask host to restricted DEV content on Posit Connect.
-5. Obtain the provisioned `clientId` and supported JWT contract from EDAV.
-6. Validate the EDAV-hosted iframe through the temporary parent application.
-7. Evaluate grounding, citations, safety behavior, refusals, and user value.
-8. Decide separately whether the future CAT application should embed the proven bot.
-
-## Key files
-
-| File | Purpose |
+| Question | Answer |
 |---|---|
-| `host_app/app.py` | Temporary Flask parent application, safe readiness endpoints, and authenticated token route |
-| `host_app/entra_auth.py` | Server-only Entra client-credentials token provider with short-lived token caching |
-| `host_app/templates/index.html` | Authenticated pilot status and future Microbot container |
-| `host_app/static/microbot.js` | Exact-origin, nonce-validated EDAV iframe protocol scaffold |
-| `PHASE_3_BEHAVIOR_CONFIGURATION.md` | Versioned grounding, citation, safety, refusal, and uncertainty configuration record |
-| `PHASE_3_BEHAVIOR_TESTS.md` | Ten configuration-level acceptance tests for the live EDAV bot |
-| `PILOT_BOT_INSTRUCTIONS.md` | Copy-ready grounding and safety instructions for EM Knowledge Bot |
-| `scripts/verify_source_register.py` | Read-only comparison of the register with the local PDF corpus |
-| `scripts/verify_phase3.py` | Read-only consistency check for the Phase 3 release artifacts |
-| `Docs/chat-archive-workflow.md` | Local conversation-archive workflow |
+| What is being tested? | Whether an EDAV BaaS microbot can give grounded, cited answers from the approved equipment manuals. |
+| What is implemented? | A restricted Flask/Posit Connect parent host, an exact-origin iframe contract, an Entra client-credentials token provider, and repository-level validation. |
+| What is prepared? | The bot instructions, behavior-and-safety record, and ten acceptance tests for release `EMKB-P3-v1.0`. |
+| What is not yet validated? | EDAV portal setup, manual ingestion, live bot behavior, and pilot user value. |
+| What is outside scope? | Production deployment, custom RAG, CAT integration, live equipment status, PII, and competency or authorization decisions. |
 
-## Manual handling
+The legacy release ID `EMKB-P3-v1.0` and test IDs `P3-T01` through `P3-T10`
+remain controlled identifiers. They are not names for the current work.
 
-The 35 source PDFs remain local under `Docs/` and are intentionally excluded by `.gitignore`. The source register also remains local and is not published by Git.
+## Start here
 
-## Local-only project artifacts
+- [Understand the pilot and its current status](Docs/bot-behavior.md).
+- [Review the EDAV bot instructions and safety rules](Docs/bot-instructions.md).
+- [Run or review the acceptance tests](Docs/bot-tests.md).
+- [Work on the disposable Flask host](host_app/README.md).
+- [Run a repository check](scripts/README.md).
+- [Handle manuals and other protected local material](Docs/README.md).
 
-The following artifacts are required locally but intentionally excluded from Git:
+## Repository map
 
-| Local path or pattern | Purpose |
+| Location | Purpose and boundary |
 |---|---|
-| `*.docx` | Word planning and reference documents |
-| `Docs/*.pdf` | Approved equipment-manual corpus |
-| `PILOT_SOURCE_REGISTER.md` | Manual filenames, sizes, page counts, hashes, and verification status |
-| `PHASE_0_PILOT_BOUNDARY.md` | Pilot scope and decision record |
-| `PHASE_2_BAAS_CONFIGURATION.md` | EDAV configuration, discovery, and evidence runbook |
+| `Docs/` | Pilot documentation and the local manuals directory. Its guide identifies what must remain outside Git and deployment. |
+| `host_app/` | The isolated Flask/Posit Connect parent host. It embeds an EDAV iframe but does not ingest manuals, retrieve passages, or implement the bot. |
+| `scripts/` | Read-only behavior and corpus checks plus the local chat-archive tool. |
+| `tests/` | Automated checks for the Flask host, iframe contract, deployment boundary, and archive behavior. |
+| `.gitignore` | Enforces exclusion of manuals, local registers, Word records, transcripts, runtime configuration, and generated deployment material. |
 
-Removing these files from Git tracking does not delete the local copies. A new clone will not contain them; obtain them through the approved project file-sharing process.
+## Protected local material
+
+Approved PDF manuals live locally under `Docs/` and are intentionally ignored
+by Git. Obtain them only through approved project file sharing. The local
+manual register, pilot-boundary record, EDAV BaaS runbook, Word records, and
+private chat archives are also excluded from Git.
+
+Do not copy any of those materials into `host_app/`, static assets, templates,
+or a deployment bundle. Do not commit secrets, bearer tokens, `.env` files,
+client credentials, PII, or source registers.
 
 ## Temporary Flask host
 
-The host uses Entra client credentials to obtain an app-only EDAV access token. Posit Connect identity metadata identifies the signed-in pilot user and is required before the token route responds, but it is never treated as the EDAV JWT.
+`host_app/` is the Posit Connect deployment target for a disposable DEV parent
+application. It is not the EM Knowledge Bot, a RAG system, CAT, or a production
+application. It remains configuration-pending until EDAV supplies the required
+settings and the approved runtime configuration is present. See the
+[host guide](host_app/README.md) for its file map and deployment boundary.
 
-Required runtime configuration:
+## Runtime configuration
 
-```text
-APP_ENV=development
-EDAV_MICROBOT_BASE_URL=https://edav-dev-microbot-ui.edav-dev-app.appserviceenvironment.net/
-EDAV_MICROBOT_ORIGIN=https://edav-dev-microbot-ui.edav-dev-app.appserviceenvironment.net
-EDAV_MICROBOT_CLIENT_ID=
-EDAV_ENTRA_TENANT_ID=
-EDAV_ENTRA_CLIENT_ID=
-EDAV_ENTRA_CLIENT_SECRET=
-EDAV_MICROBOT_SCOPE=
-EDAV_AUTH_MODE=unconfigured
-```
-
-`EDAV_ENTRA_CLIENT_SECRET` is never committed. Add it only through Posit Connect's **Vars** tab or an approved secret store. `EDAV_MICROBOT_SCOPE` must be the complete EDAV-provided scope ending in `/.default`. Use the same Entra application/client ID for `EDAV_ENTRA_CLIENT_ID` and `EDAV_MICROBOT_CLIENT_ID` when EDAV has provisioned one client for both purposes.
-
-For local development, create an isolated Python 3.11.2 environment, install `requirements-dev.txt`, and run from the repository root:
+The host reads non-secret settings and secrets only from approved runtime
+configuration or secret storage. The expected setting names are:
 
 ```text
-flask --app host_app.app run
+APP_ENV
+EDAV_MICROBOT_BASE_URL
+EDAV_MICROBOT_ORIGIN
+EDAV_MICROBOT_CLIENT_ID
+EDAV_ENTRA_TENANT_ID
+EDAV_ENTRA_CLIENT_ID
+EDAV_ENTRA_CLIENT_SECRET
+EDAV_MICROBOT_SCOPE
+EDAV_AUTH_MODE
 ```
 
-Do not commit `.env` files, tokens, client secrets, subscription keys, or Connect API keys.
+Add `EDAV_ENTRA_CLIENT_SECRET` only after the provider code is deployed, using
+Posit Connect **Vars** or an approved secret store. Until then, keep
+`EDAV_AUTH_MODE=unconfigured`; the host fails closed and does not load the
+iframe.
 
 ### Git-backed Posit Connect deployment
-
-Git-backed Connect deployment does not require a personal Connect API key. The committed `host_app/manifest.json` identifies the Flask application, and the isolated `host_app/` target directory prevents manuals and project-only records from entering the Git archive used by Connect.
 
 Connect treats `host_app/` as the deployment root and imports `app:app` from that directory. The host supports this top-level import while retaining package-relative imports for local tests.
 
@@ -116,8 +108,6 @@ After deployment, require login, restrict access to the designated pilot users o
 Connect must already be able to read the private GitHub repository through its server-managed GitHub credential or OAuth integration. If the repository cannot be selected or cloned, that is a Connect-side private-repository access issue; do not put GitHub credentials in the repository URL.
 
 The Git-backed content should track `dev` for this DEV pilot. After a successful DEV validation, promote the tested `dev` change to `main` through a separate pull request.
-
-## Local validation
 
 ### Diagnose a live token failure in Connect
 
@@ -164,33 +154,31 @@ test iframe acknowledgment separately.
 MSAL references: [client-credentials acquisition](https://learn.microsoft.com/en-us/entra/msal/python/getting-started/acquiring-tokens)
 and [client timeout option](https://learn.microsoft.com/en-us/python/api/msal/msal.application.confidentialclientapplication).
 
-The Phase 3 package can be checked with:
+## Validation
+
+From the repository root:
 
 ```text
-python scripts/verify_phase3.py
+python scripts/verify_bot.py
 python -m unittest discover -s tests
-python -m pytest tests/test_app.py tests/test_microbot_contract.py tests/test_deployment_boundary.py
+python -m pytest tests/test_app.py tests/test_entra_auth.py tests/test_microbot_contract.py tests/test_deployment_boundary.py
+node --test tests/test_microbot_js.mjs
 ```
 
-If Node.js is available, the executable JavaScript contract tests can also be run with `node --test tests/test_microbot_js.mjs`.
-
-When the local source register and all 35 PDFs are present, the local corpus can also be checked with Python and `pypdf`:
+The behavior-package check does not need the manual corpus. The source-register
+check does, so run it only when the approved local PDFs and local register are
+available:
 
 ```text
 python scripts/verify_source_register.py
 ```
 
-The corpus command verifies that every registered manual matches the corresponding local PDF. The Phase 3 command checks that its documents agree on the release identifier and ten required behavior tests. The unit-test command checks the conversation-archive workflow.
+See [scripts/README.md](scripts/README.md) for inputs and interpretation.
 
-## Scope boundary
+## Contribution and deployment path
 
-The disposable Flask application is only a parent window for the EDAV-hosted iframe. CAT development, Azure Functions, custom RAG, direct MaaS integration, production databases, PII, and competency or authorization decisions remain outside the pilot scope. The host does not ingest manuals, retrieve passages, call a model, or implement competency-assessment behavior.
-
-## Repository workflow
-
-- `main` is the stable branch and receives reviewed promotion pull requests from `dev`.
-- `dev` is the integration branch for active development.
-- Each change starts with a GitHub issue and an issue-numbered feature branch created from an up-to-date `dev`, such as `12-add-evaluation-matrix`.
-- Feature pull requests target `dev`; feature branches do not merge directly into `main`.
-- `dev` is promoted to `main` through a separate pull request after the integrated changes are ready.
-- Both `main` and `dev` are protected: changes require pull requests, unresolved review conversations block merging, and force-pushes and branch deletion are disabled.
+`main` is the stable branch. `dev` is the integration branch. Normal changes
+begin with an issue-numbered branch based on an up-to-date `dev` and reach
+`dev` through a pull request; promotion from `dev` to `main` is a separate pull
+request. Posit Connect must target `host_app/`, whose committed
+`host_app/manifest.json` lists only the application runtime files.

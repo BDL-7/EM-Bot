@@ -1,4 +1,4 @@
-"""Read-only verification of the Phase 1 equipment-manual source register.
+"""Read-only verification of the equipment-manual source register.
 
 The check compares every register row with the PDF currently on disk.  It does
 not modify the source manuals or the register.
@@ -14,7 +14,7 @@ from pypdf import PdfReader
 
 
 def verify(root: Path) -> int:
-    register_path = root / "PILOT_SOURCE_REGISTER.md"
+    register_path = root / "Docs" / "manual-register.md"
     docs_dir = root / "Docs"
     rows = [
         line
