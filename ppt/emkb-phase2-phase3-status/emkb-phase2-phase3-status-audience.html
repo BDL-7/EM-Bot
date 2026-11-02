@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Presentation Template</title>
+  <style>
+:root {
+  --page-bg: #05070f;
+  --bg: #080b16;
+  --bg2: #0e1830;
+  --panel: #101a30;
+  --panel2: #0d1526;
+  --line: #22304d;
+  --ink: #eef4ff;
+  --muted: #a8b6d4;
+  --muted2: #6f80a3;
+  --blue: #4aa8ff;
+  --cyan: #22d3ee;
+  --purple: #9b7dff;
+  --pink: #f472b6;
+  --green: #34d399;
+  --amber: #fbbf24;
+  --red: #f26d6d;
+  --slide-glow: #13213a;
+  --slide-middle: #0a0e18;
+  --slide-base: #070a12;
+  --font: "Aptos", "Inter", "Segoe UI", Arial, sans-serif;
+  --mono: "SF Mono", "Cascadia Code", Consolas, monospace;
+  --slide-width: 1280px;
+  --slide-height: 720px;
+  --slide-pad-x: 58px;
+  --slide-pad-y: 34px;
+}
+
+:root[data-font-family="system-sans"] {
+  --font: "Aptos", "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+:root[data-font-family="humanist-sans"] {
+  --font: "Segoe UI", "Trebuchet MS", Calibri, Arial, sans-serif;
+}
+
+:root[data-font-family="scientific-serif"] {
+  --font: Cambria, Georgia, "Times New Roman", serif;
+}
+
+:root[data-color-scheme="graphite"] {
+  --page-bg: #090a0d;
+  --bg: #0f1115;
+  --bg2: #1a1e25;
+  --panel: #191d24;
+  --panel2: #13161b;
+  --line: #343b47;
+  --ink: #f1f3f5;
+  --muted: #bdc3cc;
+  --muted2: #858d99;
+  --blue: #79afe0;
+  --cyan: #70c5c3;
+  --purple: #b19bd6;
+  --pink: #d68fb2;
+  --green: #78c49b;
+  --amber: #d8b45e;
+  --red: #dc8080;
+  --slide-glow: #2a3039;
+  --slide-middle: #171a20;
+  --slide-base: #0e1014;
+}
+
+:root[data-color-scheme="deep-ocean"] {
+  --page-bg: #031014;
+  --bg: #06151b;
+  --bg2: #0a2630;
+  --panel: #0b2630;
+  --panel2: #071c24;
+  --line: #1d4652;
+  --ink: #edfafa;
+  --muted: #a9c8ca;
+  --muted2: #71999d;
+  --blue: #4db4d7;
+  --cyan: #35d0cf;
+  --purple: #9c93dd;
+  --pink: #d987b4;
+  --green: #43c89c;
+  --amber: #d8b75d;
+  --red: #df7d78;
+  --slide-glow: #0d3944;
+  --slide-middle: #08232c;
+  --slide-base: #041319;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--page-bg);
+  color: var(--ink);
+  font-family: var(--font);
+}
+body { -webkit-font-smoothing: antialiased; }
+button, a { font: inherit; }
+
+#app {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+body.presenter #app { right: 380px; }
+body.presenter.notes-hidden #app { right: 0; }
+
+#deck {
+  position: relative;
+  width: var(--slide-width);
+  height: var(--slide-height);
+  transform-origin: center center;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  width: var(--slide-width);
+  height: var(--slide-height);
+  padding: var(--slide-pad-y) var(--slide-pad-x);
+  overflow: hidden;
+  background:
+    radial-gradient(1100px 620px at 74% -8%, var(--slide-glow) 0%, var(--slide-middle) 54%, var(--slide-base) 100%);
+}
+.slide.active { display: flex; }
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+.deck-id {
+  color: #e4f0ff;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.progress {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 7px;
+}
+.progress-label {
+  color: var(--blue);
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.progress-bars { display: flex; gap: 5px; }
+.progress-bars i {
+  display: block;
+  width: 20px;
+  height: 5px;
+  border-radius: 999px;
+  background: #22304d;
+}
+.progress-bars i.done { background: #33507d; }
+.progress-bars i.on { background: var(--blue); }
+
+h1 {
+  max-width: 1120px;
+  margin: 12px 0 0;
+  color: var(--ink);
+  font-size: 45px;
+  font-weight: 900;
+  letter-spacing: -.025em;
+  line-height: 1.05;
+}
+h1 span { color: var(--blue); }
+h2, h3, h4 { color: var(--ink); }
+p { margin: 0; }
+.subtitle {
+  max-width: 1030px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1.35;
+}
+.kicker {
+  color: var(--cyan);
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+.lead {
+  max-width: 850px;
+  margin: 16px 0 20px;
+  color: var(--muted);
+  font-size: 22px;
+  line-height: 1.35;
+}
+.eyebrow {
+  margin-bottom: 8px;
+  color: var(--muted2);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.panel, .card, .step, .timeline-node {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(16, 26, 48, .98), rgba(13, 21, 38, .98));
+  box-shadow: 0 16px 30px rgba(0, 0, 0, .18);
+}
+.panel, .card { padding: 22px 24px; }
+.panel h2, .panel h3, .card h2, .card h3 {
+  margin: 0 0 12px;
+  font-size: 23px;
+  line-height: 1.15;
+}
+.panel p, .card p, .body-copy, li {
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.42;
+}
+.panel .big-number, .card .big-number {
+  margin: 8px 0 6px;
+  color: var(--ink);
+  font-size: 38px;
+  font-weight: 900;
+}
+.panel .label, .card .label {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.accent-cyan { border-color: #1e6a7a; }
+.accent-cyan h2, .accent-cyan h3, .accent-cyan .big-number { color: var(--cyan); }
+.accent-purple { border-color: #4a3c7d; }
+.accent-purple h2, .accent-purple h3, .accent-purple .big-number { color: var(--purple); }
+.accent-pink { border-color: #72405e; }
+.accent-pink h2, .accent-pink h3, .accent-pink .big-number { color: var(--pink); }
+.accent-green { border-color: #245b42; }
+.accent-green h2, .accent-green h3, .accent-green .big-number { color: var(--green); }
+.accent-amber { border-color: #6d551d; }
+.accent-amber h2, .accent-amber h3, .accent-amber .big-number { color: var(--amber); }
+.accent-red { border-color: #704040; }
+.accent-red h2, .accent-red h3, .accent-red .big-number { color: var(--red); }
+
+ul.clean, ol.clean {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+ul.clean li {
+  position: relative;
+  margin: 8px 0;
+  padding-left: 18px;
+}
+ul.clean li::before {
+  position: absolute;
+  top: .68em;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--blue);
+  content: "";
+}
+ol.numbered { counter-reset: item; }
+ol.numbered li {
+  position: relative;
+  min-height: 32px;
+  margin: 13px 0;
+  padding-left: 44px;
+  counter-increment: item;
+}
+ol.numbered li::before {
+  position: absolute;
+  top: .02em;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--purple);
+  color: #06101f;
+  font-size: 17px;
+  font-weight: 900;
+  content: counter(item);
+}
+
+.grid {
+  display: grid;
+  gap: 22px;
+}
+.grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.grid.cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+.slide-body { flex: 1; min-height: 0; }
+
+.image-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #060a14;
+  box-shadow: 0 20px 42px rgba(0, 0, 0, .24);
+}
+.image-frame.light { background: #f6f9fb; }
+.image-frame img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 12px;
+  object-fit: contain;
+}
+.image-frame.cover img { width: 100%; height: 100%; object-fit: cover; }
+.image-caption {
+  margin-top: 8px;
+  color: var(--muted2);
+  font-size: 13px;
+  text-align: center;
+}
+
+.layout-title .cover-grid {
+  display: grid;
+  flex: 1;
+  grid-template-columns: .95fr 1.05fr;
+  gap: 30px;
+  align-items: center;
+  min-height: 0;
+}
+.layout-title.no-image .cover-grid {
+  grid-template-columns: 1fr;
+  max-width: 980px;
+}
+.layout-title .cover-copy h1 { margin-top: 12px; font-size: 62px; line-height: 1; }
+.layout-title.no-image .cover-copy h1 { font-size: 68px; }
+.layout-title .hero { height: 475px; }
+.cover-credits {
+  position: absolute;
+  bottom: 30px;
+  left: var(--slide-pad-x);
+  color: var(--muted);
+  font-size: 17px;
+  font-weight: 500;
+}
+.dotlist {
+  display: grid;
+  gap: 14px;
+  margin-top: 24px;
+}
+.dotitem { display: flex; gap: 14px; align-items: flex-start; }
+.dotitem .dot {
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  margin-top: 9px;
+  border-radius: 50%;
+  background: var(--blue);
+}
+.dotitem p { color: #b9c7e4; font-size: 20px; line-height: 1.35; }
+.dotitem b { color: #f4f8ff; font-weight: 900; }
+
+.layout-image .single-image-wrap {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  margin-top: 24px;
+}
+.layout-image .single-image-wrap .image-frame {
+  width: 1120px;
+  height: 455px;
+}
+
+.layout-cards .grid { margin-top: 36px; }
+.layout-cards .card { min-height: 240px; }
+.card-number {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 18px;
+  border-radius: 999px;
+  background: var(--cyan);
+  color: #06101f;
+  font-size: 21px;
+  font-weight: 900;
+}
+.accent-purple .card-number { background: var(--purple); }
+.accent-pink .card-number { background: var(--pink); }
+.accent-green .card-number { background: var(--green); }
+.accent-amber .card-number { background: var(--amber); }
+
+.layout-split .split-grid {
+  display: grid;
+  flex: 1;
+  gap: 24px;
+  align-items: stretch;
+  min-height: 0;
+  margin-top: 24px;
+}
+.layout-split .split-grid > * { min-width: 0; }
+.block-stack { display: grid; gap: 14px; height: 100%; }
+.block-list { height: 100%; }
+.block-list .panel { height: 100%; }
+.quote {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 30px;
+  border: 1px solid #2f4269;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(74, 168, 255, .12), rgba(155, 125, 255, .1));
+  color: #dfe7ff;
+  font-size: 27px;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: center;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.chip {
+  padding: 7px 11px;
+  border: 1px solid #2d7e8e;
+  border-radius: 999px;
+  background: rgba(34, 211, 238, .08);
+  color: var(--cyan);
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.layout-metrics .metrics-grid {
+  display: grid;
+  flex: 1;
+  grid-template-columns: .65fr 1.35fr;
+  gap: 20px;
+  min-height: 0;
+  margin-top: 28px;
+}
+.stat-stack { display: grid; gap: 14px; }
+.stat-card { padding: 20px; text-align: center; }
+.stat-card .big-number { font-size: 42px; }
+.bar-panel { padding: 22px 24px; }
+.bar-panel h3 { margin: 0 0 18px; font-size: 25px; }
+.bar-row {
+  display: grid;
+  grid-template-columns: 180px 70px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin: 9px 0;
+}
+.bar-row .bar-label { color: var(--muted); font-size: 15px; text-align: right; }
+.bar-row .bar-value { color: var(--ink); font-size: 14px; font-weight: 900; white-space: nowrap; }
+.bar-track { height: 13px; overflow: hidden; border-radius: 7px; background: #0b1428; }
+.bar-fill { height: 100%; border-radius: 7px; background: var(--blue); }
+
+.layout-process .process-flow {
+  display: grid;
+  flex: 1;
+  align-items: stretch;
+  gap: 10px;
+  min-height: 0;
+  margin-top: 52px;
+}
+.step {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 300px;
+  padding: 20px;
+}
+.step h3 { margin: 0; color: var(--blue); font-size: 18px; }
+.step .step-text { margin: auto 0; color: var(--ink); font-size: 20px; line-height: 1.35; text-align: center; }
+.step pre {
+  margin: auto 0;
+  padding: 16px;
+  border: 1px solid #1b2946;
+  border-radius: 10px;
+  background: #050913;
+  color: #cfe0ff;
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+.step small { color: var(--muted2); font-size: 13px; text-align: center; }
+.flow-arrow { display: grid; place-items: center; color: var(--blue); font-size: 30px; }
+
+.layout-loop .loop-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  flex: 1;
+  min-height: 0;
+  margin-top: 34px;
+}
+.loop-card { min-height: 420px; overflow: visible; }
+.cycle {
+  position: relative;
+  width: 300px;
+  height: 190px;
+  margin: 18px auto 10px;
+  border: 2px dashed #2a3c5e;
+  border-radius: 50%;
+}
+.cycle-node {
+  position: absolute;
+  padding: 9px 18px;
+  border: 1px solid #2a3c5e;
+  border-radius: 999px;
+  background: #16223b;
+  color: var(--cyan);
+  font-weight: 900;
+}
+.cycle-node:nth-child(1) { top: -18px; left: 100px; }
+.cycle-node:nth-child(2) { right: -10px; bottom: 42px; color: var(--amber); }
+.cycle-node:nth-child(3) { bottom: 42px; left: -24px; color: var(--green); }
+.cycle-center { position: absolute; inset: 0; display: grid; place-items: center; color: var(--cyan); font-size: 62px; }
+.stack-list { display: grid; gap: 12px; margin-top: 20px; }
+.stack-item {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #0b1428;
+  color: #d7e1f8;
+  font-size: 18px;
+}
+.stack-item.emphasis { border-color: #256e94; background: #10243a; color: #fff; font-weight: 900; }
+
+.layout-timeline .timeline {
+  display: grid;
+  flex: 1;
+  gap: 12px;
+  min-height: 0;
+  margin-top: 40px;
+}
+.timeline-node { min-height: 270px; padding: 16px 13px; text-align: center; }
+.timeline-number {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 12px;
+  border-radius: 999px;
+  background: var(--blue);
+  color: #06101f;
+  font-size: 21px;
+  font-weight: 900;
+}
+.timeline-node h3 { margin: 0; font-size: 18px; }
+.timeline-node h4 {
+  min-height: 28px;
+  margin: 4px 0 12px;
+  color: var(--cyan);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.timeline-node li { font-size: 13.5px; text-align: left; }
+.deliverables {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 14px;
+  margin-bottom: 30px;
+  padding: 14px 18px;
+  border: 1px solid #3e3b74;
+  border-radius: 14px;
+  background: rgba(155, 125, 255, .12);
+  color: #dfe7ff;
+  font-size: 16px;
+  text-align: center;
+}
+.deliverables b { color: #fff; font-size: 18px; }
+
+.layout-closing .closing-grid {
+  display: grid;
+  flex: 1;
+  grid-template-columns: .85fr 1fr 1.05fr;
+  gap: 30px;
+  align-items: start;
+  min-height: 0;
+  margin-top: 32px;
+}
+.layout-closing h2 { margin: 0 0 18px; font-size: 28px; }
+.layout-closing li { color: #d7e1f8; font-size: 21px; line-height: 1.3; }
+.closing-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+.closing-link .link-label {
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: var(--cyan);
+  box-shadow: 0 12px 22px rgba(34, 211, 238, .2);
+  color: #06101f;
+  font-size: 16px;
+  font-weight: 900;
+}
+.closing-link img { width: 390px; max-height: 330px; object-fit: contain; filter: drop-shadow(0 16px 22px rgba(0, 0, 0, .42)); }
+
+.layout-custom .custom-wrap { flex: 1; min-height: 0; margin-top: 24px; }
+.trace-diagram {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr 60px 1fr;
+  align-items: center;
+  height: 390px;
+}
+.trace-node {
+  padding: 28px 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(180deg, #111b31, #0d1526);
+  text-align: center;
+}
+.trace-node b { display: block; margin-bottom: 10px; color: var(--cyan); font-size: 23px; }
+.trace-node span { color: var(--muted); font-size: 17px; line-height: 1.4; }
+.trace-arrow { color: var(--blue); font-size: 34px; font-weight: 900; text-align: center; }
+
+.nav {
+  position: fixed;
+  z-index: 20;
+  bottom: 16px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 13px;
+  border: 1px solid #22304d;
+  border-radius: 999px;
+  background: rgba(8, 12, 22, .86);
+  opacity: .78;
+  transform: translateX(-50%);
+  backdrop-filter: blur(8px);
+  transition: opacity .18s ease;
+}
+.nav:hover, .nav:focus-within { opacity: 1; }
+.nav button { padding: 4px 10px; border: 0; border-radius: 9px; background: transparent; color: #dbeafe; font-size: 20px; cursor: pointer; }
+.nav button:hover { background: #1a2743; }
+.nav span { min-width: 58px; color: var(--muted); font-size: 13px; text-align: center; }
+.hint { position: fixed; z-index: 20; top: 12px; right: 18px; color: #62718d; font-size: 12px; opacity: .18; }
+.kbd { padding: 1px 6px; border: 1px solid #2a3c5e; border-radius: 5px; background: #101a30; color: #a8b6d4; font-family: var(--mono); }
+
+.speaker-notes {
+  position: fixed;
+  z-index: 30;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 380px;
+  overflow-y: auto;
+  padding: 22px;
+  border-left: 1px solid var(--line);
+  background: #070b14;
+  color: var(--muted);
+}
+.notes-hidden .speaker-notes { display: none; }
+.notes-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+#notes-slide-id { color: var(--blue); font-size: 12px; }
+.note-duration {
+  display: inline-block;
+  margin: 16px 0 2px;
+  padding: 5px 9px;
+  border: 1px solid #2a3c5e;
+  border-radius: 999px;
+  color: var(--cyan);
+  font-size: 12px;
+  font-weight: 800;
+}
+.note-section { margin-top: 18px; }
+.note-section h3 { margin: 0 0 7px; color: var(--ink); font-size: 15px; }
+.note-section .clean { gap: 6px; font-size: 14px; line-height: 1.45; }
+.notes-empty { margin-top: 18px; color: var(--muted2); font-size: 14px; }
+.presenter .nav { left: calc((100% - 380px) / 2); }
+.presenter.notes-hidden .nav { left: 50%; }
+.presenter .hint { right: 398px; }
+.presenter.notes-hidden .hint { right: 18px; }
+
+.debug .slide { outline: 2px dashed rgba(242, 109, 109, .8); outline-offset: -4px; }
+.debug .overflowing { box-shadow: inset 0 0 0 6px rgba(242, 109, 109, .9); }
+.debug-badge {
+  position: absolute;
+  z-index: 99;
+  right: 12px;
+  bottom: 12px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: var(--red);
+  color: #160606;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+@keyframes cardIn { from { opacity: 0; transform: translateY(18px) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes imageIn { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes barPulse { 0%, 100% { filter: none; } 50% { filter: drop-shadow(0 0 8px rgba(74, 168, 255, .75)); } }
+
+.slide.active .topbar { animation: fadeDown .36s ease both; }
+.slide.active h1 { animation: fadeUp .46s cubic-bezier(.2, .85, .25, 1) .06s both; }
+.slide.active .subtitle, .slide.active .lead { animation: fadeUp .42s cubic-bezier(.2, .85, .25, 1) .16s both; }
+.slide.active .card, .slide.active .panel, .slide.active .step, .slide.active .timeline-node, .slide.active .trace-node, .slide.active .deliverables { animation: cardIn .46s cubic-bezier(.2, .85, .25, 1) both; }
+.slide.active .grid > *:nth-child(1), .slide.active .process-flow > *:nth-child(1), .slide.active .timeline > *:nth-child(1) { animation-delay: .20s; }
+.slide.active .grid > *:nth-child(2), .slide.active .process-flow > *:nth-child(3), .slide.active .timeline > *:nth-child(2) { animation-delay: .30s; }
+.slide.active .grid > *:nth-child(3), .slide.active .process-flow > *:nth-child(5), .slide.active .timeline > *:nth-child(3) { animation-delay: .40s; }
+.slide.active .grid > *:nth-child(4), .slide.active .process-flow > *:nth-child(7), .slide.active .timeline > *:nth-child(4) { animation-delay: .50s; }
+.slide.active .grid > *:nth-child(5), .slide.active .timeline > *:nth-child(5) { animation-delay: .60s; }
+.slide.active .image-frame img { animation: imageIn .62s cubic-bezier(.2, .85, .25, 1) .18s both; }
+.slide.active .progress-bars i.on { animation: barPulse 1.5s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .slide.active * { animation: none !important; }
+}
+
+@media print {
+  @page { size: 13.333in 7.5in; margin: 0; }
+  html, body { width: 13.333in; height: auto; overflow: visible; background: white; }
+  #app { position: static; display: block; }
+  #deck { width: 13.333in !important; height: auto !important; transform: none !important; transform-origin: top left !important; }
+  .slide { position: relative; display: flex !important; width: 13.333in !important; height: 7.5in !important; margin: 0 !important; page-break-after: always; break-after: page; box-shadow: none !important; }
+  .nav, .hint, .debug-badge, .speaker-notes { display: none !important; }
+}
+
+</style>
+</head>
+<body>
+  <div id="app">
+    <main id="deck" aria-live="polite"></main>
+  </div>
+
+  <div class="hint">
+    Use <span class="kbd">Left</span> <span class="kbd">Right</span>
+    <span class="kbd">F</span> fullscreen <span class="kbd">D</span> debug
+  </div>
+  <div class="nav" aria-label="Presentation navigation">
+    <button aria-label="Previous slide" id="prev">&lsaquo;</button>
+    <span id="count">1 / 1</span>
+    <button aria-label="Next slide" id="next">&rsaquo;</button>
+  </div>
+
+  <script>
+window.DECK = {
+  "meta": {
+    "shortTitle": "EM Knowledge Bot",
+    "title": "EM Knowledge Bot: Status and Safe Execution",
+    "presenter": "Repository status review",
+    "organization": "Equipment Manual Knowledge Retrieval Pilot",
+    "date": "October 6, 2026",
+    "visualStyle": {
+      "fontFamily": "humanist-sans",
+      "fontScale": "standard",
+      "colorScheme": "deep-ocean"
+    }
+  },
+  "slides": [
+    {
+      "id": "s01-title",
+      "layout": "title",
+      "section": "Pilot Snapshot",
+      "title": "EM Knowledge Bot status and safe execution",
+      "highlight": "safe execution",
+      "subtitle": "Read-only repository status, Phase 2 and Phase 3 plan, and approval boundaries as of October 6, 2026.",
+      "kicker": "Equipment Manual Knowledge Retrieval Pilot",
+      "bullets": [
+        {
+          "color": "cyan",
+          "html": "Purpose: help staff find approved equipment-manual information through EDAV"
+        },
+        {
+          "color": "purple",
+          "html": "Scope: 35 approved, non-PII manuals held locally"
+        },
+        {
+          "color": "green",
+          "html": "Decision: keep repository evidence separate from live EDAV evidence"
+        }
+      ],
+      "credits": "Repository status review | October 6, 2026"
+    },
+    {
+      "id": "s02-evidence",
+      "layout": "cards",
+      "section": "Evidence Status",
+      "title": "Evidence status table",
+      "highlight": "Evidence",
+      "subtitle": "Each category names what the current checkout supports and what it does not.",
+      "columns": 2,
+      "numbered": false,
+      "cards": [
+        {
+          "accent": "green",
+          "title": "Verified from files and tests",
+          "bullets": [
+            "e057c36 is active branch HEAD",
+            "Phase 3 package is consistent",
+            "21 selected host tests passed",
+            "Exact-origin and nonce checks are tested"
+          ]
+        },
+        {
+          "accent": "cyan",
+          "title": "Implemented, not live-validated",
+          "bullets": [
+            "MSAL client-credentials provider",
+            "Fail-closed token endpoint",
+            "Token cache and sanitized errors",
+            "Iframe token handoff code"
+          ]
+        },
+        {
+          "accent": "purple",
+          "title": "Documented or planned",
+          "bullets": [
+            "EMKB-P3-v1.0 release",
+            "Ten acceptance prompts",
+            "Git-backed Connect runbook",
+            "Phase 4 evaluation concept"
+          ]
+        },
+        {
+          "accent": "amber",
+          "title": "External dependencies",
+          "bullets": [
+            "EDAV identity and scope contract",
+            "Bot identifier and source ingestion result",
+            "Model, access, citations, UI route",
+            "GitHub Issue #12 linkage"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s03-scope",
+      "layout": "cards",
+      "section": "Pilot Snapshot",
+      "title": "Pilot boundaries and ownership",
+      "highlight": "ownership",
+      "subtitle": "The pilot evaluates a bounded EDAV retrieval experience without a separate RAG service.",
+      "columns": 4,
+      "numbered": false,
+      "cards": [
+        {
+          "accent": "cyan",
+          "title": "EDAV BaaS",
+          "bullets": [
+            "Hosts bot and retrieval",
+            "Controls model and source display",
+            "Provides supported UI route"
+          ]
+        },
+        {
+          "accent": "purple",
+          "title": "Flask parent",
+          "bullets": [
+            "Disposable iframe host",
+            "Obtains short-lived app token",
+            "Does not retrieve manuals"
+          ]
+        },
+        {
+          "accent": "green",
+          "title": "Local sources",
+          "bullets": [
+            "35 approved PDFs",
+            "Source register stays local",
+            "No manual contents in Git"
+          ]
+        },
+        {
+          "accent": "amber",
+          "title": "Future CAT use",
+          "bullets": [
+            "Potential later decision",
+            "Outside this pilot",
+            "No competency function"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s04-checkout",
+      "layout": "split",
+      "section": "Pilot Snapshot",
+      "title": "Checkout is merged but local dev is stale",
+      "highlight": "merged",
+      "subtitle": "PR #13 merged the feature change into origin/dev. This checkout remains on the feature branch.",
+      "columns": "1fr 1fr",
+      "left": {
+        "kind": "panel",
+        "accent": "cyan",
+        "title": "Observed local state",
+        "bullets": [
+          "Checkout: aquarius-assistant",
+          "Branch: 12-implement-entra-token-flow",
+          "HEAD: e057c36",
+          "Pre-existing modification: .gitignore",
+          "Feature branch tracks origin"
+        ]
+      },
+      "right": {
+        "kind": "panel",
+        "accent": "amber",
+        "title": "Current release implication",
+        "bullets": [
+          "PR #13 merged into origin/dev",
+          "Local dev is 10 commits behind origin/dev",
+          "Current checkout remains the feature branch",
+          "GitHub CLI is unavailable",
+          "Refresh local dev before a Git-backed deployment"
+        ]
+      }
+    },
+    {
+      "id": "s05-release-path",
+      "layout": "timeline",
+      "section": "Safe Execution",
+      "title": "Issue-first merge completed for the token provider",
+      "highlight": "merge",
+      "subtitle": "PR #13 merged the feature branch into origin/dev; PR #19 later merged dev into origin/main.",
+      "stages": [
+        {
+          "title": "Feature branch",
+          "subtitle": "Existing branch",
+          "bullets": [
+            "12-implement-entra-token-flow",
+            "Remote branch still retained"
+          ]
+        },
+        {
+          "title": "PR #13",
+          "subtitle": "Merged to dev",
+          "bullets": [
+            "Merge commit d592c96",
+            "Contains e057c36"
+          ]
+        },
+        {
+          "title": "Current dev",
+          "subtitle": "Has advanced",
+          "bullets": [
+            "Later PRs #16 and #18",
+            "Refresh stale local dev"
+          ]
+        },
+        {
+          "title": "Connect deployment",
+          "subtitle": "Next approved action",
+          "bullets": [
+            "Select updated dev branch",
+            "Target host_app only"
+          ]
+        },
+        {
+          "title": "PR #19",
+          "subtitle": "Dev merged to main",
+          "bullets": [
+            "Merge commit 67ca23b",
+            "Contains the token provider"
+          ]
+        }
+      ],
+      "deliverables": [
+        "PR #13 merge record",
+        "Updated local dev",
+        "Reviewed deployment commit",
+        "Recorded main promotion"
+      ]
+    },
+    {
+      "id": "s06-owner-inputs",
+      "layout": "cards",
+      "section": "Safe Execution",
+      "title": "Evidence EDAV and platform owners must provide",
+      "highlight": "must provide",
+      "subtitle": "Record facts and evidence locations, never secrets or token values.",
+      "columns": 2,
+      "numbered": false,
+      "cards": [
+        {
+          "accent": "cyan",
+          "title": "Bot and identity",
+          "bullets": [
+            "Bot or client identifier",
+            "Accepted identity type",
+            "Audience and complete scope",
+            "App-only support confirmation"
+          ]
+        },
+        {
+          "accent": "green",
+          "title": "Manual sources",
+          "bullets": [
+            "Supported ingestion path",
+            "Accepted and processed counts",
+            "Rejection outcome",
+            "Reconciliation to 35 manuals"
+          ]
+        },
+        {
+          "accent": "purple",
+          "title": "Behavior and access",
+          "bullets": [
+            "Selected model",
+            "Pilot user access group",
+            "Citation display capability",
+            "External knowledge control"
+          ]
+        },
+        {
+          "accent": "amber",
+          "title": "Configuration and route",
+          "bullets": [
+            "Supported screen",
+            "Save or publish action",
+            "Preview or direct UI route",
+            "Evidence owner and time"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s07-connect",
+      "layout": "timeline",
+      "section": "Safe Execution",
+      "title": "Posit Connect activation checklist",
+      "highlight": "activation",
+      "subtitle": "Keep the host configuration-pending until deployed code and restricted access are confirmed.",
+      "stages": [
+        {
+          "title": "Deploy dev",
+          "subtitle": "Reviewed code",
+          "bullets": [
+            "Import branch dev",
+            "Target host_app only"
+          ]
+        },
+        {
+          "title": "Restrict access",
+          "subtitle": "Before auth",
+          "bullets": [
+            "Require login",
+            "No public sharing"
+          ]
+        },
+        {
+          "title": "Set non-secrets",
+          "subtitle": "Still pending",
+          "bullets": [
+            "Base URL and origin",
+            "Tenant, client IDs, scope"
+          ]
+        },
+        {
+          "title": "Store secret",
+          "subtitle": "Approved channel",
+          "bullets": [
+            "Connect Vars tab",
+            "Or secret store"
+          ]
+        },
+        {
+          "title": "Enable mode",
+          "subtitle": "Last setting",
+          "bullets": [
+            "Set client_credentials",
+            "Do not log values"
+          ]
+        },
+        {
+          "title": "Validate",
+          "subtitle": "Observed evidence",
+          "bullets": [
+            "Check health",
+            "Check token and iframe handoff"
+          ]
+        }
+      ],
+      "deliverables": [
+        "Restricted content",
+        "Safe configuration",
+        "Observed health result",
+        "No token exposure"
+      ]
+    },
+    {
+      "id": "s08-handoff",
+      "layout": "process",
+      "section": "Safe Execution",
+      "title": "Health, token, and iframe handoff checks",
+      "highlight": "handoff",
+      "subtitle": "Capture status codes, booleans, and evidence locations rather than secrets.",
+      "steps": [
+        {
+          "label": "1. Health",
+          "text": "Confirm expected safe readiness booleans for client ID, tenant, scope, and authentication mode."
+        },
+        {
+          "label": "2. Connect identity",
+          "text": "Verify an authenticated Connect user is required before the token endpoint responds."
+        },
+        {
+          "label": "3. Token route",
+          "text": "Observe success or sanitized failure. Do not display, log, or save the token value."
+        },
+        {
+          "label": "4. Iframe protocol",
+          "text": "Confirm configured origin, nonce-matched acknowledgment, and clean listener shutdown."
+        }
+      ]
+    },
+    {
+      "id": "s09-phase3-apply",
+      "layout": "timeline",
+      "section": "Phase 3 Verification",
+      "title": "Phase 3 begins after Phase 2 evidence",
+      "highlight": "after",
+      "subtitle": "The prepared release stays unapplied until the bot, sources, model, access, and route are observed.",
+      "stages": [
+        {
+          "title": "Confirm gate",
+          "subtitle": "Phase 2 evidence",
+          "bullets": [
+            "Bot and source counts",
+            "Model, access, route"
+          ]
+        },
+        {
+          "title": "Recheck local",
+          "subtitle": "Package",
+          "bullets": [
+            "Verify source register",
+            "Run Phase 3 verifier"
+          ]
+        },
+        {
+          "title": "Apply release",
+          "subtitle": "EMKB-P3-v1.0",
+          "bullets": [
+            "Copy approved instructions",
+            "Record field name"
+          ]
+        },
+        {
+          "title": "Set controls",
+          "subtitle": "Only exposed",
+          "bullets": [
+            "Enable source display",
+            "Record unavailable controls"
+          ]
+        },
+        {
+          "title": "Publish",
+          "subtitle": "Supported action",
+          "bullets": [
+            "Save configuration",
+            "Record outcome"
+          ]
+        },
+        {
+          "title": "Test fresh",
+          "subtitle": "Ten conversations",
+          "bullets": [
+            "One test per conversation",
+            "Save evidence"
+          ]
+        }
+      ],
+      "deliverables": [
+        "Configuration record",
+        "Test evidence",
+        "Known limitations",
+        "No inferred pass"
+      ]
+    },
+    {
+      "id": "s10-p3-record",
+      "layout": "cards",
+      "section": "Phase 3 Verification",
+      "title": "P3-T01 through P3-T10 require fresh conversations",
+      "highlight": "fresh conversations",
+      "subtitle": "Record Pass, Fail, or Blocked with source display, reviewer, date, and evidence location.",
+      "columns": 2,
+      "numbered": false,
+      "cards": [
+        {
+          "accent": "cyan",
+          "title": "Grounding and citations",
+          "bullets": [
+            "P3-T01 manual-grounded answer",
+            "P3-T02 citation fidelity",
+            "Reviewer checks support"
+          ]
+        },
+        {
+          "accent": "purple",
+          "title": "Ambiguity and gaps",
+          "bullets": [
+            "P3-T03 ambiguous equipment",
+            "P3-T04 unsupported information",
+            "P3-T10 instruction integrity"
+          ]
+        },
+        {
+          "accent": "green",
+          "title": "Safety boundaries",
+          "bullets": [
+            "P3-T05 competency",
+            "P3-T06 current status",
+            "P3-T08 unsafe bypass"
+          ]
+        },
+        {
+          "accent": "amber",
+          "title": "People and local facts",
+          "bullets": [
+            "P3-T07 PII boundary",
+            "P3-T09 missing local fact",
+            "Current result: Not run"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s11-blockers",
+      "layout": "cards",
+      "section": "Phase 3 Verification",
+      "title": "Release-blocking behavior failures",
+      "highlight": "Release-blocking",
+      "subtitle": "A plausible answer does not offset a safety, privacy, competency, or citation-integrity failure.",
+      "columns": 4,
+      "numbered": false,
+      "cards": [
+        {
+          "accent": "pink",
+          "title": "Unsafe guidance",
+          "bullets": [
+            "No bypass instructions",
+            "Direct user to official support",
+            "Retest correction"
+          ]
+        },
+        {
+          "accent": "pink",
+          "title": "PII use",
+          "bullets": [
+            "No employee details",
+            "Do not request PII",
+            "Retest correction"
+          ]
+        },
+        {
+          "accent": "pink",
+          "title": "Competency conclusion",
+          "bullets": [
+            "No training decision",
+            "Refer to SOP or supervisor",
+            "Retest correction"
+          ]
+        },
+        {
+          "accent": "pink",
+          "title": "Fabricated citation",
+          "bullets": [
+            "No invented locator",
+            "Name reliable source only",
+            "Retest correction"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s12-conclusion",
+      "layout": "split",
+      "section": "Phase 3 Verification",
+      "title": "Prepared work does not equal live readiness",
+      "highlight": "does not equal",
+      "subtitle": "Use only the claims that observed evidence supports.",
+      "columns": "1fr 1fr",
+      "left": {
+        "kind": "panel",
+        "accent": "green",
+        "title": "Supported today",
+        "bullets": [
+          "Phase 3 release is prepared",
+          "Host code has a candidate provider",
+          "Selected host tests passed",
+          "Phase 2 remains pending"
+        ]
+      },
+      "right": {
+        "kind": "panel",
+        "accent": "amber",
+        "title": "Not supported today",
+        "bullets": [
+          "EDAV deployment succeeded",
+          "EDAV accepted a token",
+          "Manual ingestion completed",
+          "Phase 3 passed",
+          "Production readiness"
+        ]
+      }
+    },
+    {
+      "id": "s13-phase4-approvals",
+      "layout": "closing",
+      "section": "Phase 4 Decision",
+      "title": "Phase 4 evaluation and approvals",
+      "highlight": "approvals",
+      "subtitle": "Phase 4 starts only after Phase 3 passes. External actions require explicit approval.",
+      "actionsTitle": "Phase 4 matrix after the gate",
+      "actions": [
+        "Manual answer accuracy and completeness",
+        "Citation fidelity and source-locator usefulness",
+        "Pilot-user usefulness, limitations, and feedback",
+        "Designated SME review and continue-or-stop decision"
+      ],
+      "intakeTitle": "Approvals before external action",
+      "intake": [
+        "Refresh local dev",
+        "Confirm selected dev commit",
+        "EDAV configuration authority",
+        "Connect deployment authority",
+        "Secret activation authority"
+      ],
+      "linkLabel": "Repository README workflow",
+      "link": "README.md",
+      "imageAlt": "Template-native closing visual intentionally omitted"
+    }
+  ]
+};
+
+</script>
+  <script>
+(() => {
+  "use strict";
+
+  const deckData = window.DECK;
+  const speakerNotes = window.SPEAKER_NOTES || {};
+  if (!deckData || !Array.isArray(deckData.slides)) {
+    throw new Error("deck-content.js must define window.DECK with a slides array.");
+  }
+
+  const visualStyle = {
+    fontFamily: deckData.meta?.visualStyle?.fontFamily || "system-sans",
+    fontScale: deckData.meta?.visualStyle?.fontScale || "standard",
+    colorScheme: deckData.meta?.visualStyle?.colorScheme || "midnight"
+  };
+  const fontFamilies = new Set(["system-sans", "humanist-sans", "scientific-serif"]);
+  const colorSchemes = new Set(["midnight", "graphite", "deep-ocean"]);
+  const fontScaleFactors = { compact: 0.92, standard: 1, large: 1.08 };
+  document.documentElement.dataset.fontFamily = fontFamilies.has(visualStyle.fontFamily)
+    ? visualStyle.fontFamily
+    : "system-sans";
+  document.documentElement.dataset.colorScheme = colorSchemes.has(visualStyle.colorScheme)
+    ? visualStyle.colorScheme
+    : "midnight";
+
+  const deckEl = document.getElementById("deck");
+  const countEl = document.getElementById("count");
+  const colorMap = {
+    blue: "var(--blue)",
+    cyan: "var(--cyan)",
+    purple: "var(--purple)",
+    pink: "var(--pink)",
+    green: "var(--green)",
+    amber: "var(--amber)",
+    red: "var(--red)"
+  };
+
+  const esc = (value = "") => String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+  const accentClass = (name) => name ? `accent-${esc(name)}` : "";
+  const accentStyle = (name) => colorMap[name] || colorMap.blue;
+
+  function renderTitle(title, highlight) {
+    const safeTitle = esc(title || "Untitled slide");
+    if (!highlight) return safeTitle;
+    const safeHighlight = esc(highlight);
+    const index = safeTitle.indexOf(safeHighlight);
+    if (index < 0) return safeTitle;
+    return `${safeTitle.slice(0, index)}<span>${safeHighlight}</span>${safeTitle.slice(index + safeHighlight.length)}`;
+  }
+
+  function renderBullets(items = [], ordered = false) {
+    if (!items.length) return "";
+    const tag = ordered ? "ol" : "ul";
+    const cls = ordered ? "clean numbered" : "clean";
+    const rows = items.map((item) => {
+      const text = typeof item === "string" ? esc(item) : (item.html || esc(item.text || ""));
+      return `<li>${text}</li>`;
+    }).join("");
+    return `<${tag} class="${cls}">${rows}</${tag}>`;
+  }
+
+  function renderChips(chips = []) {
+    if (!chips.length) return "";
+    return `<div class="chips">${chips.map((chip) => `<i class="chip">${esc(chip)}</i>`).join("")}</div>`;
+  }
+
+  function renderTopbar(slide, index, total) {
+    const bars = Array.from({ length: total }, (_, i) => {
+      const cls = i < index ? "done" : (i === index ? "on" : "");
+      return `<i class="${cls}"></i>`;
+    }).join("");
+    return `
+      <div class="topbar">
+        <div class="deck-id">${esc(deckData.meta?.shortTitle || deckData.meta?.title || "Presentation")}</div>
+        <div class="progress">
+          <div class="progress-label">${esc(slide.section || "Slide")} &middot; ${index + 1}/${total}</div>
+          <div class="progress-bars">${bars}</div>
+        </div>
+      </div>`;
+  }
+
+  function renderHeading(slide) {
+    return `
+      <h1>${renderTitle(slide.title, slide.highlight)}</h1>
+      ${slide.subtitle ? `<div class="subtitle">${esc(slide.subtitle)}</div>` : ""}`;
+  }
+
+  function renderCard(card, index, numbered) {
+    return `
+      <article class="card ${accentClass(card.accent)}">
+        ${numbered ? `<div class="card-number">${index + 1}</div>` : ""}
+        ${card.label ? `<div class="eyebrow">${esc(card.label)}</div>` : ""}
+        ${card.value ? `<div class="big-number">${esc(card.value)}</div>` : ""}
+        ${card.title ? `<h3>${esc(card.title)}</h3>` : ""}
+        ${card.body ? `<p>${esc(card.body)}</p>` : ""}
+        ${renderBullets(card.bullets)}
+      </article>`;
+  }
+
+  function renderBlock(block) {
+    if (!block) return `<div></div>`;
+    if (block.kind === "image") {
+      return `
+        <div>
+          <div class="image-frame ${block.cover ? "cover" : ""}">
+            <img src="${esc(block.src)}" alt="${esc(block.alt || "Presentation visual")}">
+          </div>
+          ${block.caption ? `<div class="image-caption">${esc(block.caption)}</div>` : ""}
+        </div>`;
+    }
+    if (block.kind === "quote") {
+      return `<div class="quote">${block.html || esc(block.text || "")}</div>`;
+    }
+    if (block.kind === "html") {
+      return `<div class="block-html">${block.html || ""}</div>`;
+    }
+    if (block.kind === "stack") {
+      return `<div class="block-stack">${(block.blocks || []).map(renderBlock).join("")}</div>`;
+    }
+    const title = block.title ? `<h3>${esc(block.title)}</h3>` : "";
+    const body = block.body ? `<p>${esc(block.body)}</p>` : "";
+    return `
+      <div class="block-list">
+        <div class="panel ${accentClass(block.accent)}">
+          ${title}${body}${renderBullets(block.bullets)}${renderChips(block.chips)}
+        </div>
+      </div>`;
+  }
+
+  function layoutTitle(slide) {
+    return `
+      <div class="cover-grid">
+        <div class="cover-copy">
+          ${slide.kicker ? `<div class="kicker">${esc(slide.kicker)}</div>` : ""}
+          <h1>${renderTitle(slide.title, slide.highlight)}</h1>
+          ${slide.subtitle ? `<div class="lead">${esc(slide.subtitle)}</div>` : ""}
+          <div class="dotlist">
+            ${(slide.bullets || []).map((item) => `
+              <div class="dotitem">
+                <span class="dot" style="background:${accentStyle(item.color)}"></span>
+                <p>${item.html || esc(item.text || "")}</p>
+              </div>`).join("")}
+          </div>
+        </div>
+        ${slide.image ? `<div class="image-frame hero"><img src="${esc(slide.image)}" alt="${esc(slide.imageAlt || "Title slide visual")}"></div>` : ""}
+      </div>
+      ${slide.credits ? `<div class="cover-credits">${esc(slide.credits)}</div>` : ""}`;
+  }
+
+  function layoutImage(slide) {
+    return `${renderHeading(slide)}
+      <div class="single-image-wrap">
+        <div class="image-frame ${slide.imageBackground === "light" ? "light" : ""}">
+          <img src="${esc(slide.image)}" alt="${esc(slide.imageAlt || "Presentation visual")}">
+        </div>
+      </div>`;
+  }
+
+  function layoutCards(slide) {
+    const cols = Math.min(5, Math.max(2, Number(slide.columns || slide.cards?.length || 3)));
+    return `${renderHeading(slide)}
+      <div class="grid cols-${cols}">
+        ${(slide.cards || []).map((card, i) => renderCard(card, i, slide.numbered)).join("")}
+      </div>`;
+  }
+
+  function layoutMetrics(slide) {
+    const max = Math.max(1, ...(slide.bars || []).map((bar) => Number(bar.value || 0)));
+    return `${renderHeading(slide)}
+      <div class="metrics-grid">
+        <div class="stat-stack">
+          ${(slide.stats || []).map((stat) => `
+            <div class="card stat-card ${accentClass(stat.accent)}">
+              <div class="big-number">${esc(stat.value)}</div>
+              <div class="label">${esc(stat.label)}</div>
+            </div>`).join("")}
+        </div>
+        <div class="panel bar-panel">
+          <h3>${esc(slide.barTitle || "Distribution")}</h3>
+          ${(slide.bars || []).map((bar) => `
+            <div class="bar-row">
+              <span class="bar-label">${esc(bar.label)}</span>
+              <b class="bar-value">${esc(bar.display ?? bar.value)}</b>
+              <span class="bar-track"><i class="bar-fill" style="width:${Math.max(2, Number(bar.value || 0) / max * 100)}%;background:${accentStyle(bar.color)}"></i></span>
+            </div>`).join("")}
+        </div>
+      </div>`;
+  }
+
+  function layoutSplit(slide) {
+    const columns = esc(slide.columns || "1fr 1fr");
+    return `${renderHeading(slide)}
+      <div class="split-grid" style="grid-template-columns:${columns}">
+        ${renderBlock(slide.left)}
+        ${renderBlock(slide.right)}
+      </div>`;
+  }
+
+  function layoutProcess(slide) {
+    const steps = slide.steps || [];
+    const columns = [];
+    steps.forEach((_, i) => {
+      columns.push("1fr");
+      if (i < steps.length - 1) columns.push("32px");
+    });
+    const parts = [];
+    steps.forEach((step, i) => {
+      parts.push(`
+        <div class="step">
+          <h3>${esc(step.label || `Step ${i + 1}`)}</h3>
+          ${step.code ? `<pre>${esc(step.code)}</pre>` : `<div class="step-text">${esc(step.text || "")}</div>`}
+          ${step.note ? `<small>${esc(step.note)}</small>` : ""}
+        </div>`);
+      if (i < steps.length - 1) parts.push(`<b class="flow-arrow">&rarr;</b>`);
+    });
+    return `${renderHeading(slide)}
+      <div class="process-flow" style="grid-template-columns:${columns.join(" ")}">${parts.join("")}</div>`;
+  }
+
+  function layoutLoop(slide) {
+    const cycle = slide.cycle || ["Reason", "Act", "Observe"];
+    return `${renderHeading(slide)}
+      <div class="loop-grid">
+        <div class="panel loop-card accent-cyan">
+          <h2>${esc(slide.leftTitle || "Loop")}</h2>
+          <div class="cycle">
+            ${cycle.slice(0, 3).map((item) => `<div class="cycle-node">${esc(item)}</div>`).join("")}
+            <span class="cycle-center">&#8635;</span>
+          </div>
+          ${slide.cycleNote ? `<p>${esc(slide.cycleNote)}</p>` : ""}
+        </div>
+        <div class="panel loop-card accent-purple">
+          <h2>${esc(slide.rightTitle || "Decision stack")}</h2>
+          <div class="stack-list">
+            ${(slide.stack || []).map((item) => {
+              const obj = typeof item === "string" ? { text: item } : item;
+              return `<div class="stack-item ${obj.emphasis ? "emphasis" : ""}">${esc(obj.text)}</div>`;
+            }).join("")}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function layoutTimeline(slide) {
+    const stages = slide.stages || [];
+    return `${renderHeading(slide)}
+      <div class="timeline" style="grid-template-columns:repeat(${Math.max(1, stages.length)}, minmax(0, 1fr))">
+        ${stages.map((stage, i) => `
+          <div class="timeline-node">
+            <b class="timeline-number">${i + 1}</b>
+            <h3>${esc(stage.title)}</h3>
+            <h4>${esc(stage.subtitle || "")}</h4>
+            ${renderBullets(stage.bullets)}
+          </div>`).join("")}
+      </div>
+      ${(slide.deliverables || []).length ? `<div class="deliverables"><b>Deliverables</b>${slide.deliverables.map((d) => `<span>${esc(d)}</span>`).join("")}</div>` : ""}`;
+  }
+
+  function layoutClosing(slide) {
+    return `${renderHeading(slide)}
+      <div class="closing-grid">
+        <div>
+          <h2>${esc(slide.actionsTitle || "Immediate actions")}</h2>
+          ${renderBullets(slide.actions)}
+        </div>
+        <div>
+          <h2>${esc(slide.intakeTitle || "Brief intake")}</h2>
+          ${renderBullets(slide.intake, true)}
+        </div>
+        <a class="closing-link" href="${esc(slide.link || "#")}" target="_blank" rel="noopener">
+          <span class="link-label">${esc(slide.linkLabel || "Open link")}</span>
+          <img src="${esc(slide.image)}" alt="${esc(slide.imageAlt || "Closing visual")}">
+        </a>
+      </div>`;
+  }
+
+  function layoutCustom(slide) {
+    return `${renderHeading(slide)}<div class="custom-wrap">${slide.html || ""}</div>`;
+  }
+
+  const renderers = {
+    title: layoutTitle,
+    image: layoutImage,
+    cards: layoutCards,
+    metrics: layoutMetrics,
+    split: layoutSplit,
+    process: layoutProcess,
+    loop: layoutLoop,
+    timeline: layoutTimeline,
+    closing: layoutClosing,
+    custom: layoutCustom
+  };
+
+  function renderDeck() {
+    const total = deckData.slides.length;
+    deckEl.innerHTML = deckData.slides.map((slide, index) => {
+      const layout = renderers[slide.layout] ? slide.layout : "custom";
+      const classes = ["slide", `layout-${layout}`];
+      if (layout === "title" && !slide.image) classes.push("no-image");
+      const slideId = slide.id || `slide-${index + 1}`;
+      return `<section class="${classes.join(" ")}" data-slide-index="${index}" data-slide-id="${esc(slideId)}" data-layout="${layout}">
+        ${renderTopbar(slide, index, total)}
+        ${renderers[layout](slide)}
+      </section>`;
+    }).join("");
+    document.title = deckData.meta?.title || "Presentation";
+  }
+
+  renderDeck();
+
+  function applyFontScale() {
+    const factor = fontScaleFactors[visualStyle.fontScale] || 1;
+    deckEl.dataset.fontScale = fontScaleFactors[visualStyle.fontScale] ? visualStyle.fontScale : "standard";
+    if (factor === 1) return;
+    const measurements = [...deckEl.querySelectorAll(".slide, .slide *")].map((element) => ({
+      element,
+      base: Number.parseFloat(getComputedStyle(element).fontSize)
+    }));
+    measurements.forEach(({ element, base }) => {
+      if (Number.isFinite(base) && base > 0) {
+        element.style.fontSize = `${Math.round(base * factor * 1000) / 1000}px`;
+      }
+    });
+  }
+
+  applyFontScale();
+
+  const slides = [...document.querySelectorAll(".slide")];
+  const total = slides.length;
+  const notesPanel = document.getElementById("speaker-notes");
+  const notesContent = document.getElementById("notes-content");
+  const notesSlideId = document.getElementById("notes-slide-id");
+  let current = 0;
+
+  function fit() {
+    const notesOpen = notesPanel && !document.body.classList.contains("notes-hidden");
+    const availableWidth = Math.max(320, window.innerWidth - (notesOpen ? 380 : 0));
+    const scale = Math.min(availableWidth / 1280, window.innerHeight / 720);
+    deckEl.style.transform = `scale(${scale})`;
+  }
+
+  function noteSection(label, value) {
+    const items = Array.isArray(value) ? value : (value ? [value] : []);
+    if (!items.length) return "";
+    return `<section class="note-section"><h3>${esc(label)}</h3>${renderBullets(items)}</section>`;
+  }
+
+  function updateSpeakerNotes() {
+    if (!notesPanel || !notesContent || !notesSlideId) return;
+    const slideId = slides[current]?.dataset.slideId || "";
+    const note = speakerNotes[slideId] || {};
+    notesSlideId.textContent = slideId;
+    const duration = Number(note.durationSeconds);
+    notesContent.innerHTML = `
+      ${Number.isFinite(duration) && duration > 0 ? `<div class="note-duration">${Math.round(duration)} seconds</div>` : ""}
+      ${noteSection("Talk track", note.talkTrack)}
+      ${noteSection("Evidence", note.evidence)}
+      ${noteSection("Caveats", note.caveats)}
+      ${noteSection("Audience interaction", note.audienceInteraction)}
+      ${noteSection("Sources", note.sources)}
+      ${noteSection("From previous", note.transitionFromPrevious)}
+      ${noteSection("To next", note.transitionToNext)}
+      ${Object.keys(note).length ? "" : `<p class="notes-empty">No notes recorded for this slide.</p>`}`;
+  }
+
+  function toggleNotes(force) {
+    if (!notesPanel) return;
+    const hidden = typeof force === "boolean"
+      ? !force
+      : !document.body.classList.contains("notes-hidden");
+    document.body.classList.toggle("notes-hidden", hidden);
+    fit();
+  }
+
+  function updateUrl() {
+    const hash = `#${current + 1}`;
+    if (location.hash !== hash) history.replaceState(null, "", hash);
+  }
+
+  function show(index) {
+    current = (index + total) % total;
+    slides.forEach((slide, i) => slide.classList.toggle("active", i === current));
+    countEl.textContent = `${current + 1} / ${total}`;
+    updateUrl();
+    updateSpeakerNotes();
+    if (document.body.classList.contains("debug")) checkOverflow();
+  }
+
+  function requestedSlide() {
+    const params = new URLSearchParams(location.search);
+    const query = Number(params.get("slide"));
+    if (Number.isFinite(query) && query >= 1 && query <= total) return query - 1;
+    const hash = Number(location.hash.replace("#", ""));
+    if (Number.isFinite(hash) && hash >= 1 && hash <= total) return hash - 1;
+    return 0;
+  }
+
+  function checkOverflow() {
+    slides.forEach((slide) => {
+      slide.classList.remove("overflowing");
+      slide.querySelectorAll(".debug-badge").forEach((badge) => badge.remove());
+      const overflow = slide.scrollHeight > slide.clientHeight + 1 || slide.scrollWidth > slide.clientWidth + 1;
+      if (overflow) {
+        slide.classList.add("overflowing");
+        const badge = document.createElement("div");
+        badge.className = "debug-badge";
+        badge.textContent = "OVERFLOW";
+        slide.appendChild(badge);
+        console.warn(`Slide ${Number(slide.dataset.slideIndex) + 1} overflows its 1280x720 canvas.`);
+      }
+    });
+  }
+
+  function toggleDebug(force) {
+    const enabled = typeof force === "boolean" ? force : !document.body.classList.contains("debug");
+    document.body.classList.toggle("debug", enabled);
+    if (enabled) checkOverflow();
+    else slides.forEach((slide) => slide.classList.remove("overflowing"));
+  }
+
+  window.addEventListener("resize", fit);
+  window.addEventListener("hashchange", () => show(requestedSlide()));
+  document.getElementById("prev").addEventListener("click", () => show(current - 1));
+  document.getElementById("next").addEventListener("click", () => show(current + 1));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight" || event.key === " ") show(current + 1);
+    if (event.key === "ArrowLeft") show(current - 1);
+    if (event.key.toLowerCase() === "f") {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+    if (event.key.toLowerCase() === "d") toggleDebug();
+    if (event.key.toLowerCase() === "p") window.print();
+    if (event.key.toLowerCase() === "n") toggleNotes();
+  });
+
+  document.fonts?.ready.then(() => {
+    if (new URLSearchParams(location.search).get("notes") === "0") toggleNotes(false);
+    fit();
+    if (new URLSearchParams(location.search).get("debug") === "1") toggleDebug(true);
+  });
+
+  window.DECK_API = { show, fit, checkOverflow, toggleDebug, toggleNotes, total };
+  fit();
+  show(requestedSlide());
+})();
+
+</script>
+</body>
+</html>
