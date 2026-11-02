@@ -5,7 +5,7 @@ from pathlib import Path
 HOST_ROOT = Path(__file__).parents[1] / "host_app"
 
 
-def test_host_directory_contains_only_runtime_material():
+def test_host_directory_contains_only_approved_runtime_and_guidance_files():
     runtime_files = {
         path.relative_to(HOST_ROOT).as_posix()
         for path in HOST_ROOT.rglob("*")
@@ -15,6 +15,7 @@ def test_host_directory_contains_only_runtime_material():
     }
     assert runtime_files == {
         ".python-version",
+        "README.md",
         "__init__.py",
         "app.py",
         "auth_diagnostics.py",
@@ -30,9 +31,9 @@ def test_host_directory_contains_only_runtime_material():
 def test_host_directory_excludes_private_project_artifacts():
     bundled_names = [path.name.lower() for path in HOST_ROOT.rglob("*") if path.is_file()]
     assert not any(name.endswith((".pdf", ".docx", ".env")) for name in bundled_names)
-    assert "pilot_source_register.md" not in bundled_names
-    assert "phase_0_pilot_boundary.md" not in bundled_names
-    assert "phase_2_baas_configuration.md" not in bundled_names
+    assert "manual-register.md" not in bundled_names
+    assert "pilot-boundary.md" not in bundled_names
+    assert "baas-runbook.md" not in bundled_names
 
 
 def test_committed_manifest_describes_only_the_isolated_host():
@@ -47,4 +48,5 @@ def test_committed_manifest_describes_only_the_isolated_host():
     assert "app.py" in files
     assert "templates/index.html" in files
     assert "static/microbot.js" in files
+    assert "README.md" not in files
     assert not any(path.lower().endswith((".pdf", ".docx", ".env")) for path in files)
