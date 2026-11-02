@@ -21,6 +21,10 @@ else:
 DEFAULT_BASE_URL = (
     "https://edav-dev-microbot-ui.edav-dev-app.appserviceenvironment.net/"
 )
+CLIENT_CREDENTIALS_MODE = "client_credentials"
+# EDAV confirmed the Microbot needs no token when no user information is shown.
+NO_TOKEN_MODE = "none"
+SUPPORTED_AUTH_MODES = {CLIENT_CREDENTIALS_MODE, NO_TOKEN_MODE}
 
 
 @dataclass(frozen=True)
@@ -38,12 +42,18 @@ class Settings:
     microbot_scope: str
 
     @property
+    def requires_token(self) -> bool:
+        return self.auth_mode != NO_TOKEN_MODE
+
+    @property
     def missing_dependencies(self) -> list[str]:
         missing: list[str] = []
         if not self.client_id:
             missing.append("EDAV Microbot clientId")
-        if self.auth_mode != "client_credentials":
-            missing.append("EDAV client-credentials authentication")
+        if self.auth_mode == NO_TOKEN_MODE:
+            pass
+        elif self.auth_mode != CLIENT_CREDENTIALS_MODE:
+            missing.append("EDAV authentication mode")
         else:
             if not self.entra_tenant_id:
                 missing.append("EDAV Entra tenant ID")
@@ -168,6 +178,7 @@ def create_app(
             "origin": settings.origin,
             "clientId": settings.client_id,
             "ready": settings.ready,
+            "requiresToken": settings.requires_token,
             "tokenEndpoint": url_for("edav_token"),
             "missingDependencies": settings.missing_dependencies,
         }
@@ -192,7 +203,12 @@ def create_app(
                 "entra_tenant_configured": bool(settings.entra_tenant_id),
                 "entra_client_id_configured": bool(settings.entra_client_id),
                 "microbot_scope_configured": bool(settings.microbot_scope),
-                "auth_mode_configured": settings.auth_mode == "client_credentials",
+                "auth_mode_configured": settings.auth_mode in SUPPORTED_AUTH_MODES,
+                "auth_mode": (
+                    settings.auth_mode
+                    if settings.auth_mode in SUPPORTED_AUTH_MODES
+                    else "unconfigured"
+                ),
             }
         )
 
@@ -224,6 +240,16 @@ def create_app(
                 ),
                 503,
             )
+        if not settings.requires_token:
+            return (
+                jsonify(
+                    {
+                        "error": "EDAV_TOKEN_NOT_USED",
+                        "message": "This host is configured to load the Microbot without a token.",
+                    }
+                ),
+                404,
+            )
         stage = "client_initialization"
         try:
             provider = get_token_provider(settings)
@@ -244,7 +270,8 @@ def create_app(
                 ),
                 502,
             )
-        return jsonify({"token": token.value, "expiresAt": token.expires_at})
+        # The Microbot contract expects expiresAt in milliseconds.
+        return jsonify({"token": token.value, "expiresAt": token.expires_at * 1000})
 
     return app
 

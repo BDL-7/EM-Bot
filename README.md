@@ -12,7 +12,7 @@ Planning and pilot-support materials for the Equipment Manual Knowledge Retrieva
 - Phase 1: the 35-manual corpus is inventoried and locally verified against a local-only source register.
 - Phase 2: the local-only EDAV BaaS configuration package is prepared, but EDAV portal configuration and ingestion have not yet been performed or evidenced.
 - Phase 3: release `EMKB-P3-v1.0` defines the bot behavior and ten configuration-level tests, but it has not yet been applied or verified in EDAV.
-- A disposable Aquarius Flask parent application is deployed as the DEV Posit Connect host. It now supports the EDAV-approved Entra client-credentials token flow, but remains inactive until its secret is added in Connect and `EDAV_AUTH_MODE=client_credentials` is set.
+- A disposable Aquarius Flask parent application is deployed as the DEV Posit Connect host. It now supports the EDAV-approved Entra client-credentials token flow, but remains inactive until `EDAV_AUTH_MODE` is set: `none` loads the Microbot without a token (EDAV-confirmed when no user information is shown); `client_credentials` uses the Entra token flow after its secret is added in Connect.
 
 This repository does not represent a production application or a production-ready bot. The temporary host is not CAT and is unrelated to the competency-assessment application.
 
@@ -116,6 +116,10 @@ After deployment, require login, restrict access to the designated pilot users o
 Connect must already be able to read the private GitHub repository through its server-managed GitHub credential or OAuth integration. If the repository cannot be selected or cloned, that is a Connect-side private-repository access issue; do not put GitHub credentials in the repository URL.
 
 The Git-backed content should track `dev` for this DEV pilot. After a successful DEV validation, promote the tested `dev` change to `main` through a separate pull request.
+
+### No-token mode (`EDAV_AUTH_MODE=none`)
+
+EDAV confirmed that the Microbot does not need a token when it shows no user information, and this pilot shows none. Set `EDAV_AUTH_MODE=none` and `EDAV_MICROBOT_CLIENT_ID` in Connect. The host then loads the iframe with only the `clientId`, never requests or sends a token, and sends no user name or email to EDAV. `/api/edav-token` refuses requests in this mode. Posit Connect still controls who can open the host. The Entra variables are used only in `client_credentials` mode.
 
 ## Local validation
 

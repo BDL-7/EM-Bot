@@ -45,9 +45,9 @@
             </dd>
           </div>
           <div>
-            <dt>JWT integration</dt>
-            <dd class="{{ 'good' if settings.auth_mode != 'unconfigured' else 'pending' }}">
-              {{ 'Configured' if settings.auth_mode != 'unconfigured' else 'Waiting for EDAV contract' }}
+            <dt>EDAV authentication</dt>
+            <dd class="{{ 'good' if settings.auth_mode in ('none', 'client_credentials') else 'pending' }}">
+              {% if settings.auth_mode == 'none' %}No token required{% elif settings.auth_mode == 'client_credentials' %}Configured{% else %}Waiting for EDAV contract{% endif %}
             </dd>
           </div>
           <div><dt>Iframe handshake</dt><dd id="iframe-status" class="pending">Not started</dd></div>

@@ -108,6 +108,7 @@ def test_health_is_safe_and_reports_pending_edav(client):
     assert response.status_code == 200
     assert response.get_json() == {
         "application": "Aquarius Assistant",
+        "auth_mode": "unconfigured",
         "auth_mode_configured": False,
         "bot": "EM Knowledge Bot",
         "client_id_configured": False,
@@ -134,7 +135,7 @@ def test_token_endpoint_fails_closed_without_complete_configuration(client):
     assert payload["error"] == "EDAV_CONFIGURATION_PENDING"
     assert payload["missing_dependencies"] == [
         "EDAV Microbot clientId",
-        "EDAV client-credentials authentication",
+        "EDAV authentication mode",
     ]
     assert "token" not in payload
 
@@ -154,7 +155,7 @@ def test_token_endpoint_returns_token_without_echoing_the_secret(monkeypatch):
     assert response.status_code == 200
     assert response.get_json() == {
         "token": "one.two.three",
-        "expiresAt": 1_700_000_000,
+        "expiresAt": 1_700_000_000_000,
     }
     assert observed == [
         {
@@ -196,6 +197,42 @@ def test_token_endpoint_sanitizes_provider_errors(monkeypatch):
     assert response.status_code == 502
     assert response.get_json()["error"] == "EDAV_TOKEN_UNAVAILABLE"
     assert "test-only-secret" not in response.get_data(as_text=True)
+
+
+def test_no_token_mode_is_ready_with_only_client_id(monkeypatch):
+    client = build_client(
+        monkeypatch,
+        EDAV_MICROBOT_CLIENT_ID="microbot-client-id",
+        EDAV_AUTH_MODE="none",
+    )
+    body = client.get("/", headers=connect_identity()).get_data(as_text=True)
+    assert '"ready": true' in body
+    assert '"requiresToken": false' in body
+    assert "No token required" in body
+    health = client.get("/health").get_json()
+    assert health["edav_ready"] is True
+    assert health["auth_mode"] == "none"
+
+
+def test_no_token_mode_still_requires_client_id(monkeypatch):
+    client = build_client(monkeypatch, EDAV_AUTH_MODE="none")
+    assert client.get("/health").get_json()["edav_ready"] is False
+
+
+def test_no_token_mode_never_issues_a_token(monkeypatch):
+    def unexpected_provider(**kwargs):
+        raise AssertionError("no token provider should be created")
+
+    client = build_client(
+        monkeypatch,
+        unexpected_provider,
+        EDAV_MICROBOT_CLIENT_ID="microbot-client-id",
+        EDAV_AUTH_MODE="none",
+    )
+    response = client.post("/api/edav-token", headers=connect_identity())
+    assert response.status_code == 404
+    assert response.get_json()["error"] == "EDAV_TOKEN_NOT_USED"
+    assert "token" not in response.get_json()
 
 
 def test_settings_reject_scope_without_default_suffix(monkeypatch):
