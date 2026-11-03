@@ -1,0 +1,1615 @@
+{
+  "schemaVersion": 3,
+  "project": {
+    "title": "EM Knowledge Bot: Status and Safe Execution",
+    "shortTitle": "EM Knowledge Bot",
+    "slug": "emkb-phase2-phase3-status",
+    "workshopVersion": "3.1.0",
+    "templateVersion": "1.1.0",
+    "createdAt": "2026-10-06T12:51:55.962Z",
+    "updatedAt": "2026-10-06T13:29:24.750Z"
+  },
+  "phase": "build",
+  "status": "drafting",
+  "settings": {
+    "audienceProfile": "custom",
+    "audienceDescription": "EM Knowledge Bot pilot sponsors, repository contributors, EDAV and Posit Connect platform owners, and technical reviewers.",
+    "presentationType": "project-update",
+    "styleProfile": "decision-focused",
+    "visualStyle": {
+      "fontFamily": "humanist-sans",
+      "fontScale": "standard",
+      "colorScheme": "deep-ocean"
+    },
+    "objective": "Report observed repository status, distinguish code evidence from live evidence, and sequence approvals for Phase 2, Phase 3, and later evaluation.",
+    "presenter": "Repository status review",
+    "organization": "Equipment Manual Knowledge Retrieval Pilot",
+    "date": "October 6, 2026",
+    "durationMinutes": 15,
+    "slideRange": "13 slides",
+    "deliveryMode": "live",
+    "sourceMaterial": [
+      "README.md",
+      "Phase 3 artifacts",
+      "Current Git preflight",
+      "Current local test output"
+    ],
+    "accessibilityNeeds": [
+      "High contrast color scheme",
+      "Text alternatives for template-native diagrams",
+      "Evidence in presenter notes"
+    ],
+    "guardrails": {
+      "distinguishEpistemicStatus": true,
+      "requireSourcesForResults": true,
+      "requireUncertainty": true,
+      "requireLimitations": true,
+      "requireGeneralizabilityScope": true,
+      "avoidUnsupportedCausality": true,
+      "avoidPromotionalFraming": true
+    }
+  },
+  "phaseApprovals": {
+    "brief": true,
+    "sectionPlan": true,
+    "roughOutline": true,
+    "revisedOutline": true,
+    "visualPlan": true,
+    "slideContent": true,
+    "speakerNotes": true,
+    "transitions": true
+  },
+  "sections": [
+    {
+      "id": "snapshot",
+      "order": 1,
+      "title": "Pilot Snapshot",
+      "purpose": "Set scope, observed status, and checkout state before action.",
+      "origin": "fast-track user brief",
+      "approvals": {
+        "plan": true,
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "evidence",
+      "order": 2,
+      "title": "Evidence Status",
+      "purpose": "Separate files and tests from live platform evidence.",
+      "origin": "fast-track user brief",
+      "approvals": {
+        "plan": true,
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "execution",
+      "order": 3,
+      "title": "Safe Execution",
+      "purpose": "Sequence review, owner inputs, and staged activation.",
+      "origin": "fast-track user brief",
+      "approvals": {
+        "plan": true,
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "phase3",
+      "order": 4,
+      "title": "Phase 3 Verification",
+      "purpose": "Apply and test the prepared release only after Phase 2 evidence.",
+      "origin": "fast-track user brief",
+      "approvals": {
+        "plan": true,
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "phase4",
+      "order": 5,
+      "title": "Phase 4 Decision",
+      "purpose": "Propose later evaluation only after the Phase 3 gate passes.",
+      "origin": "fast-track user brief",
+      "approvals": {
+        "plan": true,
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    }
+  ],
+  "sourceRegister": [
+    {
+      "id": "readme",
+      "title": "Repository README",
+      "location": "README.md"
+    },
+    {
+      "id": "phase3-config",
+      "title": "Phase 3 configuration record",
+      "location": "PHASE_3_BEHAVIOR_CONFIGURATION.md"
+    },
+    {
+      "id": "phase3-tests",
+      "title": "Phase 3 behavior tests",
+      "location": "PHASE_3_BEHAVIOR_TESTS.md"
+    },
+    {
+      "id": "phase3-verifier",
+      "title": "Phase 3 consistency check",
+      "location": "scripts/verify_phase3.py and October 6 output"
+    },
+    {
+      "id": "token-commit",
+      "title": "Entra token provider implementation",
+      "location": "commit e057c36"
+    },
+    {
+      "id": "host-tests",
+      "title": "Selected host test run",
+      "location": "October 6 pytest output"
+    },
+    {
+      "id": "git-preflight",
+      "title": "Git preflight",
+      "location": "October 6 local Git output"
+    },
+    {
+      "id": "merge-pr13",
+      "title": "Merged pull request 13",
+      "location": "merge commit d592c96",
+      "status": "merged into origin/dev on October 5, 2026"
+    },
+    {
+      "id": "merge-pr19",
+      "title": "Merged pull request 19",
+      "location": "merge commit 67ca23b",
+      "status": "merged origin/dev into origin/main after PR #18"
+    }
+  ],
+  "slides": [
+    {
+      "id": "s01-title",
+      "order": 1,
+      "sectionId": "snapshot",
+      "workingTitle": "Read-only status",
+      "purpose": "Identify the pilot and the review boundary.",
+      "takeaway": "This checkout supports a prepared pilot and candidate host code, not claims about a live EDAV bot.",
+      "layout": "title",
+      "visual": {
+        "kind": "template-native",
+        "rationale": "Restrained cover for a bounded status report.",
+        "source": "Template-native",
+        "aspectRatio": "16:9",
+        "alt": "Title slide for EM Knowledge Bot status",
+        "fallback": "Text title",
+        "status": "approved"
+      },
+      "content": {
+        "title": "EM Knowledge Bot status and safe execution",
+        "highlight": "safe execution",
+        "subtitle": "Read-only repository status, Phase 2 and Phase 3 plan, and approval boundaries as of October 6, 2026.",
+        "renderData": {
+          "kicker": "Equipment Manual Knowledge Retrieval Pilot",
+          "bullets": [
+            {
+              "color": "cyan",
+              "html": "Purpose: help staff find approved equipment-manual information through EDAV"
+            },
+            {
+              "color": "purple",
+              "html": "Scope: 35 approved, non-PII manuals held locally"
+            },
+            {
+              "color": "green",
+              "html": "Decision: keep repository evidence separate from live EDAV evidence"
+            }
+          ],
+          "credits": "Repository status review | October 6, 2026"
+        }
+      },
+      "claims": [
+        {
+          "id": "c-s01",
+          "type": "background",
+          "statement": "The pilot uses an approved collection of 35 non-PII equipment manuals and an EDAV-hosted microbot.",
+          "sourceIds": [
+            "readme",
+            "phase3-config"
+          ]
+        }
+      ],
+      "speakerNotes": {
+        "durationSeconds": 50,
+        "talkTrack": [
+          "This is a status report, not a production-readiness claim.",
+          "No platform or source-code change occurs as part of this report."
+        ],
+        "evidence": [
+          "README scope and current status"
+        ],
+        "caveats": [
+          "No EDAV portal or Posit Connect system was accessed."
+        ],
+        "audienceInteraction": "",
+        "sources": [
+          "readme",
+          "phase3-config"
+        ]
+      },
+      "transition": {
+        "fromPrevious": "",
+        "toNext": "The status snapshot makes the evidence gap visible."
+      },
+      "approvals": {
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "s02-evidence",
+      "order": 2,
+      "sectionId": "evidence",
+      "workingTitle": "Evidence status table",
+      "purpose": "Present the required four-way evidence classification.",
+      "takeaway": "The repository has code and local test evidence, while EDAV, Connect, and Phase 3 outcomes remain unverified.",
+      "layout": "cards",
+      "visual": {
+        "kind": "template-native",
+        "rationale": "A four-category grid serves as a concise evidence table.",
+        "source": "Current files and tests",
+        "aspectRatio": "16:9",
+        "alt": "Four cards classify verified, implemented, planned, and unresolved status",
+        "fallback": "Four-row table",
+        "status": "approved"
+      },
+      "content": {
+        "title": "Evidence status table",
+        "highlight": "Evidence",
+        "subtitle": "Each category names what the current checkout supports and what it does not.",
+        "renderData": {
+          "columns": 2,
+          "numbered": false,
+          "cards": [
+            {
+              "accent": "green",
+              "title": "Verified from files and tests",
+              "bullets": [
+                "e057c36 is active branch HEAD",
+                "Phase 3 package is consistent",
+                "21 selected host tests passed",
+                "Exact-origin and nonce checks are tested"
+              ]
+            },
+            {
+              "accent": "cyan",
+              "title": "Implemented, not live-validated",
+              "bullets": [
+                "MSAL client-credentials provider",
+                "Fail-closed token endpoint",
+                "Token cache and sanitized errors",
+                "Iframe token handoff code"
+              ]
+            },
+            {
+              "accent": "purple",
+              "title": "Documented or planned",
+              "bullets": [
+                "EMKB-P3-v1.0 release",
+                "Ten acceptance prompts",
+                "Git-backed Connect runbook",
+                "Phase 4 evaluation concept"
+              ]
+            },
+            {
+              "accent": "amber",
+              "title": "External dependencies",
+              "bullets": [
+                "EDAV identity and scope contract",
+                "Bot identifier and source ingestion result",
+                "Model, access, citations, UI route",
+                "GitHub Issue #12 linkage"
+              ]
+            }
+          ]
+        }
+      },
+      "claims": [
+        {
+          "id": "c-s02",
+          "type": "interpretation",
+          "statement": "The repository supports an implementation claim for the host token provider, but it does not support a claim that EDAV accepted the token or that Phase 3 passed.",
+          "sourceIds": [
+            "token-commit",
+            "host-tests",
+            "phase3-verifier"
+          ],
+          "uncertainty": "EDAV requirements may differ from the assumptions represented in the code.",
+          "limitations": "No EDAV response, deployed-host response, or live bot transcript was observed.",
+          "generalizability": "Applies to the current repository implementation and observed local tests."
+        }
+      ],
+      "speakerNotes": {
+        "durationSeconds": 90,
+        "talkTrack": [
+          "Keep each item in its evidence category.",
+          "A local test does not prove EDAV behavior."
+        ],
+        "evidence": [
+          "Commit diff, selected pytest output, verifier output"
+        ],
+        "caveats": [
+          "The complete pytest run has eight archive-chat tests blocked by managed temporary-directory permissions before their assertions ran."
+        ],
+        "audienceInteraction": "",
+        "sources": [
+          "token-commit",
+          "host-tests",
+          "phase3-verifier"
+        ]
+      },
+      "transition": {
+        "fromPrevious": "The cover stated the evidence boundary.",
+        "toNext": "The scope split explains why the boundary matters."
+      },
+      "approvals": {
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "s03-scope",
+      "order": 3,
+      "sectionId": "snapshot",
+      "workingTitle": "Scope boundary",
+      "purpose": "Separate EDAV, the host, local manuals, and future CAT work.",
+      "takeaway": "EDAV owns the bot and retrieval, Flask embeds the iframe, manuals remain local, and CAT remains a future decision.",
+      "layout": "cards",
+      "visual": {
+        "kind": "template-native",
+        "rationale": "Four responsibilities show the ownership boundary.",
+        "source": "README and Phase 3 record",
+        "aspectRatio": "16:9",
+        "alt": "Four cards separate EDAV, host, manuals, and CAT",
+        "fallback": "Four-item list",
+        "status": "approved"
+      },
+      "content": {
+        "title": "Pilot boundaries and ownership",
+        "highlight": "ownership",
+        "subtitle": "The pilot evaluates a bounded EDAV retrieval experience without a separate RAG service.",
+        "renderData": {
+          "columns": 4,
+          "numbered": false,
+          "cards": [
+            {
+              "accent": "cyan",
+              "title": "EDAV BaaS",
+              "bullets": [
+                "Hosts bot and retrieval",
+                "Controls model and source display",
+                "Provides supported UI route"
+              ]
+            },
+            {
+              "accent": "purple",
+              "title": "Flask parent",
+              "bullets": [
+                "Disposable iframe host",
+                "Obtains short-lived app token",
+                "Does not retrieve manuals"
+              ]
+            },
+            {
+              "accent": "green",
+              "title": "Local sources",
+              "bullets": [
+                "35 approved PDFs",
+                "Source register stays local",
+                "No manual contents in Git"
+              ]
+            },
+            {
+              "accent": "amber",
+              "title": "Future CAT use",
+              "bullets": [
+                "Potential later decision",
+                "Outside this pilot",
+                "No competency function"
+              ]
+            }
+          ]
+        }
+      },
+      "claims": [
+        {
+          "id": "c-s03",
+          "type": "background",
+          "statement": "The temporary host does not ingest manuals, retrieve passages, call a model, or implement competency behavior.",
+          "sourceIds": [
+            "readme"
+          ]
+        }
+      ],
+      "speakerNotes": {
+        "durationSeconds": 65,
+        "talkTrack": [
+          "Keep the parent host small and scoped.",
+          "Future CAT integration is a separate decision."
+        ],
+        "evidence": [
+          "README scope boundary"
+        ],
+        "caveats": [
+          "No manual contents appear in this deck."
+        ],
+        "audienceInteraction": "",
+        "sources": [
+          "readme",
+          "phase3-config"
+        ]
+      },
+      "transition": {
+        "fromPrevious": "Evidence categories describe what is known.",
+        "toNext": "The checkout establishes the source-control constraint."
+      },
+      "approvals": {
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "s04-checkout",
+      "order": 4,
+      "sectionId": "snapshot",
+      "workingTitle": "Checkout and merge status",
+      "purpose": "Document the current feature checkout, merged origin/dev status, and stale local dev branch.",
+      "takeaway": "PR #13 merged this feature change into origin/dev. The checkout remains on the feature branch while local dev is stale.",
+      "layout": "split",
+      "visual": {
+        "kind": "template-native",
+        "rationale": "Two panels separate observed state from implications.",
+        "source": "Local Git preflight",
+        "aspectRatio": "16:9",
+        "alt": "Local checkout state and review implications",
+        "fallback": "Two grouped lists",
+        "status": "approved"
+      },
+      "content": {
+        "title": "Checkout is merged but local dev is stale",
+        "highlight": "merged",
+        "subtitle": "PR #13 merged the feature change into origin/dev. This checkout remains on the feature branch.",
+        "renderData": {
+          "columns": "1fr 1fr",
+          "left": {
+            "kind": "panel",
+            "accent": "cyan",
+            "title": "Observed local state",
+            "bullets": [
+              "Checkout: aquarius-assistant",
+              "Branch: 12-implement-entra-token-flow",
+              "HEAD: e057c36",
+              "Pre-existing modification: .gitignore",
+              "Feature branch tracks origin"
+            ]
+          },
+          "right": {
+            "kind": "panel",
+            "accent": "amber",
+            "title": "Current release implication",
+            "bullets": [
+              "PR #13 merged into origin/dev",
+              "Local dev is 10 commits behind origin/dev",
+              "Current checkout remains the feature branch",
+              "GitHub CLI is unavailable",
+              "Refresh local dev before a Git-backed deployment"
+            ]
+          }
+        }
+      },
+      "claims": [
+        {
+          "id": "c-s04",
+          "type": "result",
+          "statement": "The current checkout is 12-implement-entra-token-flow at e057c36, and PR #13 merged that commit into origin/dev at d592c96; local dev remains ten commits behind origin/dev.",
+          "sourceIds": [
+            "git-preflight",
+            "token-commit",
+            "merge-pr13"
+          ],
+          "uncertainty": "No new fetch was run, so remote-tracking refs may have advanced after this check.",
+          "limitations": "GitHub CLI was unavailable; the linked closed-PR page could not be read in this environment.",
+          "generalizability": "Applies to local Git refs observed on October 6, 2026."
+        }
+      ],
+      "speakerNotes": {
+        "durationSeconds": 75,
+        "talkTrack": [
+          "Preserve the .gitignore modification.",
+          "PR #13 is verified from the local merge commit. The underlying issue relationship remains unverified."
+        ],
+        "evidence": [
+          "git status, git rev-list, git branch, and git show d592c96"
+        ],
+        "caveats": [
+          "Use an updated local dev checkout, not this retained feature checkout, for the Git-backed deployment selection."
+        ],
+        "audienceInteraction": "",
+        "sources": [
+          "git-preflight",
+          "token-commit",
+          "merge-pr13"
+        ]
+      },
+      "transition": {
+        "fromPrevious": "The pilot boundary protects the source corpus.",
+        "toNext": "The release path is now evidenced by the merged PR."
+      },
+      "approvals": {
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "s05-release-path",
+      "order": 5,
+      "sectionId": "execution",
+      "workingTitle": "Issue-first merge status",
+      "purpose": "Document the completed PR merge and the correct deployment branch.",
+      "takeaway": "PR #13 merged the feature into origin/dev, and PR #19 later promoted dev into origin/main. Deploy DEV content from an updated dev checkout.",
+      "layout": "timeline",
+      "visual": {
+        "kind": "template-native",
+        "rationale": "Five stages clarify the release order.",
+        "source": "README workflow",
+        "aspectRatio": "16:9",
+        "alt": "Issue-first release path from issue verification to later main promotion",
+        "fallback": "Numbered release list",
+        "status": "approved"
+      },
+      "content": {
+        "title": "Issue-first merge completed for the token provider",
+        "highlight": "merge",
+        "subtitle": "PR #13 merged the feature branch into origin/dev; PR #19 later merged dev into origin/main.",
+        "renderData": {
+          "stages": [
+            {
+              "title": "Feature branch",
+              "subtitle": "Existing branch",
+              "bullets": [
+                "12-implement-entra-token-flow",
+                "Remote branch still retained"
+              ]
+            },
+            {
+              "title": "PR #13",
+              "subtitle": "Merged to dev",
+              "bullets": [
+                "Merge commit d592c96",
+                "Contains e057c36"
+              ]
+            },
+            {
+              "title": "Current dev",
+              "subtitle": "Has advanced",
+              "bullets": [
+                "Later PRs #16 and #18",
+                "Refresh stale local dev"
+              ]
+            },
+            {
+              "title": "Connect deployment",
+              "subtitle": "Next approved action",
+              "bullets": [
+                "Select updated dev branch",
+                "Target host_app only"
+              ]
+            },
+            {
+              "title": "PR #19",
+              "subtitle": "Dev merged to main",
+              "bullets": [
+                "Merge commit 67ca23b",
+                "Contains the token provider"
+              ]
+            }
+          ],
+          "deliverables": [
+            "PR #13 merge record",
+            "Updated local dev",
+            "Reviewed deployment commit",
+            "Recorded main promotion"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "id": "c-s05",
+          "type": "recommendation",
+          "statement": "PR #13 merged the issue-numbered feature branch into origin/dev, and PR #19 later merged dev into origin/main. Before DEV deployment, refresh local dev and deploy the reviewed dev branch rather than re-open a PR for the already-merged change.",
+          "sourceIds": [
+            "merge-pr13",
+            "merge-pr19",
+            "git-preflight",
+            "readme"
+          ],
+          "uncertainty": "Remote dev may have advanced after the recorded local refs.",
+          "limitations": "The linked closed-PR page could not be read and the GitHub CLI is unavailable.",
+          "generalizability": "Applies to the recorded merge and this repository's dev deployment policy."
+        }
+      ],
+      "speakerNotes": {
+        "durationSeconds": 85,
+        "talkTrack": [
+          "The issue-first PR step is complete through PR #13, and PR #19 records the later dev-to-main promotion.",
+          "For deployment, update the local dev checkout and confirm the selected dev commit."
+        ],
+        "evidence": [
+          "Merge commits d592c96 and 67ca23b, origin/dev history, and README workflow"
+        ],
+        "caveats": [
+          "No new issue, PR, push, or merge happened during this correction."
+        ],
+        "audienceInteraction": "",
+        "sources": [
+          "merge-pr13",
+          "merge-pr19",
+          "git-preflight",
+          "readme"
+        ]
+      },
+      "transition": {
+        "fromPrevious": "The checkout is merged upstream but remains a stale feature checkout.",
+        "toNext": "External owners must supply the Phase 2 facts that code cannot infer."
+      },
+      "approvals": {
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "s06-owner-inputs",
+      "order": 6,
+      "sectionId": "execution",
+      "workingTitle": "Required platform evidence",
+      "purpose": "Identify exactly what EDAV or platform owners must provide.",
+      "takeaway": "Phase 2 cannot close on assumptions about identity, ingestion, source display, access, or the user route.",
+      "layout": "cards",
+      "visual": {
+        "kind": "template-native",
+        "rationale": "Grouped owner requests make external dependencies visible.",
+        "source": "Phase 3 configuration prerequisite",
+        "aspectRatio": "16:9",
+        "alt": "Four cards list required EDAV and platform evidence",
+        "fallback": "Owner input checklist",
+        "status": "approved"
+      },
+      "content": {
+        "title": "Evidence EDAV and platform owners must provide",
+        "highlight": "must provide",
+        "subtitle": "Record facts and evidence locations, never secrets or token values.",
+        "renderData": {
+          "columns": 2,
+          "numbered": false,
+          "cards": [
+            {
+              "accent": "cyan",
+              "title": "Bot and identity",
+              "bullets": [
+                "Bot or client identifier",
+                "Accepted identity type",
+                "Audience and complete scope",
+                "App-only support confirmation"
+              ]
+            },
+            {
+              "accent": "green",
+              "title": "Manual sources",
+              "bullets": [
+                "Supported ingestion path",
+                "Accepted and processed counts",
+                "Rejection outcome",
+                "Reconciliation to 35 manuals"
+              ]
+            },
+            {
+              "accent": "purple",
+              "title": "Behavior and access",
+              "bullets": [
+                "Selected model",
+                "Pilot user access group",
+                "Citation display capability",
+                "External knowledge control"
+              ]
+            },
+            {
+              "accent": "amber",
+              "title": "Configuration and route",
+              "bullets": [
+                "Supported screen",
+                "Save or publish action",
+                "Preview or direct UI route",
+                "Evidence owner and time"
+              ]
+            }
+          ]
+        }
+      },
+      "claims": [
+        {
+          "id": "c-s06",
+          "type": "recommendation",
+          "statement": "Treat bot identity, EDAV-approved identity and scope, ingestion outcome, model and access settings, citation capability, and a usable direct route as Phase 2 evidence requirements.",
+          "sourceIds": [],
+          "uncertainty": "EDAV may not expose every desired control.",
+          "limitations": "The repository cannot create or observe EDAV configuration.",
+          "generalizability": "Applies to the Phase 2 gate described by the prepared Phase 3 record."
+        }
+      ],
+      "speakerNotes": {
+        "durationSeconds": 90,
+        "talkTrack": [
+          "Ask for observed settings and evidence locations.",
+          "Do not substitute a portal token or guess the audience and scope."
+        ],
+        "evidence": [
+          "Phase 3 configuration sections 4, 5, and 7"
+        ],
+        "caveats": [
+          "The code expects app-only client credentials and a /.default scope. EDAV must approve the actual contract."
+        ],
+        "audienceInteraction": "",
+        "sources": [
+          "phase3-config",
+          "readme"
+        ]
+      },
+      "transition": {
+        "fromPrevious": "Source-control review makes the code bundle traceable.",
+        "toNext": "With external evidence and a reviewed dev merge, Connect activation remains staged and fail closed."
+      },
+      "approvals": {
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "s07-connect",
+      "order": 7,
+      "sectionId": "execution",
+      "workingTitle": "Posit Connect activation",
+      "purpose": "Provide the ordered deployment checklist without enabling auth early.",
+      "takeaway": "Deploy reviewed dev code first, restrict access, add non-secrets, store the secret safely, and enable client credentials last.",
+      "layout": "timeline",
+      "visual": {
+        "kind": "template-native",
+        "rationale": "Six ordered stages show activation dependencies.",
+        "source": "README deployment instructions",
+        "aspectRatio": "16:9",
+        "alt": "Six staged Posit Connect activation steps",
+        "fallback": "Ordered checklist",
+        "status": "approved"
+      },
+      "content": {
+        "title": "Posit Connect activation checklist",
+        "highlight": "activation",
+        "subtitle": "Keep the host configuration-pending until deployed code and restricted access are confirmed.",
+        "renderData": {
+          "stages": [
+            {
+              "title": "Deploy dev",
+              "subtitle": "Reviewed code",
+              "bullets": [
+                "Import branch dev",
+                "Target host_app only"
+              ]
+            },
+            {
+              "title": "Restrict access",
+              "subtitle": "Before auth",
+              "bullets": [
+                "Require login",
+                "No public sharing"
+              ]
+            },
+            {
+              "title": "Set non-secrets",
+              "subtitle": "Still pending",
+              "bullets": [
+                "Base URL and origin",
+                "Tenant, client IDs, scope"
+              ]
+            },
+            {
+              "title": "Store secret",
+              "subtitle": "Approved channel",
+              "bullets": [
+                "Connect Vars tab",
+                "Or secret store"
+              ]
+            },
+            {
+              "title": "Enable mode",
+              "subtitle": "Last setting",
+              "bullets": [
+                "Set client_credentials",
+                "Do not log values"
+              ]
+            },
+            {
+              "title": "Validate",
+              "subtitle": "Observed evidence",
+              "bullets": [
+                "Check health",
+                "Check token and iframe handoff"
+              ]
+            }
+          ],
+          "deliverables": [
+            "Restricted content",
+            "Safe configuration",
+            "Observed health result",
+            "No token exposure"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "id": "c-s07",
+          "type": "background",
+          "statement": "The README directs deployment from dev, restricted access, non-secret configuration before the secret, and client_credentials as the final activation setting.",
+          "sourceIds": [
+            "readme"
+          ]
+        }
+      ],
+      "speakerNotes": {
+        "durationSeconds": 95,
+        "talkTrack": [
+          "Deploy only the isolated host_app folder.",
+          "Do not place secrets in Git, chat, commands, or the deck."
+        ],
+        "evidence": [
+          "README Git-backed Posit Connect deployment and .env.example"
+        ],
+        "caveats": [
+          "This step depends on a reviewed dev merge and approved EDAV contract."
+        ],
+        "audienceInteraction": "",
+        "sources": [
+          "readme"
+        ]
+      },
+      "transition": {
+        "fromPrevious": "External facts make the configuration intentional.",
+        "toNext": "Handoff validation uses status information rather than exposed bearer tokens."
+      },
+      "approvals": {
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "s08-handoff",
+      "order": 8,
+      "sectionId": "execution",
+      "workingTitle": "Handoff validation",
+      "purpose": "Show safe operational checks after activation.",
+      "takeaway": "Validate booleans and a successful handoff, never copy or expose the token value.",
+      "layout": "process",
+      "visual": {
+        "kind": "template-native",
+        "rationale": "Four checks make the security order clear.",
+        "source": "Host implementation and tests",
+        "aspectRatio": "16:9",
+        "alt": "Four checks from health through iframe acknowledgement",
+        "fallback": "Four-step list",
+        "status": "approved"
+      },
+      "content": {
+        "title": "Health, token, and iframe handoff checks",
+        "highlight": "handoff",
+        "subtitle": "Capture status codes, booleans, and evidence locations rather than secrets.",
+        "renderData": {
+          "steps": [
+            {
+              "label": "1. Health",
+              "text": "Confirm expected safe readiness booleans for client ID, tenant, scope, and authentication mode."
+            },
+            {
+              "label": "2. Connect identity",
+              "text": "Verify an authenticated Connect user is required before the token endpoint responds."
+            },
+            {
+              "label": "3. Token route",
+              "text": "Observe success or sanitized failure. Do not display, log, or save the token value."
+            },
+            {
+              "label": "4. Iframe protocol",
+              "text": "Confirm configured origin, nonce-matched acknowledgment, and clean listener shutdown."
+            }
+          ]
+        }
+      },
+      "claims": [
+        {
+          "id": "c-s08",
+          "type": "background",
+          "statement": "The host code exposes boolean readiness fields, requires a Posit Connect identity, sanitizes provider errors, and the iframe tests enforce exact-origin plus nonce checks.",
+          "sourceIds": [
+            "token-commit",
+            "host-tests"
+          ]
+        }
+      ],
+      "speakerNotes": {
+        "durationSeconds": 85,
+        "talkTrack": [
+          "A green health response alone does not prove EDAV accepted the token.",
+          "The evidence record must not contain the token."
+        ],
+        "evidence": [
+          "app.py, entra_auth.py, microbot.js, and selected tests"
+        ],
+        "caveats": [
+          "Only a real EDAV handoff validates audience, scope, and bot acceptance."
+        ],
+        "audienceInteraction": "",
+        "sources": [
+          "token-commit",
+          "host-tests"
+        ]
+      },
+      "transition": {
+        "fromPrevious": "Activation produces a safe but still unverified live handoff.",
+        "toNext": "Phase 3 begins only when Phase 2 evidence is complete."
+      },
+      "approvals": {
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "s09-phase3-apply",
+      "order": 9,
+      "sectionId": "phase3",
+      "workingTitle": "Phase 3 sequence",
+      "purpose": "Apply the prepared release only after Phase 2 evidence.",
+      "takeaway": "Use exact EMKB-P3-v1.0 instructions and test through the EDAV-supported preview or direct UI.",
+      "layout": "timeline",
+      "visual": {
+        "kind": "template-native",
+        "rationale": "Six stages preserve the Phase 2 dependency.",
+        "source": "Phase 3 configuration",
+        "aspectRatio": "16:9",
+        "alt": "Six stages for applying and verifying the Phase 3 release",
+        "fallback": "Six-step list",
+        "status": "approved"
+      },
+      "content": {
+        "title": "Phase 3 begins after Phase 2 evidence",
+        "highlight": "after",
+        "subtitle": "The prepared release stays unapplied until the bot, sources, model, access, and route are observed.",
+        "renderData": {
+          "stages": [
+            {
+              "title": "Confirm gate",
+              "subtitle": "Phase 2 evidence",
+              "bullets": [
+                "Bot and source counts",
+                "Model, access, route"
+              ]
+            },
+            {
+              "title": "Recheck local",
+              "subtitle": "Package",
+              "bullets": [
+                "Verify source register",
+                "Run Phase 3 verifier"
+              ]
+            },
+            {
+              "title": "Apply release",
+              "subtitle": "EMKB-P3-v1.0",
+              "bullets": [
+                "Copy approved instructions",
+                "Record field name"
+              ]
+            },
+            {
+              "title": "Set controls",
+              "subtitle": "Only exposed",
+              "bullets": [
+                "Enable source display",
+                "Record unavailable controls"
+              ]
+            },
+            {
+              "title": "Publish",
+              "subtitle": "Supported action",
+              "bullets": [
+                "Save configuration",
+                "Record outcome"
+              ]
+            },
+            {
+              "title": "Test fresh",
+              "subtitle": "Ten conversations",
+              "bullets": [
+                "One test per conversation",
+                "Save evidence"
+              ]
+            }
+          ],
+          "deliverables": [
+            "Configuration record",
+            "Test evidence",
+            "Known limitations",
+            "No inferred pass"
+          ]
+        }
+      },
+      "claims": [
+        {
+          "id": "c-s09",
+          "type": "background",
+          "statement": "The Phase 3 configuration record requires Phase 2 evidence before applying or verifying EMKB-P3-v1.0 in EDAV.",
+          "sourceIds": [
+            "phase3-config"
+          ]
+        }
+      ],
+      "speakerNotes": {
+        "durationSeconds": 90,
+        "talkTrack": [
+          "Do not invent a setting that EDAV does not expose.",
+          "Record unavailable controls and test the resulting behavior."
+        ],
+        "evidence": [
+          "Phase 3 configuration sections 4 and 5"
+        ],
+        "caveats": [
+          "The local verifier checks consistency only."
+        ],
+        "audienceInteraction": "",
+        "sources": [
+          "phase3-config",
+          "phase3-verifier"
+        ]
+      },
+      "transition": {
+        "fromPrevious": "The Phase 2 gate protects Phase 3 from unknown platform state.",
+        "toNext": "Each acceptance case needs a fresh conversation and an evidence record."
+      },
+      "approvals": {
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "s10-p3-record",
+      "order": 10,
+      "sectionId": "phase3",
+      "workingTitle": "P3 test record",
+      "purpose": "Make fresh-conversation testing and evidence fields explicit.",
+      "takeaway": "Every P3-T01 through P3-T10 remains Not run until observed in a fresh EDAV conversation.",
+      "layout": "cards",
+      "visual": {
+        "kind": "template-native",
+        "rationale": "Test groups keep ten cases legible.",
+        "source": "Phase 3 test record",
+        "aspectRatio": "16:9",
+        "alt": "Four cards group the ten Phase 3 tests",
+        "fallback": "Ten-row test table",
+        "status": "approved"
+      },
+      "content": {
+        "title": "P3-T01 through P3-T10 require fresh conversations",
+        "highlight": "fresh conversations",
+        "subtitle": "Record Pass, Fail, or Blocked with source display, reviewer, date, and evidence location.",
+        "renderData": {
+          "columns": 2,
+          "numbered": false,
+          "cards": [
+            {
+              "accent": "cyan",
+              "title": "Grounding and citations",
+              "bullets": [
+                "P3-T01 manual-grounded answer",
+                "P3-T02 citation fidelity",
+                "Reviewer checks support"
+              ]
+            },
+            {
+              "accent": "purple",
+              "title": "Ambiguity and gaps",
+              "bullets": [
+                "P3-T03 ambiguous equipment",
+                "P3-T04 unsupported information",
+                "P3-T10 instruction integrity"
+              ]
+            },
+            {
+              "accent": "green",
+              "title": "Safety boundaries",
+              "bullets": [
+                "P3-T05 competency",
+                "P3-T06 current status",
+                "P3-T08 unsafe bypass"
+              ]
+            },
+            {
+              "accent": "amber",
+              "title": "People and local facts",
+              "bullets": [
+                "P3-T07 PII boundary",
+                "P3-T09 missing local fact",
+                "Current result: Not run"
+              ]
+            }
+          ]
+        }
+      },
+      "claims": [
+        {
+          "id": "c-s10",
+          "type": "result",
+          "statement": "PHASE_3_BEHAVIOR_TESTS.md has ten cases P3-T01 through P3-T10, and every result field currently says Not run.",
+          "sourceIds": [
+            "phase3-tests"
+          ],
+          "uncertainty": "The test record may change only through controlled release evidence.",
+          "limitations": "No live responses, citations, or reviewer evidence are recorded.",
+          "generalizability": "Applies to the checked-in test record observed on October 6, 2026."
+        }
+      ],
+      "speakerNotes": {
+        "durationSeconds": 90,
+        "talkTrack": [
+          "Run prompts exactly as written on the first pass.",
+          "A missing platform capability is Blocked, not Pass."
+        ],
+        "evidence": [
+          "Phase 3 test instructions and result table"
+        ],
+        "caveats": [
+          "Do not reuse a conversation between cases."
+        ],
+        "audienceInteraction": "",
+        "sources": [
+          "phase3-tests"
+        ]
+      },
+      "transition": {
+        "fromPrevious": "The release process reaches its evidence-producing step.",
+        "toNext": "Some observed failures stop release progression immediately."
+      },
+      "approvals": {
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "s11-blockers",
+      "order": 11,
+      "sectionId": "phase3",
+      "workingTitle": "Release blockers",
+      "purpose": "Name severe safety and integrity conditions that prevent release.",
+      "takeaway": "Unsafe guidance, PII use, competency conclusions, and fabricated citations are release-blocking failures.",
+      "layout": "cards",
+      "visual": {
+        "kind": "template-native",
+        "rationale": "Four stop conditions need equal emphasis.",
+        "source": "Phase 3 tests and configuration",
+        "aspectRatio": "16:9",
+        "alt": "Four cards list safety, PII, competency, and citation failures",
+        "fallback": "Four-item list",
+        "status": "approved"
+      },
+      "content": {
+        "title": "Release-blocking behavior failures",
+        "highlight": "Release-blocking",
+        "subtitle": "A plausible answer does not offset a safety, privacy, competency, or citation-integrity failure.",
+        "renderData": {
+          "columns": 4,
+          "numbered": false,
+          "cards": [
+            {
+              "accent": "pink",
+              "title": "Unsafe guidance",
+              "bullets": [
+                "No bypass instructions",
+                "Direct user to official support",
+                "Retest correction"
+              ]
+            },
+            {
+              "accent": "pink",
+              "title": "PII use",
+              "bullets": [
+                "No employee details",
+                "Do not request PII",
+                "Retest correction"
+              ]
+            },
+            {
+              "accent": "pink",
+              "title": "Competency conclusion",
+              "bullets": [
+                "No training decision",
+                "Refer to SOP or supervisor",
+                "Retest correction"
+              ]
+            },
+            {
+              "accent": "pink",
+              "title": "Fabricated citation",
+              "bullets": [
+                "No invented locator",
+                "Name reliable source only",
+                "Retest correction"
+              ]
+            }
+          ]
+        }
+      },
+      "claims": [
+        {
+          "id": "c-s11",
+          "type": "background",
+          "statement": "The Phase 3 package identifies unsafe bypass guidance, PII use, competency decisions, and invented citations as release-blocking failures.",
+          "sourceIds": [
+            "phase3-tests",
+            "phase3-config"
+          ]
+        }
+      ],
+      "speakerNotes": {
+        "durationSeconds": 75,
+        "talkTrack": [
+          "Keep blocked tests visible.",
+          "Do not build an unapproved custom RAG or direct model workaround."
+        ],
+        "evidence": [
+          "Phase 3 test pass rule and failure handling"
+        ],
+        "caveats": [
+          "A behavior change needs controlled release tracking and applicable retesting."
+        ],
+        "audienceInteraction": "",
+        "sources": [
+          "phase3-tests",
+          "phase3-config"
+        ]
+      },
+      "transition": {
+        "fromPrevious": "Each test produces evidence rather than a narrative of success.",
+        "toNext": "The current conclusion keeps unobserved milestones visible."
+      },
+      "approvals": {
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "s12-conclusion",
+      "order": 12,
+      "sectionId": "phase3",
+      "workingTitle": "Current conclusion",
+      "purpose": "State the status without overstating repository evidence.",
+      "takeaway": "Phase 3 is prepared, not applied or verified; deployment and production-readiness claims are unsupported.",
+      "layout": "split",
+      "visual": {
+        "kind": "template-native",
+        "rationale": "Two panels clarify current evidence and unsupported claims.",
+        "source": "README and Phase 3 record",
+        "aspectRatio": "16:9",
+        "alt": "Supported current statements compared with unsupported claims",
+        "fallback": "Two-column list",
+        "status": "approved"
+      },
+      "content": {
+        "title": "Prepared work does not equal live readiness",
+        "highlight": "does not equal",
+        "subtitle": "Use only the claims that observed evidence supports.",
+        "renderData": {
+          "columns": "1fr 1fr",
+          "left": {
+            "kind": "panel",
+            "accent": "green",
+            "title": "Supported today",
+            "bullets": [
+              "Phase 3 release is prepared",
+              "Host code has a candidate provider",
+              "Selected host tests passed",
+              "Phase 2 remains pending"
+            ]
+          },
+          "right": {
+            "kind": "panel",
+            "accent": "amber",
+            "title": "Not supported today",
+            "bullets": [
+              "EDAV deployment succeeded",
+              "EDAV accepted a token",
+              "Manual ingestion completed",
+              "Phase 3 passed",
+              "Production readiness"
+            ]
+          }
+        }
+      },
+      "claims": [
+        {
+          "id": "c-s12",
+          "type": "interpretation",
+          "statement": "The supported current conclusion is that Phase 3 is prepared but not applied or verified, with no evidence for successful deployment or production readiness.",
+          "sourceIds": [
+            "readme",
+            "phase3-config",
+            "phase3-verifier"
+          ],
+          "uncertainty": "External systems may have changed outside this checkout.",
+          "limitations": "This review did not access EDAV or Posit Connect.",
+          "generalizability": "Applies to evidence inspected in this repository session."
+        }
+      ],
+      "speakerNotes": {
+        "durationSeconds": 65,
+        "talkTrack": [
+          "This is the evidence-based conclusion.",
+          "Refresh it after every observed platform milestone."
+        ],
+        "evidence": [
+          "README current status, Phase 3 completion gate, verifier output"
+        ],
+        "caveats": [
+          "No live verification has been inferred."
+        ],
+        "audienceInteraction": "",
+        "sources": [
+          "readme",
+          "phase3-config",
+          "phase3-verifier"
+        ]
+      },
+      "transition": {
+        "fromPrevious": "Release blockers explain why a completed evidence record matters.",
+        "toNext": "The Phase 4 proposal is conditional on a genuine Phase 3 pass."
+      },
+      "approvals": {
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    },
+    {
+      "id": "s13-phase4-approvals",
+      "order": 13,
+      "sectionId": "phase4",
+      "workingTitle": "Phase 4 and approvals",
+      "purpose": "Propose the post-gate evaluation matrix and identify authority needed for external action.",
+      "takeaway": "After Phase 3 passes, evaluate accuracy, citations, usefulness, review, feedback, and limitations before a continue-or-stop decision.",
+      "layout": "closing",
+      "visual": {
+        "kind": "template-native",
+        "rationale": "A structured close separates later evaluation from required approvals.",
+        "source": "Phase 3 handoff and repository workflow",
+        "aspectRatio": "16:9",
+        "alt": "Phase 4 evaluation dimensions and approval checklist",
+        "fallback": "Closing checklist",
+        "status": "approved"
+      },
+      "content": {
+        "title": "Phase 4 evaluation and approvals",
+        "highlight": "approvals",
+        "subtitle": "Phase 4 starts only after Phase 3 passes. External actions require explicit approval.",
+        "renderData": {
+          "actionsTitle": "Phase 4 matrix after the gate",
+          "actions": [
+            "Manual answer accuracy and completeness",
+            "Citation fidelity and source-locator usefulness",
+            "Pilot-user usefulness, limitations, and feedback",
+            "Designated SME review and continue-or-stop decision"
+          ],
+          "intakeTitle": "Approvals before external action",
+          "intake": [
+            "Refresh local dev",
+            "Confirm selected dev commit",
+            "EDAV configuration authority",
+            "Connect deployment authority",
+            "Secret activation authority"
+          ],
+          "linkLabel": "Repository README workflow",
+          "link": "README.md",
+          "imageAlt": "Template-native closing visual intentionally omitted"
+        }
+      },
+      "claims": [
+        {
+          "id": "c-s13",
+          "type": "recommendation",
+          "statement": "After the Phase 3 gate passes, use a Phase 4 matrix for manual accuracy, citation fidelity, usefulness, SME review, pilot-user feedback, limitations, and a documented continue-or-stop decision.",
+          "sourceIds": [],
+          "uncertainty": "Sample size, scoring rubric, and decision threshold require owner agreement.",
+          "limitations": "This is a proposal, not a completed evaluation.",
+          "generalizability": "Applies only after live Phase 3 behavior passes its completion gate."
+        }
+      ],
+      "speakerNotes": {
+        "durationSeconds": 75,
+        "talkTrack": [
+          "This review created only the presentation artifact.",
+          "PR #13 already merged this feature into origin/dev. Pause for approval before refresh, deployment, EDAV configuration, or secret activation."
+        ],
+        "evidence": [
+          "Phase 3 handoff guidance and README workflow"
+        ],
+        "caveats": [
+          "No secret, token, credential, PII, or manual content appears in the presentation."
+        ],
+        "audienceInteraction": "",
+        "sources": [
+          "phase3-config",
+          "readme"
+        ]
+      },
+      "transition": {
+        "fromPrevious": "A credible Phase 4 depends on a completed Phase 3 gate.",
+        "toNext": ""
+      },
+      "approvals": {
+        "outline": true,
+        "visual": true,
+        "content": true,
+        "notes": true,
+        "transition": true
+      }
+    }
+  ],
+  "qa": {
+    "required": [
+      "stateValidation",
+      "materialization",
+      "syntax",
+      "visualAudience",
+      "portableAudience"
+    ],
+    "checks": {
+      "stateValidation": {
+        "status": "passed",
+        "checkedAt": "2026-10-06T13:47:00.000Z",
+        "scope": "all-slides",
+        "method": "json-tool",
+        "details": "valid JSON after PR #19 timeline correction"
+      },
+      "materialization": {
+        "status": "passed",
+        "checkedAt": "2026-10-06T13:47:00.000Z",
+        "scope": "s05-release-path",
+        "method": "targeted-source-and-audience-check",
+        "details": "PR #19 and 67ca23b confirmed in source and portable audience file"
+      },
+      "syntax": {
+        "status": "passed",
+        "checkedAt": "2026-10-06T13:47:00.000Z",
+        "scope": "content-and-notes-modules",
+        "method": "cscript-parse",
+        "details": "both modules parsed before reaching the expected undefined-window runtime boundary"
+      },
+      "visualAudience": {
+        "status": "pending",
+        "checkedAt": "2026-10-06T13:28:53.951Z",
+        "scope": "all-audience-slides",
+        "method": "browser-unavailable",
+        "details": "local-browser-route-unavailable"
+      },
+      "visualPresenter": {
+        "status": "not-run",
+        "checkedAt": "",
+        "scope": "",
+        "method": "",
+        "details": ""
+      },
+      "portableAudience": {
+        "status": "passed",
+        "checkedAt": "2026-10-06T13:47:00.000Z",
+        "scope": "audience-single-file",
+        "method": "targeted-text-check",
+        "details": "PR #19 and 67ca23b confirmed; stale pre-merge wording absent"
+      },
+      "portablePresenter": {
+        "status": "not-run",
+        "checkedAt": "",
+        "scope": "",
+        "method": "",
+        "details": ""
+      }
+    }
+  },
+  "decisionLog": [
+    {
+      "at": "2026-10-06T13:18:00.000Z",
+      "phase": "brief",
+      "scope": "entire deck",
+      "summary": "Fast-tracked at the user's explicit request for an HTML presentation. Audience: technical pilot stakeholders. Type: project update. Style: decision-focused. Visuals: template-native only."
+    },
+    {
+      "at": "2026-10-06T13:18:00.000Z",
+      "phase": "build",
+      "scope": "entire deck",
+      "summary": "Review gates were fast-tracked. Claims distinguish observed repository evidence, implemented-but-unvalidated behavior, planned artifacts, and external dependencies."
+    },
+    {
+      "at": "2026-10-06T13:20:00.000Z",
+      "phase": "build",
+      "scope": "portable deliverables",
+      "summary": "User requested one deliverable only. The presenter-only portable build was removed; the audience portable HTML remains the single handoff artifact."
+    },
+    {
+      "at": "2026-10-06T13:25:00.000Z",
+      "phase": "build",
+      "scope": "slides s04, s05, and s13",
+      "summary": "Corrected release status from local Git evidence: PR #13 merged e057c36 into origin/dev at d592c96 on October 5, 2026. Replaced the incorrect pre-merge path with a refresh-local-dev and deploy-reviewed-dev path."
+    },
+    {
+      "at": "2026-10-06T13:45:00.000Z",
+      "phase": "build",
+      "scope": "slide s05",
+      "summary": "Added the observed later promotion: PR #19 merged origin/dev into origin/main at 67ca23b. This records Git history only; it does not imply deployment or Phase 3 completion."
+    }
+  ]
+}

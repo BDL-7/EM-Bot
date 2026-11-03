@@ -1,0 +1,27 @@
+# Generation prompts
+
+## Initial generation
+
+Create a detailed polished architecture diagram as a high-resolution landscape 16:9 PNG, preferably 3840x2160. Title: "EMLab + EDAV BaaS". Subtitle: "How the equipment-manual assistant fits together". Professional editorial technical infographic, warm ivory background, deep teal headings, navy text, amber dashed conceptual flows, generous whitespace, crisp readable sans-serif labels. No decorative robots, no vendor logos. Use correct spelling and clean orthogonal arrows without crossings. Six well-organized regions with clear hierarchy.
+
+LEFT UPPER: person icon "Lab user" connected to a large outlined "Browser" containing an "EMLab parent page" box containing a smaller "EDAV Microbot iframe" chat window. Under iframe write "Displayed here • hosted by EDAV". User captions "Ask a question" and "Check the supporting manual". The nested boxes mean displayed inside, NOT server hosting.
+
+LEFT LOWER: distinct outlined hosting region "Posit Connect" containing "Flask host application". Inside list "Serves the parent page" and "Provides authenticated token endpoint". Small note: "Does not search manuals or draft answers". An arrow UP from Flask to parent page labeled "Page + access-token response". Small line "Signed-in user identity controls host access".
+
+CENTER LOWER: separate box "Microsoft Entra ID" with a two-way arrow to Flask labeled "App-only authentication". A callout by the browser frame says "Parent → iframe: token handoff" and "Exact-origin checks + acknowledgment". Another compact callout "clientId selects configured bot". Do not include secret names, values, URLs, tenant IDs, or token strings. Clearly separate user sign-in from app authentication.
+
+RIGHT UPPER: outlined region "EDAV-hosted service" with box "Microbot web interface" connected bidirectionally to the browser iframe by a line labeled "Separately hosted interface". Below it a DASHED AMBER container labeled "Configured bot — intended functions". Inside three clear connected boxes: "Instructions" / "Scope and clarification"; "Retrieval" / "Find relevant manual passages"; "AI language model" / "Draft from question + evidence". Make instruction guidance distinct from the retrieval → drafting evidence flow. Link this functional area bidirectionally to Microbot interface, labels "Question" and "Reply + available sources". Do NOT route answers through Flask. No model vendor, embedding engine, database, vector index or actual storage location is specified.
+
+RIGHT LOWER: separate manual-document collection icon and box "Approved equipment manuals". Under it "Match equipment model + manual version". Dashed amber arrow from manuals to retrieval labeled "Prepare / update / verify". Footnote directly under manuals: "Evidence collection; EDAV storage details unverified". Do not put manuals inside Flask or browser. Make manual preparation distinct from per-question flow.
+
+BOTTOM full-width narrow band: "Each question: Ask → Clarify → Find passages → Draft → Show sources → Person checks". Next line "Missing evidence? Explain the gap. Authentication unavailable? Show a pending or error state." Footer legend "Solid outlines: code-backed integration • Dashed amber: intended functions, not verified backend architecture". Final small but readable footnote "Conceptual architecture • October 9, 2026 • Live retrieval, source display, model choice and backend storage require verification."
+
+Keep the diagram visually exciting through clear nested boundaries, small restrained icons of person/browser/server/manuals, and elegant colored arrows. All information is logical architecture, not claims of production readiness. Ensure no ambiguity between display containment and hosting containment. All labels must remain readable at full resolution.
+
+## Correction pass
+
+Edit this architecture image, preserving layout and all other labels. In Microsoft Entra ID box remove the entire 'User sign-in (authenticates people)' subsection and person icon and divider. Keep only app-only authentication, centered, with label 'Authenticates the Flask app'. User identity is controlled by Posit Connect as already indicated, but its sign-in provider is not verified. In the browser chat replace question with 'Where are the cleaning instructions?' and reply with 'Which instrument and model?' and add clear small label 'Illustrative conversation' above the chat bubbles. Correct the client identifier label to exact case 'clientId selects configured bot'. Change dashed amber borders around token handoff and clientId callouts to solid blue because these are code-backed integration, not intended backend functions. Preserve the dashed amber border of the intended bot functions and dashed manual-preparation arrow. Make the retrieval-to-language-model arrow point only right, labeled 'Evidence'. Keep all other architecture relationships and limitations. Output high-resolution 16:9 landscape PNG.
+
+## Title-size revision
+
+Make exactly one localized typography adjustment to this diagram: reduce the main title EMLab + EDAV BaaS to 55% of its current font size, keeping it centered in the existing top header band, with a refined semibold weight. Keep the subtitle unchanged in wording, size and location. Preserve every other element, text label, arrow, icon, boundary, color, footnote, canvas size and position exactly. Do not redesign or reflow the diagram. Only the large main title should become smaller; preserve its exact wording.
