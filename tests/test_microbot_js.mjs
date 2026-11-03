@@ -18,6 +18,16 @@ test("builds an iframe URL with clientId and cache timestamp", () => {
   assert.equal(url.origin, "https://microbot.example");
   assert.equal(url.searchParams.get("clientId"), "em-bot");
   assert.equal(url.searchParams.get("_t"), "12345");
+  assert.equal(url.searchParams.has("ShowHeader"), false);
+});
+
+test("builds a token-free URL that hides the EDAV header", () => {
+  const url = new URL(
+    protocol.buildIntegrationUrl("https://microbot.example/?ShowHeader=true&other=value", "id with spaces")
+  );
+  assert.equal(url.searchParams.get("IntegrationId"), "id with spaces");
+  assert.deepEqual(url.searchParams.getAll("ShowHeader"), ["false"]);
+  assert.equal(url.searchParams.get("other"), "value");
 });
 
 test("accepts an acknowledgment only from the expected origin and nonce", () => {
@@ -144,7 +154,7 @@ test("no-token mode loads the Microbot without requesting a token", async () => 
   });
   protocol.start(page.doc, page.win);
   const iframe = page.elements["iframe"];
-  assert.equal(iframe.src, "https://microbot.example/?IntegrationId=integration-id");
+  assert.equal(iframe.src, "https://microbot.example/?IntegrationId=integration-id&ShowHeader=false");
   assert.equal(iframe.allow, "clipboard-write");
   assert.equal(iframe.loading, "lazy");
   assert.equal(iframe.title, "EM Knowledge Assistant");

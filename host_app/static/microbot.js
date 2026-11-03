@@ -26,6 +26,7 @@
   function buildIntegrationUrl(baseUrl, integrationId) {
     const url = new URL(baseUrl);
     url.searchParams.set("IntegrationId", integrationId);
+    url.searchParams.set("ShowHeader", "false");
     return url.toString();
   }
 
