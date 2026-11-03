@@ -26,6 +26,7 @@
   function buildIntegrationUrl(baseUrl, integrationId) {
     const url = new URL(baseUrl);
     url.searchParams.set("IntegrationId", integrationId);
+    url.searchParams.set("ShowHeader", "false");
     return url.toString();
   }
 
@@ -69,10 +70,12 @@
     const panel = doc.getElementById("microbot-panel");
     const container = doc.getElementById("microbot-container");
     const closeButton = doc.getElementById("close-microbot");
+    const openButton = doc.getElementById("open-microbot");
 
     let iframe = null;
     let nonce = null;
     let stopResending = null;
+    let generation = 0;
 
     function cancelResending() {
       if (stopResending) stopResending();
@@ -81,36 +84,46 @@
 
     function setStatus(message, ready) {
       status.textContent = message;
-      status.className = ready ? "good" : "pending";
+      status.className = "chat-status " + (ready ? "good" : "pending");
     }
 
     function cleanup() {
+      generation += 1;
       win.removeEventListener("message", onMessage);
       cancelResending();
       if (iframe) iframe.remove();
       iframe = null;
       nonce = null;
       panel.hidden = true;
-      setStatus("Closed", false);
+      closeButton.hidden = true;
+      openButton.hidden = false;
+      setStatus("Chat closed. Reopen it to reload the chat.", false);
+      openButton.focus();
     }
 
     function onMessage(event) {
-      if (event.origin !== config.origin) return;
-      if (isAcknowledgment(event, config.origin, nonce)) {
+      if (!iframe || event.origin !== config.origin || event.source !== iframe.contentWindow) return;
+      if (config.requiresToken !== false && nonce && isAcknowledgment(event, config.origin, nonce)) {
         cancelResending();
-        setStatus("Token acknowledged; Microbot ready", true);
+        setStatus("Token acknowledged; verify the chat response.", true);
         return;
       }
       if (event.data && event.data.type === "EVA_CLOSE_REQUESTED") cleanup();
     }
 
-    async function authenticateFrame() {
+    function isCurrent(targetFrame, session) {
+      return iframe === targetFrame && generation === session;
+    }
+
+    async function authenticateFrame(targetFrame, session) {
       const response = await win.fetch(config.tokenEndpoint, {
         method: "POST",
         credentials: "same-origin",
         headers: { Accept: "application/json" },
       });
+      if (!isCurrent(targetFrame, session)) return;
       const payload = await response.json();
+      if (!isCurrent(targetFrame, session)) return;
       if (!response.ok) throw new Error(payload.message || "EDAV token request failed");
       if (!isValidJwt(payload.token)) throw new Error("EDAV token response was not a JWT");
       cancelResending();
@@ -124,10 +137,9 @@
           userProfile: payload.userProfile || undefined,
         },
       };
-      const targetFrame = iframe;
       stopResending = repeatUntilStopped(
         function (attempt) {
-          if (!targetFrame.contentWindow) return;
+          if (!isCurrent(targetFrame, session) || !targetFrame.contentWindow) return;
           targetFrame.contentWindow.postMessage(message, config.origin);
           setStatus(
             "Token sent (attempt " + attempt + " of " + MAX_TOKEN_SEND_ATTEMPTS +
@@ -141,10 +153,11 @@
           setInterval: win.setInterval.bind(win),
           clearInterval: win.clearInterval.bind(win),
           onExhausted: function () {
+            if (!isCurrent(targetFrame, session)) return;
             stopResending = null;
             setStatus(
               "No acknowledgment from Microbot after " + MAX_TOKEN_SEND_ATTEMPTS +
-                " attempts; check that this host origin is allowed for the clientId",
+                " attempts. See Technical details for connection testing.",
               false
             );
           },
@@ -153,38 +166,51 @@
     }
 
     if (!config.ready) {
-      setStatus("Blocked by pending EDAV configuration", false);
+      setStatus("Chat is not configured. See Technical details for what is needed.", false);
       return { cleanup: cleanup };
     }
 
-    iframe = doc.createElement("iframe");
-    const requiresToken = config.requiresToken !== false;
-    iframe.title = "EM Knowledge Assistant";
-    if (requiresToken) {
-      iframe.src = buildIframeUrl(config.baseUrl, config.clientId, Date.now());
-    } else {
-      iframe.src = buildIntegrationUrl(config.baseUrl, config.integrationId);
-      iframe.allow = "clipboard-write";
-      iframe.loading = "lazy";
-      iframe.className = "integration-iframe";
-    }
-    iframe.addEventListener("load", function () {
-      if (!requiresToken) {
-        setStatus("Iframe loaded; verify chat response", false);
-        return;
+    function open() {
+      if (iframe) return;
+      const session = ++generation;
+      const targetFrame = doc.createElement("iframe");
+      iframe = targetFrame;
+      const requiresToken = config.requiresToken !== false;
+      targetFrame.title = "EM Knowledge Assistant";
+      if (requiresToken) {
+        targetFrame.src = buildIframeUrl(config.baseUrl, config.clientId, Date.now());
+      } else {
+        targetFrame.src = buildIntegrationUrl(config.baseUrl, config.integrationId);
+        targetFrame.allow = "clipboard-write";
+        targetFrame.loading = "lazy";
+        targetFrame.className = "integration-iframe";
       }
-      authenticateFrame().catch(function (error) {
-        setStatus(error.message, false);
+      targetFrame.addEventListener("load", function () {
+        if (!isCurrent(targetFrame, session)) return;
+        if (!requiresToken) {
+          setStatus("Iframe loaded; verify chat response", false);
+          return;
+        }
+        authenticateFrame(targetFrame, session).catch(function (error) {
+          if (isCurrent(targetFrame, session)) {
+            setStatus(error.message + ". See Technical details for connection testing.", false);
+          }
+        });
       });
+      win.addEventListener("message", onMessage);
+      container.appendChild(targetFrame);
+      panel.hidden = false;
+      closeButton.hidden = false;
+      openButton.hidden = true;
+      setStatus("Loading Microbot", false);
+    }
+
+    closeButton.addEventListener("click", cleanup);
+    openButton.addEventListener("click", function () {
+      open();
+      closeButton.focus();
     });
-    win.addEventListener("message", onMessage);
-    closeButton.addEventListener("click", cleanup, { once: true });
-    container.appendChild(iframe);
-    panel.hidden = false;
-    setStatus(
-      requiresToken ? "Iframe loaded; authentication pending" : "Loading Microbot",
-      false
-    );
+    open();
     return { cleanup: cleanup };
   }
 

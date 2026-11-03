@@ -27,6 +27,10 @@ never in this folder, Git, application assets, or documentation.
 
 The host remains inactive until EDAV configuration is available. In the
 unconfigured state it does not load the iframe and the token route fails closed.
+Deployment and connection details are available under the collapsed
+**Technical details** section. Closing the chat removes its iframe; reopening
+starts a fresh view and may discard the previous chat session. The embedded
+chat's appearance and contents are managed separately by EDAV.
 
 ## Deployment boundary
 

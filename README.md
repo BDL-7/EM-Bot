@@ -117,8 +117,9 @@ For the EDAV-supplied token-free integration, set `EDAV_AUTH_MODE=none`,
 `EDAV_MICROBOT_BASE_URL` to the approved environment URL, and
 `EDAV_MICROBOT_INTEGRATION_ID` to the identifier supplied by EDAV in Connect.
 If `EDAV_MICROBOT_ORIGIN` is set, it must match the base URL's origin.
-The iframe URL uses the case-sensitive `IntegrationId` query parameter; it
-does not use the legacy `clientId`. The host neither requests nor sends a token
+The iframe URL uses the case-sensitive `IntegrationId` query parameter and
+`ShowHeader=false` to hide the EDAV header; it does not use the legacy
+`clientId`. The host neither requests nor sends a token
 or user profile in this mode. `/api/edav-token` refuses requests. Posit Connect
 still controls who can open the host. Loading an iframe does not prove that the
 bot can answer: verify a live question after deployment.

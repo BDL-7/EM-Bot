@@ -99,9 +99,23 @@ def test_index_includes_safe_connection_testing_guide(client):
     assert "Connection testing" in body
     assert 'href="/health"' in body
     assert "POST /api/edav-token" in body
-    assert "Iframe handshake" in body
+    assert "Chat status" in body
     assert "Do not send tokens, client" in body
     assert "secrets, or full request headers." in body
+
+
+def test_chat_precedes_collapsed_diagnostics_and_status_is_visible(client):
+    body = client.get("/").get_data(as_text=True)
+    chat = body.index('id="microbot-heading"')
+    status = body.index('id="iframe-status"')
+    details = body.index('<details class="technical-details">')
+    assert chat < status < details
+    assert body.index("Deployment status", details) > details
+    assert body.index("Integration readiness", details) > details
+    assert body.index("Required from EDAV", details) > details
+    assert body.index("Connection testing", details) > details
+    assert 'id="open-microbot"' in body
+    assert 'aria-live="polite"' in body
 
 
 def test_health_is_safe_and_reports_pending_edav(client):
@@ -214,6 +228,7 @@ def test_no_token_mode_is_ready_with_only_integration_id(monkeypatch):
     assert '"integrationId": "integration-id"' in body
     assert "Token-free integration configured" in body
     assert "Test token connection" not in body
+    assert 'href="/health"' in body
     assert "verify chat response" in body.lower() or "confirm that chat works" in body
     assert "Configured for DEV" not in body
     health = client.get("/health").get_json()
