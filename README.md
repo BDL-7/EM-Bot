@@ -70,6 +70,7 @@ APP_ENV
 EDAV_MICROBOT_BASE_URL
 EDAV_MICROBOT_ORIGIN
 EDAV_MICROBOT_CLIENT_ID
+EDAV_MICROBOT_INTEGRATION_ID
 EDAV_ENTRA_TENANT_ID
 EDAV_ENTRA_CLIENT_ID
 EDAV_ENTRA_CLIENT_SECRET
@@ -77,19 +78,18 @@ EDAV_MICROBOT_SCOPE
 EDAV_AUTH_MODE
 ```
 
-Add `EDAV_ENTRA_CLIENT_SECRET` only after the provider code is deployed, using
-Posit Connect **Vars** or an approved secret store. Until then, keep
-`EDAV_AUTH_MODE=unconfigured`; the host fails closed and does not load the
-iframe.
+Keep `EDAV_AUTH_MODE=unconfigured` until the settings for the intended
+integration are in place. The host fails closed and does not load the iframe
+while configuration is incomplete. Client-credentials mode also requires
+`EDAV_ENTRA_CLIENT_SECRET` in Posit Connect **Vars** or an approved secret store.
 
 ### Git-backed Posit Connect deployment
 
 Connect treats `host_app/` as the deployment root and imports `app:app` from that directory. The host supports this top-level import while retaining package-relative imports for local tests.
 
-The deployed host page includes a safe **Connection testing** guide. It directs
-pilot users through the safe `/health` readiness check, the browser Network
-request to `/api/edav-token`, token-request outcomes, and the EDAV iframe
-handoff without exposing access tokens, client secrets, or Connect credentials.
+The host page provides mode-specific connection testing. The `/health` endpoint
+reports configuration presence rather than confirming a working chat. Token
+testing is available only in client-credentials mode.
 
 To refresh the manifest after changing application code or dependencies, run `rsconnect write-manifest api --overwrite --entrypoint app:app host_app`, inspect it, and commit it with the corresponding application changes.
 
@@ -103,7 +103,9 @@ For the first deployment:
 6. Enter **Aquarius Assistant - EM Knowledge Bot Pilot Host** as the content title.
 7. Deploy the content.
 
-After deployment, require login, restrict access to the designated pilot users or group, configure runtime variables outside Git, and disable public access. Configure the non-secret tenant ID, client IDs, and scope first. After the provider code is deployed, add `EDAV_ENTRA_CLIENT_SECRET` in Connect and set `EDAV_AUTH_MODE=client_credentials` last. Until then, the host remains in a controlled configuration-pending state and does not load the iframe.
+After deployment, require login, restrict access to the designated pilot users
+or group, configure runtime variables outside Git, and disable public access.
+Select the integration mode only after its required settings are present.
 
 Connect must already be able to read the private GitHub repository through its server-managed GitHub credential or OAuth integration. If the repository cannot be selected or cloned, that is a Connect-side private-repository access issue; do not put GitHub credentials in the repository URL.
 
@@ -111,7 +113,18 @@ The Git-backed content should track `dev` for this DEV pilot. After a successful
 
 ### No-token mode (`EDAV_AUTH_MODE=none`)
 
-EDAV confirmed that the Microbot does not need a token when it shows no user information, and this pilot shows none. Set `EDAV_AUTH_MODE=none` and `EDAV_MICROBOT_CLIENT_ID` in Connect. The host then loads the iframe with only the `clientId`, never requests or sends a token, and sends no user name or email to EDAV. `/api/edav-token` refuses requests in this mode. Posit Connect still controls who can open the host. The Entra variables are used only in `client_credentials` mode.
+For the EDAV-supplied token-free integration, set `EDAV_AUTH_MODE=none`,
+`EDAV_MICROBOT_BASE_URL` to the approved environment URL, and
+`EDAV_MICROBOT_INTEGRATION_ID` to the identifier supplied by EDAV in Connect.
+If `EDAV_MICROBOT_ORIGIN` is set, it must match the base URL's origin.
+The iframe URL uses the case-sensitive `IntegrationId` query parameter; it
+does not use the legacy `clientId`. The host neither requests nor sends a token
+or user profile in this mode. `/api/edav-token` refuses requests. Posit Connect
+still controls who can open the host. Loading an iframe does not prove that the
+bot can answer: verify a live question after deployment.
+
+The separate `client_credentials` mode retains `EDAV_MICROBOT_CLIENT_ID` and
+requires the Entra tenant, application, secret, and scope settings.
 
 ### Diagnose a live token failure in Connect
 
@@ -166,7 +179,7 @@ From the repository root:
 python scripts/verify_bot.py
 python -m unittest discover -s tests
 python -m pytest tests/test_app.py tests/test_entra_auth.py tests/test_microbot_contract.py tests/test_deployment_boundary.py
-node --test tests/test_microbot_js.mjs
+node --test tests/test_microbot_js.mjs tests/test_auth_check_js.mjs
 ```
 
 The behavior-package check does not need the manual corpus. The source-register

@@ -4,18 +4,25 @@ import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const { start } = require("../host_app/static/auth-check.js");
 
-function setup(fetch) {
+function setup(fetch, requiresToken = true) {
   let click;
   const button = { disabled: false, addEventListener: (_, fn) => { click = fn; } };
   const status = { textContent: "" };
   const elements = {
     "test-token-connection": button,
     "token-test-status": status,
-    "microbot-config": { textContent: JSON.stringify({ tokenEndpoint: "/content/example/api/edav-token" }) },
+    "microbot-config": { textContent: JSON.stringify({ tokenEndpoint: "/content/example/api/edav-token", requiresToken }) },
   };
   start({ getElementById: id => elements[id] }, { fetch });
   return { button, status, click };
 }
+
+test("no-token mode does not enable token testing", () => {
+  const state = setup(() => { throw Error("fetch should not be called"); }, false);
+  assert.equal(state.button.disabled, true);
+  assert.equal(state.click, undefined);
+  assert.match(state.status.textContent, /not used/);
+});
 
 test("success does not read or display the token response", async () => {
   const state = setup(async (url, options) => {

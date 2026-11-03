@@ -35,6 +35,7 @@ def build_client(monkeypatch, token_provider_factory=None, **settings):
             "https://edav-dev-microbot-ui.edav-dev-app.appserviceenvironment.net"
         ),
         "EDAV_MICROBOT_CLIENT_ID": "",
+        "EDAV_MICROBOT_INTEGRATION_ID": "",
         "EDAV_AUTH_MODE": "unconfigured",
         "EDAV_ENTRA_TENANT_ID": "",
         "EDAV_ENTRA_CLIENT_ID": "",
@@ -112,6 +113,7 @@ def test_health_is_safe_and_reports_pending_edav(client):
         "auth_mode_configured": False,
         "bot": "EM Knowledge Bot",
         "client_id_configured": False,
+        "integration_id_configured": False,
         "edav_ready": False,
         "entra_client_id_configured": False,
         "entra_tenant_configured": False,
@@ -199,24 +201,33 @@ def test_token_endpoint_sanitizes_provider_errors(monkeypatch):
     assert "test-only-secret" not in response.get_data(as_text=True)
 
 
-def test_no_token_mode_is_ready_with_only_client_id(monkeypatch):
+def test_no_token_mode_is_ready_with_only_integration_id(monkeypatch):
     client = build_client(
         monkeypatch,
-        EDAV_MICROBOT_CLIENT_ID="microbot-client-id",
+        EDAV_MICROBOT_INTEGRATION_ID="integration-id",
         EDAV_AUTH_MODE="none",
+        EDAV_MICROBOT_SCOPE="unused-invalid-scope",
     )
     body = client.get("/", headers=connect_identity()).get_data(as_text=True)
     assert '"ready": true' in body
     assert '"requiresToken": false' in body
-    assert "No token required" in body
+    assert '"integrationId": "integration-id"' in body
+    assert "Token-free integration configured" in body
+    assert "Test token connection" not in body
+    assert "verify chat response" in body.lower() or "confirm that chat works" in body
+    assert "Configured for DEV" not in body
     health = client.get("/health").get_json()
     assert health["edav_ready"] is True
     assert health["auth_mode"] == "none"
+    assert health["integration_id_configured"] is True
 
 
-def test_no_token_mode_still_requires_client_id(monkeypatch):
-    client = build_client(monkeypatch, EDAV_AUTH_MODE="none")
+def test_no_token_mode_requires_integration_id_not_legacy_client_id(monkeypatch):
+    client = build_client(
+        monkeypatch, EDAV_AUTH_MODE="none", EDAV_MICROBOT_CLIENT_ID="legacy-id"
+    )
     assert client.get("/health").get_json()["edav_ready"] is False
+    assert "EDAV Microbot IntegrationId" in client.get("/").get_data(as_text=True)
 
 
 def test_no_token_mode_never_issues_a_token(monkeypatch):
@@ -226,7 +237,7 @@ def test_no_token_mode_never_issues_a_token(monkeypatch):
     client = build_client(
         monkeypatch,
         unexpected_provider,
-        EDAV_MICROBOT_CLIENT_ID="microbot-client-id",
+        EDAV_MICROBOT_INTEGRATION_ID="integration-id",
         EDAV_AUTH_MODE="none",
     )
     response = client.post("/api/edav-token", headers=connect_identity())
@@ -236,7 +247,7 @@ def test_no_token_mode_never_issues_a_token(monkeypatch):
 
 
 def test_settings_reject_scope_without_default_suffix(monkeypatch):
-    build_client(monkeypatch, EDAV_MICROBOT_SCOPE="api://edav-microbot/read")
+    build_client(monkeypatch, EDAV_AUTH_MODE="client_credentials", EDAV_MICROBOT_SCOPE="api://edav-microbot/read")
     with pytest.raises(ValueError, match="/.default"):
         load_settings()
 
