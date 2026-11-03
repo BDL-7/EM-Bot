@@ -9,14 +9,34 @@
   <body>
     <main class="shell">
       <header class="hero">
-        <p class="eyebrow">Aquarius Assistant · DEV pilot</p>
-        <h1>EM Knowledge Bot</h1>
+        <p class="eyebrow">Aquarius Assistant <span aria-hidden="true">✦</span> EMLab</p>
+        <h1>Your equipment knowledge companion</h1>
         <p class="summary">
-          Temporary authenticated parent application for the EDAV-hosted Microbot.
-          This is not CAT or the competency-assessment application.
+          Explore your equipment manuals with the EM Knowledge Assistant.
+          Check important answers against the referenced source.
         </p>
       </header>
 
+      <section class="assistant-section" aria-labelledby="microbot-heading">
+        <div class="assistant-heading">
+          <div>
+            <p class="section-label">YOUR ASSISTANT</p>
+            <h2 id="microbot-heading">Ask EM Knowledge Assistant</h2>
+            <p class="assistant-intro">Ask a question to get started.</p>
+          </div>
+          <button id="close-microbot" class="secondary-button" type="button" hidden>Close chat</button>
+          <button id="open-microbot" class="primary-button" type="button" hidden>Reopen chat</button>
+        </div>
+        <p id="iframe-status" class="pending chat-status" role="status" aria-live="polite">Not started</p>
+        <p class="session-note">Reopening reloads the chat and may clear the conversation.</p>
+        <div id="microbot-panel" hidden>
+          <div id="microbot-container"></div>
+        </div>
+      </section>
+
+      <details class="technical-details">
+        <summary>Technical details <span>Deployment, readiness and connection testing</span></summary>
+        <div class="technical-content">
       <section class="notice" aria-labelledby="deployment-status">
         <h2 id="deployment-status">Deployment status</h2>
         <p>
@@ -58,7 +78,7 @@
               {% if settings.auth_mode == 'none' %}Token-free integration configured{% elif settings.auth_mode == 'client_credentials' %}Configured{% else %}Waiting for EDAV contract{% endif %}
             </dd>
           </div>
-          <div><dt>Iframe handshake</dt><dd id="iframe-status" class="pending">Not started</dd></div>
+          <div><dt>Chat status</dt><dd>See the status above the chat.</dd></div>
         </dl>
       </section>
 
@@ -78,6 +98,7 @@
         {% if settings.auth_mode == 'none' %}
         <p>Verify that the iframe loads and ask a question to confirm that chat works.
           Loading the iframe alone does not confirm that the Microbot can answer.</p>
+        <p>Review the <a href="{{ url_for('health') }}">health endpoint</a> for configuration status.</p>
         {% else %}
         <p>
           Test token acquisition on the Connect server independently of the iframe.
@@ -116,7 +137,7 @@
               Token acquisition succeeded, possibly using a cached token.
               The normal iframe flow sends the token to its configured origin after
               the frame loads; the test button checks token acquisition only.
-              Watch <strong>Iframe handshake</strong> for an acknowledgment.
+              Watch the <strong>chat status</strong> for an acknowledgment.
             </dd>
           </div>
           <div>
@@ -155,14 +176,8 @@
         </p>
         {% endif %}
       </section>
-
-      <section id="microbot-panel" aria-labelledby="microbot-heading" hidden>
-        <div class="panel-heading">
-          <h2 id="microbot-heading">EDAV Microbot</h2>
-          <button id="close-microbot" type="button">Close bot</button>
         </div>
-        <div id="microbot-container"></div>
-      </section>
+      </details>
     </main>
 
     <script id="microbot-config" type="application/json">{{ browser_config|tojson }}</script>
