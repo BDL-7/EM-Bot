@@ -95,17 +95,21 @@ function fakePage(config) {
       children: [],
       listeners: {},
       appendChild(child) {
+        child.parent = this;
         this.children.push(child);
       },
       addEventListener(type, handler) {
         this.listeners[type] = handler;
       },
-      remove() {},
+      remove() {
+        if (this.parent) this.parent.children = this.parent.children.filter((child) => child !== this);
+      },
+      focus() { this.focused = true; },
     };
     elements[id] = el;
     return el;
   };
-  ["iframe-status", "microbot-panel", "microbot-container", "close-microbot"].forEach(make);
+  ["iframe-status", "microbot-panel", "microbot-container", "close-microbot", "open-microbot"].forEach(make);
   make("microbot-config").textContent = JSON.stringify(config);
   const doc = {
     getElementById: (id) => elements[id] || null,
@@ -151,14 +155,20 @@ test("no-token mode loads the Microbot without requesting a token", async () => 
   assert.equal(page.fetchCalls.length, 0);
   assert.deepEqual(page.messages, []);
   assert.equal(page.elements["iframe-status"].textContent, "Iframe loaded; verify chat response");
-  assert.equal(page.elements["iframe-status"].className, "pending");
+  assert.equal(page.elements["iframe-status"].className, "chat-status pending");
+  page.listeners.message({
+    origin: "https://microbot.example",
+    source: iframe.contentWindow,
+    data: { type: "TOKEN_ACKNOWLEDGED", nonce: null },
+  });
+  assert.equal(page.elements["iframe-status"].textContent, "Iframe loaded; verify chat response");
 });
 
 test("no-token iframe does not load when the integration is not configured", () => {
   const page = fakePage({ ready: false, requiresToken: false });
   protocol.start(page.doc, page.win);
   assert.equal(page.elements["iframe"], undefined);
-  assert.equal(page.elements["iframe-status"].textContent, "Blocked by pending EDAV configuration");
+  assert.match(page.elements["iframe-status"].textContent, /not configured.*Technical details/);
 });
 
 test("client-credentials mode still sends its token and accepts acknowledgment", async () => {
@@ -195,8 +205,89 @@ test("client-credentials mode still sends its token and accepts acknowledgment",
   }, "https://microbot.example"]]);
   page.listeners.message({
     origin: "https://microbot.example",
+    source: iframe.contentWindow,
     data: { type: "TOKEN_ACKNOWLEDGED", nonce: "nonce" },
   });
   assert.equal(timers.cleared, true);
-  assert.equal(page.elements["iframe-status"].textContent, "Token acknowledged; Microbot ready");
+  assert.equal(page.elements["iframe-status"].textContent, "Token acknowledged; verify the chat response.");
+});
+
+test("closing and reopening creates only one fresh iframe without token traffic", () => {
+  const page = fakePage({
+    baseUrl: "https://microbot.example/",
+    origin: "https://microbot.example",
+    integrationId: "integration-id",
+    ready: true,
+    requiresToken: false,
+  });
+  protocol.start(page.doc, page.win);
+  const first = page.elements.iframe;
+  for (let cycle = 0; cycle < 2; cycle++) {
+    page.elements["close-microbot"].listeners.click();
+    assert.equal(page.elements["microbot-container"].children.length, 0);
+    assert.equal(page.elements["microbot-panel"].hidden, true);
+    assert.equal(page.elements["open-microbot"].hidden, false);
+    assert.equal(page.elements["open-microbot"].focused, true);
+    assert.equal(page.listeners.message, undefined);
+    page.elements["open-microbot"].listeners.click();
+    assert.equal(page.elements["microbot-container"].children.length, 1);
+    assert.equal(page.elements["microbot-panel"].hidden, false);
+    assert.equal(page.elements["close-microbot"].focused, true);
+  }
+  assert.notEqual(page.elements.iframe, first);
+  assert.deepEqual(page.fetchCalls, []);
+  assert.deepEqual(page.messages, []);
+});
+
+test("a token response arriving after close cannot affect the reopened iframe", async () => {
+  const page = fakePage({
+    baseUrl: "https://microbot.example/",
+    origin: "https://microbot.example",
+    clientId: "legacy-id",
+    ready: true,
+    requiresToken: true,
+    tokenEndpoint: "/api/edav-token",
+  });
+  let resolveFetch;
+  page.win.fetch = () => new Promise((resolve) => { resolveFetch = resolve; });
+  protocol.start(page.doc, page.win);
+  const oldFrame = page.elements.iframe;
+  oldFrame.listeners.load();
+  page.elements["close-microbot"].listeners.click();
+  page.elements["open-microbot"].listeners.click();
+  resolveFetch({ ok: true, json: async () => ({ token: "one.two.three", expiresAt: 123000 }) });
+  await new Promise(setImmediate);
+  oldFrame.listeners.load();
+  assert.deepEqual(page.messages, []);
+  assert.equal(page.elements["iframe-status"].textContent, "Loading Microbot");
+  assert.equal(page.elements["microbot-container"].children.length, 1);
+});
+
+test("messages from another window cannot acknowledge or close the iframe", async () => {
+  const page = fakePage({
+    baseUrl: "https://microbot.example/",
+    origin: "https://microbot.example",
+    integrationId: "integration-id",
+    ready: true,
+    requiresToken: false,
+  });
+  protocol.start(page.doc, page.win);
+  page.listeners.message({
+    origin: "https://microbot.example",
+    source: {},
+    data: { type: "EVA_CLOSE_REQUESTED" },
+  });
+  assert.equal(page.elements["microbot-panel"].hidden, false);
+  page.listeners.message({
+    origin: "https://bot.invalid",
+    source: page.elements.iframe.contentWindow,
+    data: { type: "EVA_CLOSE_REQUESTED" },
+  });
+  assert.equal(page.elements["microbot-panel"].hidden, false);
+  page.listeners.message({
+    origin: "https://microbot.example",
+    source: page.elements.iframe.contentWindow,
+    data: { type: "EVA_CLOSE_REQUESTED" },
+  });
+  assert.equal(page.elements["microbot-panel"].hidden, true);
 });

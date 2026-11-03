@@ -41,13 +41,13 @@
       "checksum": "e2785e2c4e377dc3f9baf693d59466fe"
     },
     "static/microbot.js": {
-      "checksum": "b05fd9a74252a6d4f123156c11539110"
+      "checksum": "88796cfbbed3ea2ed2062a30ef347a4f"
     },
     "static/styles.css": {
-      "checksum": "d852d8438ec5eb77f8e53508d506bdcc"
+      "checksum": "9f26647a1b8caf2c7ad4be594e55dece"
     },
     "templates/index.html": {
-      "checksum": "b122c038d5e3436993d3a8229c67e2c8"
+      "checksum": "d51c293d1570d197c8fbaa32a4f257db"
     }
   }
 }
