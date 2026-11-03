@@ -5,7 +5,22 @@ for 35 approved, non-PII equipment manuals. It records the bot requirements,
 the disposable Flask parent host used to load the EDAV iframe, and the checks
 that keep the pilot grounded and safely bounded.
 
-A detailed [EMLab BaaS architecture image](ppt/images/emlab-baas-architecture.png) shows browser, Flask/Posit Connect, EDAV, authentication, and intended manual-retrieval boundaries. See its [evidence and generation notes](ppt/images/README.md).
+## How the pieces fit
+
+```text
+Person → Posit Connect host page → embedded EDAV Microbot UI
+                                      ↕
+                              EDAV bot services
+                                      ↕
+                        approved sources (intended)
+```
+
+The host displays the separately hosted Microbot; it does not search manuals
+or generate answers. EDAV manages the service, while the project team supplies
+and checks its content and behavior. Users must check the official source.
+This is a conceptual view, not evidence that ingestion or retrieval works.
+The [historical token-flow diagram](archive/architecture/2026-10-token-flow/README.md)
+describes an older integration, not the current token-free mode.
 
 For an introduction to apps, chatbots, and this project's use of EDAV Bot as a Service, open the [HTML presentation](ppt/ppt_BAAS/index.html). The [presentation guide](ppt/ppt_BAAS/README.md) explains its offline use, source references, and editable build files.
 
@@ -14,9 +29,9 @@ For an introduction to apps, chatbots, and this project's use of EDAV Bot as a S
 | Question | Answer |
 |---|---|
 | What is being tested? | Whether an EDAV BaaS microbot can give grounded, cited answers from the approved equipment manuals. |
-| What is implemented? | A restricted Flask/Posit Connect parent host, an exact-origin iframe contract, a no-token mode (EDAV-confirmed) with an Entra client-credentials fallback, and repository-level validation. |
+| What is implemented? | A Flask/Posit Connect parent host with an EDAV-supplied token-free integration mode and a separate Entra client-credentials integration mode, plus repository-level validation. The modes do not automatically fall back to each other. |
 | What is prepared? | The bot instructions, behavior-and-safety record, and ten acceptance tests for release `EMKB-P3-v1.0`. |
-| What is not yet validated? | EDAV portal setup, manual ingestion, live bot behavior, and pilot user value. |
+| What is not yet validated? | Current EDAV portal settings, full manual ingestion, acceptance tests, answer accuracy, and pilot user value. A user-supplied screenshot showed a response and a reported 25 documents; it did not establish the full corpus or correctness. |
 | What is outside scope? | Production deployment, custom RAG, CAT integration, live equipment status, PII, and competency or authorization decisions. |
 
 The legacy release ID `EMKB-P3-v1.0` and test IDs `P3-T01` through `P3-T10`
@@ -39,6 +54,8 @@ remain controlled identifiers. They are not names for the current work.
 | `host_app/` | The isolated Flask/Posit Connect parent host. It embeds an EDAV iframe but does not ingest manuals, retrieve passages, or implement the bot. |
 | `scripts/` | Read-only behavior and corpus checks plus the local chat-archive tool. |
 | `tests/` | Automated checks for the Flask host, iframe contract, deployment boundary, and archive behavior. |
+| `ppt/ppt_BAAS/` | Beginner introduction: editable offline source and generated portable presentation. |
+| `archive/` | Labeled historical project-status material and superseded design notes, not current instructions. |
 | `.gitignore` | Enforces exclusion of manuals, local registers, Word records, transcripts, runtime configuration, and generated deployment material. |
 
 ## Protected local material
@@ -59,6 +76,13 @@ application. It is not the EM Knowledge Bot, a RAG system, CAT, or a production
 application. It remains configuration-pending until EDAV supplies the required
 settings and the approved runtime configuration is present. See the
 [host guide](host_app/README.md) for its file map and deployment boundary.
+
+For a local, configuration-pending preview, install `host_app/requirements.txt`
+in a virtual environment and run `python -m host_app.app` from the repository
+root. Open `http://127.0.0.1:5000/`. This local Flask server is not a
+replacement for Connect's access controls and must not be exposed publicly.
+Runtime variables must be set in the process environment; `.env.example` is
+reference documentation and is not automatically loaded by the application.
 
 ## Runtime configuration
 
@@ -129,8 +153,8 @@ requires the Entra tenant, application, secret, and scope settings.
 
 ### Diagnose a live token failure in Connect
 
-After the diagnostic change is promoted from dev to main, use **Update Now**
-on the existing main-backed Connect content (directory `host_app`). Confirm
+For the deployed revision, use **Update Now** if an approved update is needed
+on the Connect content (directory `host_app`). Confirm
 the new revision, Python 3.11.2, and application startup in the deployment log.
 Open the signed-in application's root page and click **Test token connection**.
 This calls `POST /api/edav-token` on Connect using its saved variables, even

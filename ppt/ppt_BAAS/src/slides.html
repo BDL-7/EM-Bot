@@ -1,5 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="A beginner-friendly introduction to Microbots, EDAV Bot as a Service, and the equipment-manual pilot.">
+  <title>Finding answers in equipment manuals · EDAV BaaS</title>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body class="no-js">
+  <main id="deck" aria-label="Finding answers in equipment manuals">
 <section class="slide cover active" id="s01" data-title="Finding answers in equipment manuals" data-sources="E01,E03" data-scope="A documented pilot purpose, illustrated through a conceptual manual-retrieval scene. No measured benefit or live result is shown.">
-  <img class="hero" style="right:24px;top:28px;width:570px;height:650px;object-fit:contain" src="asset:manual-retrieval.png" alt="Conceptual illustration: a laboratory centrifuge and a small manual collection, a selected passage under a magnifying glass, and an answer card linked to that evidence.">
+  <img class="hero" style="right:24px;top:28px;width:570px;height:650px;object-fit:contain" src="../assets/manual-retrieval.png" alt="Conceptual illustration: a laboratory centrifuge and a small manual collection, a selected passage under a magnifying glass, and an answer card linked to that evidence.">
   <div style="position:absolute;right:28px;top:32px;width:550px;height:640px;pointer-events:none;font-size:20px;color:var(--teal);font-weight:650" aria-label="Question leads to equipment manuals, relevant passage found, and an answer connected to its source"><span style="position:absolute;top:0;right:0;background:var(--paper);padding:4px 10px">Equipment manuals</span><span style="position:absolute;top:208px;left:0;background:var(--paper);padding:4px 10px">Question → find a relevant passage ↓</span><span style="position:absolute;bottom:0;left:35px;background:var(--paper);padding:4px 10px">↓ Answer connected to its source</span></div>
   <div class="cover-copy"><p class="kicker">EM Knowledge Bot · An introduction</p><h1>Finding answers<br>in equipment<br>manuals</h1><p class="subtitle">Our EDAV Bot as a Service pilot</p><blockquote class="cover-question">“Where does the manual explain how to clean this instrument?”</blockquote></div>
   <footer class="slide-footer"><span class="status">Conceptual illustration · October 8, 2026</span><span class="folio">01 / 12</span></footer>
@@ -8,7 +20,7 @@
 <section class="slide" id="s02" data-title="Ask before answering" data-sources="E03,E04" data-scope="Clarification and source checking are required behaviors. This example was not produced by a live bot.">
   <header><p class="kicker">01 · The experience</p><h2>Ask before answering</h2><p class="subtitle">If the instrument or model is unclear, the bot should ask before answering.</p></header>
   <div class="body"><figure aria-label="Question, clarifying question, then search the correct manual" style="max-width:960px"><p class="note">Question</p><p>“Where are the cleaning instructions?”</p><p class="emphasis" aria-hidden="true" style="margin:8px 0">↓</p><p class="note">Clarifying question</p><p>“Which instrument and model are you using?”</p><p class="emphasis" aria-hidden="true" style="margin:8px 0">↓</p><p class="emphasis">Then search the correct manual</p></figure><p class="rule">Different equipment models can have different instructions.</p></div>
-  <footer class="slide-footer"><span class="status">Illustration of intended behavior</span><a href="https://github.com/BDL-7/EM-Bot/blob/dc2d11fae2ecd3d6448d38b32452485fe0469107/PILOT_BOT_INSTRUCTIONS.md" target="_blank" rel="noopener noreferrer">Behavior requirements</a><span class="folio">02 / 12</span></footer>
+  <footer class="slide-footer"><span class="status">Illustration of intended behavior</span><a href="https://github.com/BDL-7/EM-Bot/blob/dev/Docs/bot-instructions.md" target="_blank" rel="noopener noreferrer">Behavior requirements</a><span class="folio">02 / 12</span></footer>
 </section>
 
 <section class="slide" id="s03" data-title="An app is a tool for a task" data-sources="E02,E07" data-scope="General educational explanation. The diagram is not an EDAV screenshot or a promise about particular interface controls.">
@@ -24,7 +36,7 @@
 </section>
 
 <section class="slide" id="s05" data-title="Bot as a Service" data-sources="E01,E02,E03" data-scope="The reference library is an analogy. The integration guide does not establish a complete operating agreement, cost, availability, or support guarantees.">
-  <header><p class="kicker">02 · The basic pieces</p><h2>Bot as a Service</h2><p class="subtitle">Using bot capabilities supplied and operated by another team</p></header>
+  <header><p class="kicker">02 · The basic pieces</p><h2>Bot as a Service</h2><p class="subtitle">EDAV hosts shared bot technology; a Microbot is a customized chatbot embedded in an app.</p></header>
   <div class="body"><div class="library-layout"><div><p class="library-concept">Imagine a<br><em>reference<br>library.</em></p><p class="library-limit">EDAV supplies the shared technology.<br>Our team still has work to do.</p></div><ul class="role-list" aria-label="Reference library analogy"><li><strong>Manuals</strong><span>The collection</span></li><li><strong>Chatbot</strong><span>A conversational reference helper</span></li><li><strong>App</strong><span>The way to reach that help</span></li><li><strong>EDAV</strong><span>Shared technology</span></li><li><strong>Our team</strong><span>Sources, instructions, evaluation</span></li></ul></div><p class="rule note">The helper is software. It can make mistakes and has no human expert’s judgment.</p></div>
   <footer class="slide-footer"><span class="status">BaaS means Bot as a Service in this project</span><a href="https://github.com/cdcent/edav-BaaS" target="_blank" rel="noopener noreferrer">EDAV integration guide</a><span class="folio">05 / 12</span></footer>
 </section>
@@ -32,11 +44,11 @@
 <section class="slide" id="s06" data-title="The pieces in our pilot" data-sources="E01,E02,E03,E05" data-scope="Embedding is documented. The manual-backed answer path is the intended pilot arrangement, not verified live retrieval or a statement about where documents are stored.">
   <header><p class="kicker">03 · Our project</p><h2>The pieces in our pilot</h2><p class="subtitle">The app displays EDAV chat. The person checks the source.</p></header>
   <div class="body"><figure aria-label="A person uses EDAV chat inside our app. The intended EDAV service contains EM Knowledge Bot and consults the approved manuals."><div class="relationship"><div class="person-role"><div class="human-word">You</div><p>Ask a question</p><p class="emphasis">→</p></div><div class="container-box"><h3>Our app</h3><div class="embedded">EDAV chat<br><span class="note">inside the page</span></div></div><div class="connector" aria-hidden="true">↔</div><div class="container-box service-box"><h3>EDAV service</h3><div class="embedded">EM Knowledge Bot</div></div></div><div class="relationship-bottom"><p>Our app provides the connection.<br>It does not search the manuals itself.</p><p class="manual-input"><strong>Approved manual collection</strong><br>Manuals to consult ↑</p></div><p class="return-path">← Reply and source information return to you for checking.</p></figure></div>
-  <footer class="slide-footer"><span class="status">Intended pilot arrangement · logical relationships, not storage locations</span><span class="folio">06 / 12</span></footer>
+  <footer class="slide-footer"><span class="status">This pilot's IntegrationId mode sends no token; other EDAV integrations use clientId and a token handshake.</span><span class="folio">06 / 12</span></footer>
 </section>
 
 <section class="slide" id="s07" data-title="Preparing manuals and answering questions" data-sources="E01,E03,E04" data-scope="The 35-manual scope comes from project records. Preparation, retrieval, and source display were not verified live. The diagram is a conceptual sequence, not EDAV's internal algorithm.">
-  <header><p class="kicker">03 · Our project</p><h2>Preparing manuals and answering questions</h2><p class="subtitle">Preparation happens before anyone asks.</p></header>
+  <header><p class="kicker">03 · Our project</p><h2>Preparing manuals and answering questions</h2><p class="subtitle">RAG means finding relevant source passages before drafting an answer.</p></header>
   <div class="body"><div class="lane"><p class="lane-label">Before use</p><div class="steps"><p class="step">Select the approved<br><strong>35 manuals</strong></p><span class="step-arrow" aria-hidden="true">→</span><p class="step">Make them searchable<br>through EDAV</p><span class="step-arrow" aria-hidden="true">→</span><p class="step">Verify<br>the setup</p></div></div><button class="reveal-action" type="button" data-reveal-target="question-journey" aria-controls="question-journey" aria-expanded="false">Follow a question →</button><div class="reveal" id="question-journey" hidden><div class="lane question-lane"><p class="lane-label">For a question</p><div class="steps"><p class="step">Ask &amp;<br>clarify</p><span class="step-arrow" aria-hidden="true">→</span><p class="step">Find<br>passages</p><span class="step-arrow" aria-hidden="true">→</span><p class="step">Draft from<br>evidence</p><span class="step-arrow" aria-hidden="true">→</span><p class="step">Show<br>sources</p><span class="step-arrow" aria-hidden="true">→</span><p class="step"><strong>You<br>check</strong></p></div></div><p class="gap-message">Missing evidence? Explain the gap.</p></div><p class="flow-caption">The question uses a prepared collection. It does not mean uploading every manual again or training a new model.</p></div>
   <footer class="slide-footer"><span class="status">Intended process · live behavior still needs testing</span><span class="folio">07 / 12</span></footer>
 </section>
@@ -44,7 +56,7 @@
 <section class="slide" id="s08" data-title="A source you can check" data-sources="E03,E04" data-scope="The source diagram contains placeholders, not real manual content. Page or section references are allowed only when reliably supplied by the platform.">
   <header><p class="kicker">03 · Our project</p><h2>A source you can check</h2><p class="subtitle">A citation helps you inspect the evidence. It does not prove the answer is correct.</p></header>
   <div class="body"><div class="two-col"><figure class="source-demo" aria-label="Conceptual answer connected to its supporting manual passage. No live answer or real excerpt is shown."><div class="answer-outline"><span class="number">ANSWER</span><p>Based on<br>evidence</p><p class="note">Manual identified here</p></div><div class="connector" aria-hidden="true">→</div><div class="document"><p class="document-label">Manual</p><p class="passage">Supporting passage shown here</p><p class="note">Illustrative placeholder</p></div></figure><ol class="checks"><li><span>1</span>Is it the right instrument and model?</li><li><span>2</span>Does the passage support the answer?</li><li><span>3</span>Are the warnings and conditions included?</li></ol></div><p class="source-caveat">Page or section: only when reliably available. The official manual and applicable procedures still govern the work.</p></div>
-  <footer class="slide-footer"><span class="status">Illustration · no live answer shown</span><a href="https://github.com/BDL-7/EM-Bot/blob/dc2d11fae2ecd3d6448d38b32452485fe0469107/PILOT_BOT_INSTRUCTIONS.md" target="_blank" rel="noopener noreferrer">Source and citation requirements</a><span class="folio">08 / 12</span></footer>
+  <footer class="slide-footer"><span class="status">Illustration · no live answer shown</span><a href="https://github.com/BDL-7/EM-Bot/blob/dev/Docs/bot-instructions.md" target="_blank" rel="noopener noreferrer">Source and citation requirements</a><span class="folio">08 / 12</span></footer>
 </section>
 
 <section class="slide" id="s09" data-title="Choosing the right next step" data-sources="E03,E04" data-scope="These are required responses from the documented pilot boundaries, not observed test passes. Static manuals cannot establish current equipment status or personal authorization.">
@@ -54,15 +66,15 @@
 </section>
 
 <section class="slide" id="s10" data-title="Shared work, clear responsibilities" data-sources="E01,E02,E03" data-scope="The table combines the documented integration role with proposed operational responsibilities. Platform support and features must be confirmed with their owners.">
-  <header><p class="kicker">04 · Useful boundaries</p><h2>Shared work, clear responsibilities</h2><p class="subtitle">A shared service still needs sources, setup, evaluation, and care.</p></header>
+  <header><p class="kicker">04 · Useful boundaries</p><h2>Shared work, clear responsibilities</h2><p class="subtitle">Request → configure → embed → test → maintain. The service still needs care.</p></header>
   <div class="body"><table class="responsibilities"><caption class="visually-hidden">EDAV, project-team, and user contributions</caption><thead><tr><th scope="col">EDAV</th><th scope="col">Our project team</th><th scope="col">Users</th></tr></thead><tbody><tr><td>Chat service and connection guidance</td><td>Connect the app</td><td>Use the approved route</td></tr><tr><td>Service features<br>to confirm</td><td>Select sources;<br>set behavior</td><td>Give useful context</td></tr><tr><td>Support arrangements<br>to confirm</td><td>Test and maintain<br>the pilot</td><td>Check sources;<br>report problems</td></tr></tbody></table><p class="table-caption">The technology is shared. <strong class="emphasis">The responsibilities still matter.</strong></p></div>
   <footer class="slide-footer"><span class="status">Confirm the operating arrangement with platform owners</span><span class="folio">10 / 12</span></footer>
 </section>
 
 <section class="slide" id="s11" data-title="What is ready and what needs evidence" data-sources="E01,E03,E04,E05" data-scope="Status is documented in the reviewed project files. No live EDAV or Connect inspection or bot evaluation was performed for this presentation. A lack of recorded proof does not establish that no external work has occurred.">
-  <header><p class="kicker">05 · The pilot decision</p><h2>What is ready and what needs evidence</h2><p class="subtitle">“Available” means present in the project files.</p></header>
+  <header><p class="kicker">05 · The pilot decision</p><h2>What is ready and what needs evidence</h2><p class="subtitle">A screenshot showed a response and 25 documents; neither confirms accuracy or the full corpus.</p></header>
   <div class="body"><table class="status-table"><caption class="visually-hidden">Documented project status as of October 8, 2026</caption><thead><tr><th scope="col">Available now</th><th scope="col">Prepared</th><th scope="col">Still to verify</th></tr></thead><tbody><tr><td>App connection software</td><td>Bot instructions</td><td>Live EDAV setup</td></tr><tr><td>Checks of that software</td><td>Ten behavior tests</td><td>Manual processing<br>and replies</td></tr><tr><td>Pilot documentation</td><td>Evaluation direction</td><td>Accuracy and<br>user value</td></tr></tbody></table><div class="evaluation"><span class="label">We will ask</span><strong>Supported?</strong><strong>Checkable?</strong><strong>Useful?</strong><strong>Within scope?</strong></div></div>
-  <footer class="slide-footer"><span class="status">Documented status · October 8, 2026 · live outcomes unverified</span><span class="folio">11 / 12</span></footer>
+  <footer class="slide-footer"><span class="status">Prepared artifacts are not proof of live acceptance or accuracy</span><span class="folio">11 / 12</span></footer>
 </section>
 
 <section class="slide" id="s12" data-title="The person checks the source" data-sources="E01,E03" data-scope="The workflows are teaching illustrations. No accuracy rate, time saving, or demonstrated improvement is claimed.">
@@ -70,3 +82,28 @@
   <div class="body"><div class="route"><span class="route-label">An illustrative search</span><p>Open manuals <span class="arrow">→</span> find passage <span class="arrow">→</span> check</p></div><div class="route"><span class="route-label">Proposed experience</span><p>Ask &amp; clarify <span class="arrow">→</span> answer + source <span class="arrow">→</span> check</p></div><p class="takeaway">What is the <strong class="emphasis">app</strong>, what is the <strong class="emphasis">bot</strong>,<br>and what does <strong class="emphasis">EDAV</strong> provide?</p><button class="reveal-action" type="button" data-reveal-target="closing-explanation" aria-controls="closing-explanation" aria-expanded="false">Show an example explanation →</button><div class="reveal explanation" id="closing-explanation" hidden>The app is where I interact. The bot exchanges messages.<br>EDAV supplies shared technology. The manual supports the answer—and I check it.</div></div>
   <footer class="slide-footer"><span>Help with finding information. Evidence for checking it.</span><span class="folio">12 / 12</span></footer>
 </section>
+  </main>
+  <nav class="toolbar" aria-label="Presentation controls">
+    <button id="previous" type="button" aria-label="Previous slide">←</button>
+    <label class="visually-hidden" for="slide-picker">Choose slide</label>
+    <select id="slide-picker" aria-label="Choose slide"></select>
+    <button id="next" type="button" aria-label="Next slide or reveal">→</button>
+    <span class="toolbar-separator" aria-hidden="true"></span>
+    <button id="sources-open" type="button">Sources</button>
+    <button id="fullscreen" type="button" aria-label="Toggle fullscreen">Fullscreen</button>
+    <button id="help-open" type="button" aria-label="Keyboard shortcuts">?</button>
+  </nav>
+  <div id="live-status" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <dialog id="sources-dialog" aria-labelledby="sources-title">
+    <div class="dialog-top"><h2 id="sources-title">Sources for this slide</h2><button type="button" data-close="sources-dialog" aria-label="Close sources">×</button></div>
+    <p id="source-scope"></p><ol id="source-list"></ol>
+    <p class="dialog-small">Prepared requirements and observations are not proof of live acceptance or answer accuracy.</p>
+  </dialog>
+  <dialog id="help-dialog" aria-labelledby="help-title">
+    <div class="dialog-top"><h2 id="help-title">Presentation controls</h2><button type="button" data-close="help-dialog" aria-label="Close help">×</button></div>
+    <dl class="shortcuts"><dt>→ / Space / Page Down</dt><dd>Reveal or advance</dd><dt>← / Page Up</dt><dd>Previous slide</dd><dt>Home / End</dt><dd>First / last slide</dd><dt>F</dt><dd>Fullscreen</dd><dt>S</dt><dd>Sources for this slide</dd><dt>P</dt><dd>Print or save as PDF</dd><dt>?</dt><dd>This help</dd><dt>Escape</dt><dd>Close a dialog</dd></dl>
+    <p class="dialog-small">The file works offline. Source links open only when you choose them. Printing includes all revealed content.</p>
+  </dialog>
+  <script src="deck.js"></script>
+</body>
+</html>

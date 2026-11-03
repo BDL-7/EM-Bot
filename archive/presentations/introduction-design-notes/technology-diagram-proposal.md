@@ -48,8 +48,8 @@ Do not draw the answer as passing through Flask: the host supports access and au
 Reviewed against repository base `81d2f92` on October 8, 2026:
 
 - [Repository README](../../README.md): pilot scope, temporary host, Connect deployment, identity separation, exclusion of manuals from host deployment, and no host retrieval/model calls.
-- [Host application](../../host_app/app.py) and [authentication provider](../../host_app/entra_auth.py): server responsibilities and app authentication implementation. Code presence does not establish successful live authentication.
-- [Microbot integration](../../host_app/static/microbot.js): iframe, `clientId`, token handoff, exact-origin checks, acknowledgment, and failure/pending states.
+- [Host application](../../../host_app/app.py) and [authentication provider](../../../host_app/entra_auth.py): server responsibilities and app authentication implementation. Code presence does not establish successful live authentication.
+- [Microbot integration](../../../host_app/static/microbot.js): iframe, `clientId`, token handoff, exact-origin checks, acknowledgment, and failure/pending states.
 - [Official EDAV integration guide](https://github.com/cdcent/edav-BaaS): authoritative integration reference. The current revision's web fetch was unavailable; the local implementation was inspected, and prior guide review is recorded in [evidence.md](evidence.md). Backend design must not be inferred from this guide.
 
 Review the boundaries and desired detail level before drawing or adding a future technology slide. No assumption of live retrieval, approved model selection, verified citation behavior, or production readiness is made.

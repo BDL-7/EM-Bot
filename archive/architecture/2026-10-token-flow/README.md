@@ -1,4 +1,7 @@
-# EMLab BaaS architecture image
+# Historical EMLab BaaS token-flow architecture
+
+This describes the earlier token-based path, not the separate token-free
+`IntegrationId` integration. See the [current overview](../../../README.md).
 
 [Open the architecture image](emlab-baas-architecture.png).
 
@@ -8,10 +11,8 @@ Generated October 9, 2026 with the built-in image-generation tool and visually i
 
 Reviewed against `origin/dev` at `b155c03`:
 
-- [Root README](../../README.md): Posit Connect hosting, restricted signed-in access, pilot manual collection and no host retrieval/model calls.
-- [Flask application](../../host_app/app.py): parent page and authenticated token endpoint.
-- [Entra provider](../../host_app/entra_auth.py): server-side app-only authentication using MSAL.
-- [Microbot client](../../host_app/static/microbot.js): separately hosted iframe, `clientId`, exact-origin message checks, token handoff and acknowledgment.
+- The then-current root README, Flask application, Entra provider, and Microbot
+  client at commit `b155c03` documented the token-based integration.
 
 Nested browser boxes mean display containment. Flask runs on Posit Connect. The EDAV UI is separately hosted even though displayed inside the parent page. The conceptual service-to-UI path does not specify actual backend routing. Instructions, retrieval and drafting are intended functions; no backend database, model vendor, storage, logging or retention implementation is asserted. User identity and application authentication are distinct; the Connect sign-in provider is not asserted. Generic manual covers and conversation are illustrative, not real source material or test outputs. The per-question path describes intended behavior, not implemented host retrieval. The manuals' preparation arrow describes a supported setup objective, not verified ingestion.
 

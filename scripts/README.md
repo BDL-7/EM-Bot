@@ -21,7 +21,7 @@ python -m pytest tests/test_app.py tests/test_entra_auth.py tests/test_microbot_
 If Node.js is available, run the iframe contract tests with:
 
 ```text
-node --test tests/test_microbot_js.mjs
+node --test tests/test_microbot_js.mjs tests/test_auth_check_js.mjs
 ```
 
 Passing repository checks verify the local implementation and packaging rules.

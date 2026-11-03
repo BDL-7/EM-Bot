@@ -1,4 +1,7 @@
-# Presentation Template
+# Historical project-status presentation
+
+This October 2026 snapshot is retained for context, not as a current status
+report. See the [current project overview](../../../README.md).
 
 This project is managed by the `build-html-slide-workshop` skill.
 
