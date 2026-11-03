@@ -35,6 +35,7 @@ class Settings:
     base_url: str
     origin: str
     client_id: str
+    integration_id: str
     auth_mode: str
     entra_tenant_id: str
     entra_client_id: str
@@ -48,13 +49,16 @@ class Settings:
     @property
     def missing_dependencies(self) -> list[str]:
         missing: list[str] = []
-        if not self.client_id:
-            missing.append("EDAV Microbot clientId")
         if self.auth_mode == NO_TOKEN_MODE:
-            pass
+            if not self.integration_id:
+                missing.append("EDAV Microbot IntegrationId")
         elif self.auth_mode != CLIENT_CREDENTIALS_MODE:
+            if not self.client_id:
+                missing.append("EDAV Microbot clientId")
             missing.append("EDAV authentication mode")
         else:
+            if not self.client_id:
+                missing.append("EDAV Microbot clientId")
             if not self.entra_tenant_id:
                 missing.append("EDAV Entra tenant ID")
             if not self.entra_client_id:
@@ -87,16 +91,17 @@ def load_settings() -> Settings:
         raise ValueError("EDAV_MICROBOT_ORIGIN must contain only scheme and host")
     if configured_origin != derived_origin:
         raise ValueError("EDAV_MICROBOT_ORIGIN must match EDAV_MICROBOT_BASE_URL")
+    auth_mode = os.getenv("EDAV_AUTH_MODE", "unconfigured").strip() or "unconfigured"
     microbot_scope = os.getenv("EDAV_MICROBOT_SCOPE", "").strip()
-    if microbot_scope and not microbot_scope.endswith("/.default"):
+    if auth_mode == CLIENT_CREDENTIALS_MODE and microbot_scope and not microbot_scope.endswith("/.default"):
         raise ValueError("EDAV_MICROBOT_SCOPE must use the /.default scope")
     return Settings(
         app_env=os.getenv("APP_ENV", "development").strip() or "development",
         base_url=base_url,
         origin=configured_origin,
         client_id=os.getenv("EDAV_MICROBOT_CLIENT_ID", "").strip(),
-        auth_mode=os.getenv("EDAV_AUTH_MODE", "unconfigured").strip()
-        or "unconfigured",
+        integration_id=os.getenv("EDAV_MICROBOT_INTEGRATION_ID", "").strip(),
+        auth_mode=auth_mode,
         entra_tenant_id=os.getenv("EDAV_ENTRA_TENANT_ID", "").strip(),
         entra_client_id=os.getenv("EDAV_ENTRA_CLIENT_ID", "").strip(),
         entra_client_secret=os.getenv("EDAV_ENTRA_CLIENT_SECRET", "").strip(),
@@ -177,6 +182,7 @@ def create_app(
             "baseUrl": settings.base_url,
             "origin": settings.origin,
             "clientId": settings.client_id,
+            "integrationId": settings.integration_id,
             "ready": settings.ready,
             "requiresToken": settings.requires_token,
             "tokenEndpoint": url_for("edav_token"),
@@ -200,6 +206,7 @@ def create_app(
                 "status": "healthy",
                 "edav_ready": settings.ready,
                 "client_id_configured": bool(settings.client_id),
+                "integration_id_configured": bool(settings.integration_id),
                 "entra_tenant_configured": bool(settings.entra_tenant_id),
                 "entra_client_id_configured": bool(settings.entra_client_id),
                 "microbot_scope_configured": bool(settings.microbot_scope),

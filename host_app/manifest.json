@@ -23,31 +23,31 @@
       "checksum": "5f3ead35dadb9a35bd93a9260b53b9cf"
     },
     ".python-version": {
-      "checksum": "84791982e01844d03065bb14f76eba85"
+      "checksum": "003db3fcb8dd86a81705e58fda64b6e1"
     },
     "__init__.py": {
-      "checksum": "93eec08f813f93ca1dcc0845d4cd6b1f"
+      "checksum": "749180eabf4a4e9485cdcb310d7420c8"
     },
     "app.py": {
-      "checksum": "f9490cb0ee27f9b83b5706a5a9ec89f3"
+      "checksum": "1a8a8b22c1bf3deeaaf66d2f38b54e0e"
     },
     "auth_diagnostics.py": {
       "checksum": "653ab90e324e42fd68d0a349135c33af"
     },
     "entra_auth.py": {
-      "checksum": "7ed65b151c1261cfbb8aac087bf8dcb8"
+      "checksum": "96273a53b0960fce87fe554f0a6875c2"
     },
     "static/auth-check.js": {
-      "checksum": "56b43dd513eea6d3f7bbd2a0829f663b"
+      "checksum": "e2785e2c4e377dc3f9baf693d59466fe"
     },
     "static/microbot.js": {
-      "checksum": "18d01f163b09e647780847fbb9842e7f"
+      "checksum": "b05fd9a74252a6d4f123156c11539110"
     },
     "static/styles.css": {
-      "checksum": "c4ed91dccfb7dbb3722f6976d5c41b34"
+      "checksum": "d852d8438ec5eb77f8e53508d506bdcc"
     },
     "templates/index.html": {
-      "checksum": "53e2ded8b514cd45b0a910b85668028b"
+      "checksum": "b122c038d5e3436993d3a8229c67e2c8"
     }
   }
 }

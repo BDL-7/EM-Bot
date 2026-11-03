@@ -53,6 +53,7 @@ code { font-family: "Cascadia Code", Consolas, monospace; }
 .panel-heading { display: flex; justify-content: space-between; align-items: center; }
 button { padding: .65rem 1rem; border: 0; border-radius: 8px; background: #185f87; color: white; }
 iframe { width: 100%; min-height: 620px; border: 1px solid #b9c9d6; border-radius: 12px; }
+iframe.integration-iframe { height: 700px; }
 
 @media (max-width: 600px) {
   .shell { width: 100%; margin: 0; border: 0; border-radius: 0; }

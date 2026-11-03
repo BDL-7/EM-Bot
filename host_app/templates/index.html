@@ -20,9 +20,8 @@
       <section class="notice" aria-labelledby="deployment-status">
         <h2 id="deployment-status">Deployment status</h2>
         <p>
-          The Aquarius pilot host is deployed. Use the connection-testing guide
-          below to verify the signed-in Connect user, Entra token acquisition,
-          and the EDAV Microbot iframe in that order.
+          The Aquarius pilot host is deployed. Verify the signed-in Connect user,
+          the configured integration, and a live Microbot response.
         </p>
       </section>
 
@@ -37,17 +36,26 @@
               {{ 'Authenticated as ' ~ user.display_name if user.authenticated else user.display_name }}
             </dd>
           </div>
-          <div><dt>EDAV Microbot URL</dt><dd class="good">Configured for DEV</dd></div>
+          <div><dt>EDAV Microbot origin</dt><dd>{{ settings.origin }}</dd></div>
+          {% if settings.auth_mode == 'none' %}
+          <div>
+            <dt>Microbot IntegrationId</dt>
+            <dd class="{{ 'good' if settings.integration_id else 'pending' }}">
+              {{ 'Configured' if settings.integration_id else 'Waiting for EDAV' }}
+            </dd>
+          </div>
+          {% else %}
           <div>
             <dt>Microbot clientId</dt>
             <dd class="{{ 'good' if settings.client_id else 'pending' }}">
               {{ 'Configured' if settings.client_id else 'Waiting for EDAV' }}
             </dd>
           </div>
+          {% endif %}
           <div>
             <dt>EDAV authentication</dt>
             <dd class="{{ 'good' if settings.auth_mode in ('none', 'client_credentials') else 'pending' }}">
-              {% if settings.auth_mode == 'none' %}No token required{% elif settings.auth_mode == 'client_credentials' %}Configured{% else %}Waiting for EDAV contract{% endif %}
+              {% if settings.auth_mode == 'none' %}Token-free integration configured{% elif settings.auth_mode == 'client_credentials' %}Configured{% else %}Waiting for EDAV contract{% endif %}
             </dd>
           </div>
           <div><dt>Iframe handshake</dt><dd id="iframe-status" class="pending">Not started</dd></div>
@@ -67,6 +75,10 @@
 
       <section class="connection-guide" aria-labelledby="connection-testing-heading">
         <h2 id="connection-testing-heading">Connection testing</h2>
+        {% if settings.auth_mode == 'none' %}
+        <p>Verify that the iframe loads and ask a question to confirm that chat works.
+          Loading the iframe alone does not confirm that the Microbot can answer.</p>
+        {% else %}
         <p>
           Test token acquisition on the Connect server independently of the iframe.
           This uses the saved Connect variables and does not display the token.
@@ -141,6 +153,7 @@
           Do not send tokens, client
           secrets, or full request headers.
         </p>
+        {% endif %}
       </section>
 
       <section id="microbot-panel" aria-labelledby="microbot-heading" hidden>

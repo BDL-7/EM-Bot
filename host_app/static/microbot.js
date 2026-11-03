@@ -23,6 +23,12 @@
     return url.toString();
   }
 
+  function buildIntegrationUrl(baseUrl, integrationId) {
+    const url = new URL(baseUrl);
+    url.searchParams.set("IntegrationId", integrationId);
+    return url.toString();
+  }
+
   function isAcknowledgment(event, expectedOrigin, expectedNonce) {
     return (
       event.origin === expectedOrigin &&
@@ -152,12 +158,19 @@
     }
 
     iframe = doc.createElement("iframe");
-    iframe.title = "EM Knowledge Bot";
-    iframe.src = buildIframeUrl(config.baseUrl, config.clientId, Date.now());
     const requiresToken = config.requiresToken !== false;
+    iframe.title = "EM Knowledge Assistant";
+    if (requiresToken) {
+      iframe.src = buildIframeUrl(config.baseUrl, config.clientId, Date.now());
+    } else {
+      iframe.src = buildIntegrationUrl(config.baseUrl, config.integrationId);
+      iframe.allow = "clipboard-write";
+      iframe.loading = "lazy";
+      iframe.className = "integration-iframe";
+    }
     iframe.addEventListener("load", function () {
       if (!requiresToken) {
-        setStatus("Microbot loaded (no token required)", true);
+        setStatus("Iframe loaded; verify chat response", false);
         return;
       }
       authenticateFrame().catch(function (error) {
@@ -177,6 +190,7 @@
 
   return {
     buildIframeUrl: buildIframeUrl,
+    buildIntegrationUrl: buildIntegrationUrl,
     isAcknowledgment: isAcknowledgment,
     isValidJwt: isValidJwt,
     repeatUntilStopped: repeatUntilStopped,
