@@ -12,8 +12,8 @@ CAT, or a production application.
 | `app.py` | Flask entry point, safe readiness endpoints, and the authenticated token route. |
 | `entra_auth.py` | Server-only Entra client-credentials provider, used only when `EDAV_AUTH_MODE=client_credentials`. |
 | `auth_diagnostics.py` | Allowlisted, credential-safe diagnostics for token failures (`EDAV_AUTH_DIAGNOSTIC` runtime log entries). |
-| `static/microbot.js` | Exact-origin, nonce-validated iframe protocol. |
-| `static/auth-check.js` | **Test token connection** button on the host page. |
+| `static/microbot.js` | Token-free iframe embedding and the separate exact-origin, nonce-validated token protocol. |
+| `static/auth-check.js` | Mode-aware connection diagnostics on the host page. |
 | `templates/index.html` | Parent page and configuration-pending status UI. |
 | `manifest.json` | Posit Connect application manifest; the entry point remains `app:app`. |
 | `requirements.txt` and `.python-version` | Runtime dependencies and Python version. |

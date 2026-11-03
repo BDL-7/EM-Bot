@@ -7,12 +7,12 @@
   const status = document.getElementById('live-status');
   const sourcesDialog = document.getElementById('sources-dialog');
   const helpDialog = document.getElementById('help-dialog');
-  const baseline = 'https://github.com/BDL-7/EM-Bot/blob/dc2d11fae2ecd3d6448d38b32452485fe0469107/';
+  const baseline = 'https://github.com/BDL-7/EM-Bot/blob/dev/';
   const sources = {
-    E01: { title: 'Project README', url: baseline + 'README.md', detail: 'Pilot purpose and documented project status at the reviewed commit.' },
+    E01: { title: 'Project README', url: baseline + 'README.md', detail: 'Pilot purpose, current host integration and evidence limits.' },
     E02: { title: 'EDAV Microbot UI Integration Guide', url: 'https://github.com/cdcent/edav-BaaS/blob/master/README.md', detail: 'Supports embedding the chat interface. It does not establish the pilot’s backend configuration or answer quality.' },
-    E03: { title: 'Bot behavior requirements', url: baseline + 'PHASE_3_BEHAVIOR_CONFIGURATION.md', detail: 'Prepared requirements for grounding, citations, clarification, and evaluation. These are not live outcomes.' },
-    E04: { title: 'Ten prepared behavior tests', url: baseline + 'PHASE_3_BEHAVIOR_TESTS.md', detail: 'All test-result rows were marked Not run in the inspected baseline.' },
+    E03: { title: 'Bot behavior requirements', url: baseline + 'Docs/bot-behavior.md', detail: 'Prepared requirements for grounding, citations, clarification, and evaluation. These are not live outcomes.' },
+    E04: { title: 'Ten prepared behavior tests', url: baseline + 'Docs/bot-tests.md', detail: 'Prepared tests, not evidence that the live bot passed them.' },
     E05: { title: 'Host implementation and scope', url: baseline + 'README.md#temporary-flask-host', detail: 'The host embeds EDAV chat. It does not implement manual retrieval or the bot.' },
     E07: { title: 'MDN: Browsing the web', url: 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Environment_setup/Browsing_the_web', detail: 'Background explanation of browsers and web applications.' },
     E08: { title: 'Microsoft: Designing your bot', url: 'https://learn.microsoft.com/en-us/microsoftteams/platform/bots/design/bots', detail: 'Used for the general conversational-bot concept, not as evidence of EDAV’s internal implementation.' }
