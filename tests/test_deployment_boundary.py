@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 
@@ -50,3 +51,10 @@ def test_committed_manifest_describes_only_the_isolated_host():
     assert "static/microbot.js" in files
     assert "README.md" not in files
     assert not any(path.lower().endswith((".pdf", ".docx", ".env")) for path in files)
+
+
+def test_manifest_checksums_match_runtime_files():
+    manifest = json.loads((HOST_ROOT / "manifest.json").read_text(encoding="utf-8"))
+    for path, metadata in manifest["files"].items():
+        contents = (HOST_ROOT / path).read_bytes().replace(b"\r\n", b"\n")
+        assert hashlib.md5(contents).hexdigest() == metadata["checksum"], path

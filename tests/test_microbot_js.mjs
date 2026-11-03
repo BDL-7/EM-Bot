@@ -85,6 +85,7 @@ test("reports exhaustion when no acknowledgment arrives", () => {
 
 function fakePage(config) {
   const elements = {};
+  const messages = [];
   const make = (id) => {
     const el = {
       id,
@@ -108,35 +109,94 @@ function fakePage(config) {
   make("microbot-config").textContent = JSON.stringify(config);
   const doc = {
     getElementById: (id) => elements[id] || null,
-    createElement: () => make("iframe"),
+    createElement: () => {
+      const iframe = make("iframe");
+      iframe.contentWindow = { postMessage: (...args) => messages.push(args) };
+      return iframe;
+    },
   };
   const fetchCalls = [];
+  const listeners = {};
   const win = {
     fetch: (...args) => {
       fetchCalls.push(args);
       return Promise.reject(new Error("fetch should not be called"));
     },
-    addEventListener() {},
-    removeEventListener() {},
+    addEventListener(type, handler) { listeners[type] = handler; },
+    removeEventListener(type) { delete listeners[type]; },
   };
-  return { elements, doc, win, fetchCalls };
+  return { elements, doc, win, fetchCalls, messages, listeners };
 }
 
 test("no-token mode loads the Microbot without requesting a token", async () => {
   const page = fakePage({
     baseUrl: "https://microbot.example/",
     origin: "https://microbot.example",
-    clientId: "em-bot",
+    clientId: "legacy-id",
+    integrationId: "integration-id",
     ready: true,
     requiresToken: false,
     tokenEndpoint: "/api/edav-token",
   });
   protocol.start(page.doc, page.win);
   const iframe = page.elements["iframe"];
-  assert.equal(new URL(iframe.src).searchParams.get("clientId"), "em-bot");
+  assert.equal(iframe.src, "https://microbot.example/?IntegrationId=integration-id");
+  assert.equal(iframe.allow, "clipboard-write");
+  assert.equal(iframe.loading, "lazy");
+  assert.equal(iframe.title, "EM Knowledge Assistant");
+  assert.equal(iframe.className, "integration-iframe");
   assert.equal(page.elements["microbot-panel"].hidden, false);
   iframe.listeners.load();
   await Promise.resolve();
   assert.equal(page.fetchCalls.length, 0);
-  assert.equal(page.elements["iframe-status"].textContent, "Microbot loaded (no token required)");
+  assert.deepEqual(page.messages, []);
+  assert.equal(page.elements["iframe-status"].textContent, "Iframe loaded; verify chat response");
+  assert.equal(page.elements["iframe-status"].className, "pending");
+});
+
+test("no-token iframe does not load when the integration is not configured", () => {
+  const page = fakePage({ ready: false, requiresToken: false });
+  protocol.start(page.doc, page.win);
+  assert.equal(page.elements["iframe"], undefined);
+  assert.equal(page.elements["iframe-status"].textContent, "Blocked by pending EDAV configuration");
+});
+
+test("client-credentials mode still sends its token and accepts acknowledgment", async () => {
+  const page = fakePage({
+    baseUrl: "https://microbot.example/",
+    origin: "https://microbot.example",
+    clientId: "legacy-id",
+    ready: true,
+    requiresToken: true,
+    tokenEndpoint: "/api/edav-token",
+  });
+  const timers = fakeTimers();
+  page.win.crypto = { randomUUID: () => "nonce" };
+  page.win.setInterval = timers.setInterval;
+  page.win.clearInterval = timers.clearInterval;
+  page.win.fetch = async (url, options) => {
+    page.fetchCalls.push([url, options]);
+    return { ok: true, json: async () => ({ token: "one.two.three", expiresAt: 123000 }) };
+  };
+  protocol.start(page.doc, page.win);
+  const iframe = page.elements["iframe"];
+  assert.equal(new URL(iframe.src).searchParams.get("clientId"), "legacy-id");
+  iframe.listeners.load();
+  await new Promise(setImmediate);
+  assert.equal(page.fetchCalls[0][0], "/api/edav-token");
+  assert.deepEqual(page.messages, [[{
+    type: "EDAV_AUTH_TOKEN",
+    payload: {
+      token: "one.two.three",
+      expiresAt: 123000,
+      nonce: "nonce",
+      userProfile: undefined,
+    },
+  }, "https://microbot.example"]]);
+  page.listeners.message({
+    origin: "https://microbot.example",
+    data: { type: "TOKEN_ACKNOWLEDGED", nonce: "nonce" },
+  });
+  assert.equal(timers.cleared, true);
+  assert.equal(page.elements["iframe-status"].textContent, "Token acknowledged; Microbot ready");
 });

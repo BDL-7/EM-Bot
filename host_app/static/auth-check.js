@@ -14,6 +14,11 @@
     const configElement = doc.getElementById("microbot-config");
     if (!button || !status || !configElement) return;
     const config = JSON.parse(configElement.textContent);
+    if (config.requiresToken === false) {
+      button.disabled = true;
+      status.textContent = "Token testing is not used in no-token mode.";
+      return;
+    }
     button.addEventListener("click", async function () {
       button.disabled = true;
       status.textContent = "Testing the server connection to Entra...";
